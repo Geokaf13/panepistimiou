@@ -52,7 +52,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .login-error { color: var(--red); font-size: 13px; margin-top: 8px; display: none; }
 #app { display: none; }
 .container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
-.tab-nav { display: flex; gap: 4px; background: var(--gray-100); border-radius: var(--radius); padding: 4px; margin-bottom: 24px; width: fit-content; }
+.tab-nav { display: flex; gap: 4px; background: var(--gray-100); border-radius: var(--radius); padding: 4px; margin-bottom: 24px; width: fit-content; flex-wrap: wrap; }
 .tab-btn { padding: 8px 20px; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; background: none; color: var(--gray-600); transition: all .2s; }
 .tab-btn.active { background: white; color: var(--navy); font-weight: 600; box-shadow: var(--shadow); }
 .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
@@ -102,14 +102,31 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .stat-chip .sc-label { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
 .stat-chip .sc-val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--navy); }
 .stat-chip.is-amount .sc-val { color: var(--amber); font-size: 16px; }
+.targets-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.targets-section { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; }
+.targets-section-header { padding: 14px 18px; background: linear-gradient(135deg, var(--navy) 0%, #223562 100%); color: white; }
+.targets-section-header h3 { font-size: 14px; font-weight: 700; letter-spacing: .03em; }
+.targets-list { display: grid; gap: 10px; padding: 16px; }
+.target-item { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 14px; background: white; border: 1px solid var(--gray-100); border-radius: var(--radius-sm); }
+.target-item.big { background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%); border-color: #dbeafe; }
+.target-label { font-size: 13px; font-weight: 600; color: var(--gray-600); }
+.target-value { font-family: 'DM Mono', monospace; font-weight: 700; color: var(--navy); text-align: right; }
+.target-value.money { color: var(--amber); }
+.target-value.big { font-size: 18px; }
+.targets-note { margin-top: 14px; font-size: 12px; color: var(--gray-400); }
 .toast { position: fixed; bottom: 24px; right: 24px; background: var(--navy); color: white; padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; box-shadow: var(--shadow-lg); transform: translateY(80px); opacity: 0; transition: all .3s; z-index: 999; }
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.success { background: var(--green); }
 .toast.error { background: var(--red); }
+@media (max-width: 900px) {
+  .targets-layout { grid-template-columns: 1fr; }
+}
 @media (max-width: 640px) {
   .container { padding: 16px 12px; }
   .login-card { padding: 32px 24px; }
   .entry-controls { flex-direction: column; align-items: stretch; }
+  .target-item { flex-direction: column; align-items: flex-start; }
+  .target-value { text-align: left; }
 }
 </style>
 </head>
@@ -163,6 +180,7 @@ const ADMIN_PIN = '1901';
       <div class="tab-nav">
         <button class="tab-btn active" onclick="switchTab('entry')">✏️ Εισαγωγή</button>
         <button class="tab-btn" onclick="switchTab('ytd')">📊 YTD Σύνοψη</button>
+        <button class="tab-btn" onclick="switchTab('targets')">🎯 Στόχοι 2026</button>
       </div>
       <div id="tab-entry">
         <div class="card">
@@ -202,6 +220,15 @@ const ADMIN_PIN = '1901';
           <div class="card-body"><div class="ytd-table-wrap"><table class="ytd-table"><thead id="ytd-thead"></thead><tbody id="ytd-tbody"></tbody></table></div></div>
         </div>
       </div>
+      <div id="tab-targets" style="display:none">
+        <div class="card">
+          <div class="card-header"><h2>Στόχοι 2026</h2></div>
+          <div class="card-body">
+            <div class="targets-layout" id="targets-layout"></div>
+            <div class="targets-note">Στατική απεικόνιση ετήσιων στόχων καταστήματος για το 2026.</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div id="employee-view" style="display:none">
@@ -223,6 +250,28 @@ const CATEGORIES = [
   {name:'Ποσό Ασφαλιστηρίου', amount:true},{name:'Future Capital', amount:false},{name:'Ποσό Future Capital', amount:true},
   {name:'Νέα Χρήματα', amount:true},{name:'Αμοιβαία', amount:true},{name:'Σύμβαση Συνεργάτη', amount:false},
   {name:'Εκταμιεύσεις SB', amount:true},{name:'Εκταμιεύσεις Στεγαστικού Δανείου', amount:true},{name:'Εκταμίευση Καταναλωτικού Δανείου', amount:true}
+];
+const TARGETS = [
+  {section:'Καταθέσεις & Επενδύσεις'},
+  {label:'Καταθέσεις', value:15000000, type:'money', big:true},
+  {label:'Αμοιβαία', value:6000000, type:'money', big:true},
+  {label:'Ομόλογα', value:1500000, type:'money', big:true},
+  {label:'Νέοι Cobalt πελάτες', value:67, type:'count'},
+  {section:'Δάνεια'},
+  {label:'Σύνολο Δανείων', value:11190000, type:'money', big:true},
+  {label:'SB', value:3850000, type:'money'},
+  {label:'Στεγαστικά', value:3850000, type:'money'},
+  {label:'Καταναλωτικά', value:740000, type:'money'},
+  {label:'Δ SB', value:3624052, type:'money'},
+  {section:'Κάρτες & Υπηρεσίες'},
+  {label:'Πιστωτικές Κάρτες', value:125, type:'count'},
+  {label:'Χρεωστικές Κάρτες', value:1250, type:'count'},
+  {label:'POS', value:67, type:'count'},
+  {label:'ebanking', value:1079, type:'count'},
+  {section:'Ασφαλιστικά'},
+  {label:'Σύνολο Ασφαλιστικών', value:99149, type:'money', big:true},
+  {label:'Γενικές Ασφάλειες', value:32504, type:'money'},
+  {label:'Unit Link', value:66645, type:'money'}
 ];
 const MONTHS_GR = ['','Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος','Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'];
 let sb;
@@ -266,13 +315,16 @@ function showAdminView() {
   document.getElementById('employee-view').style.display = 'none';
   document.getElementById('entry-date').value = new Date().toISOString().slice(0,10);
   buildEntryTable();
+  buildTargetsView();
   document.getElementById('ytd-month-filter').value = String(new Date().getMonth()+1);
 }
 function switchTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0&&tab==='entry')||(i===1&&tab==='ytd')));
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0&&tab==='entry')||(i===1&&tab==='ytd')||(i===2&&tab==='targets')));
   document.getElementById('tab-entry').style.display = tab==='entry'?'block':'none';
   document.getElementById('tab-ytd').style.display = tab==='ytd'?'block':'none';
+  document.getElementById('tab-targets').style.display = tab==='targets'?'block':'none';
   if(tab==='ytd') loadYTD();
+  if(tab==='targets') buildTargetsView();
 }
 function buildEntryTable() {
   const tbody = document.getElementById('entry-tbody');
@@ -285,6 +337,30 @@ function buildEntryTable() {
     tbody.appendChild(tr);
   });
   updateSaveBar();
+}
+function buildTargetsView() {
+  const wrap = document.getElementById('targets-layout');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  let currentSection = null;
+  TARGETS.forEach(item => {
+    if(item.section) {
+      currentSection = document.createElement('section');
+      currentSection.className = 'targets-section';
+      currentSection.innerHTML = `<div class="targets-section-header"><h3>${item.section}</h3></div><div class="targets-list"></div>`;
+      wrap.appendChild(currentSection);
+      return;
+    }
+    const list = currentSection.querySelector('.targets-list');
+    const div = document.createElement('div');
+    div.className = `target-item${item.big ? ' big' : ''}`;
+    div.innerHTML = `<div class="target-label">${item.label}</div><div class="target-value ${item.type==='money' ? 'money' : ''} ${item.big ? 'big' : ''}">${formatTargetValue(item)}</div>`;
+    list.appendChild(div);
+  });
+}
+function formatTargetValue(item) {
+  if(item.type === 'money') return `${item.value.toLocaleString('el-GR')} €`;
+  return item.value.toLocaleString('el-GR');
 }
 function onInputChange(el) { entryValues[el.dataset.cat] = parseFloat(el.value)||0; updateSaveBar(); }
 function updateSaveBar() {
