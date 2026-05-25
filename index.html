@@ -102,6 +102,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .stat-chip .sc-label { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
 .stat-chip .sc-val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--navy); }
 .stat-chip.is-amount .sc-val { color: var(--amber); font-size: 16px; }
+
 .targets-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .targets-section { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; }
 .targets-section-header { padding: 14px 18px; background: linear-gradient(135deg, var(--navy) 0%, #223562 100%); color: white; }
@@ -114,10 +115,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .target-value.money { color: var(--amber); }
 .target-value.big { font-size: 18px; }
 .targets-note { margin-top: 14px; font-size: 12px; color: var(--gray-400); }
+
 .toast { position: fixed; bottom: 24px; right: 24px; background: var(--navy); color: white; padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; box-shadow: var(--shadow-lg); transform: translateY(80px); opacity: 0; transition: all .3s; z-index: 999; }
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.success { background: var(--green); }
 .toast.error { background: var(--red); }
+
 @media (max-width: 900px) {
   .targets-layout { grid-template-columns: 1fr; }
 }
@@ -136,6 +139,7 @@ const SUPABASE_URL = 'https://jaqlqpjbievptpiutcbj.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_6jOh1HfTk15UpEuh3za3Kw_d3t_Fnxj';
 const ADMIN_PIN = '1901';
 </script>
+
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">📊</div>
@@ -167,6 +171,7 @@ const ADMIN_PIN = '1901';
     <div class="login-error" id="login-error">Λάθος PIN. Προσπαθήστε ξανά.</div>
   </div>
 </div>
+
 <div id="app">
   <div class="topbar">
     <div class="topbar-title">Παραγωγές <span>2026</span></div>
@@ -175,6 +180,7 @@ const ADMIN_PIN = '1901';
       <button class="logout-btn" onclick="doLogout()">Έξοδος</button>
     </div>
   </div>
+
   <div id="admin-view" style="display:none">
     <div class="container">
       <div class="tab-nav">
@@ -182,6 +188,7 @@ const ADMIN_PIN = '1901';
         <button class="tab-btn" onclick="switchTab('ytd')">📊 YTD Σύνοψη</button>
         <button class="tab-btn" onclick="switchTab('targets')">🎯 Στόχοι 2026</button>
       </div>
+
       <div id="tab-entry">
         <div class="card">
           <div class="card-header"><h2>Εισαγωγή Ημερήσιων Παραγωγών</h2></div>
@@ -203,6 +210,7 @@ const ADMIN_PIN = '1901';
           </div>
         </div>
       </div>
+
       <div id="tab-ytd" style="display:none">
         <div class="card">
           <div class="card-header">
@@ -220,6 +228,7 @@ const ADMIN_PIN = '1901';
           <div class="card-body"><div class="ytd-table-wrap"><table class="ytd-table"><thead id="ytd-thead"></thead><tbody id="ytd-tbody"></tbody></table></div></div>
         </div>
       </div>
+
       <div id="tab-targets" style="display:none">
         <div class="card">
           <div class="card-header"><h2>Στόχοι 2026</h2></div>
@@ -231,15 +240,25 @@ const ADMIN_PIN = '1901';
       </div>
     </div>
   </div>
+
   <div id="employee-view" style="display:none">
     <div class="container">
       <div class="emp-greeting"><h2 id="emp-name-display"></h2><p>Τα στοιχεία παραγωγής σας για το 2026</p></div>
       <div class="month-tabs" id="emp-month-tabs"></div>
       <div class="emp-stats-grid" id="emp-stats-grid"></div>
+      <div class="card">
+        <div class="card-header"><h2>Στόχοι 2026</h2></div>
+        <div class="card-body">
+          <div class="targets-layout" id="targets-layout-employee"></div>
+          <div class="targets-note">Στατική απεικόνιση ετήσιων στόχων καταστήματος για το 2026.</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
 <div class="toast" id="toast"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 const EMPLOYEES = ['ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ','ΙΩΑΝΝΟΥ ΝΙΚΗ','ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ','ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ','ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ','ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ','ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ','ΤΖΟΓΙΑ ΝΑΝΤΙΑ','ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ'];
@@ -279,16 +298,19 @@ try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch(e) {}
 let currentUser = null;
 let currentRole = null;
 let entryValues = {};
+
 function getMonthDateRange(year, month) {
   const mm = String(month).padStart(2,'0');
   const lastDay = new Date(year, month, 0).getDate();
   return { start: `${year}-${mm}-01`, end: `${year}-${mm}-${String(lastDay).padStart(2,'0')}` };
 }
+
 document.getElementById('login-user').addEventListener('change', function() {
   document.getElementById('pin-group').style.display = this.value === 'admin' ? 'block' : 'none';
   document.getElementById('login-error').style.display = 'none';
 });
 document.getElementById('login-pin').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
 function doLogin() {
   const user = document.getElementById('login-user').value;
   if(!user) return;
@@ -302,6 +324,7 @@ function doLogin() {
   document.getElementById('topbar-user').textContent = currentUser;
   if(currentRole === 'admin') showAdminView(); else showEmployeeView();
 }
+
 function doLogout() {
   currentUser = null; currentRole = null;
   document.getElementById('login-screen').style.display = 'flex';
@@ -310,22 +333,25 @@ function doLogout() {
   document.getElementById('pin-group').style.display = 'none';
   document.getElementById('login-pin').value = '';
 }
+
 function showAdminView() {
   document.getElementById('admin-view').style.display = 'block';
   document.getElementById('employee-view').style.display = 'none';
   document.getElementById('entry-date').value = new Date().toISOString().slice(0,10);
   buildEntryTable();
-  buildTargetsView();
+  buildTargetsView('targets-layout');
   document.getElementById('ytd-month-filter').value = String(new Date().getMonth()+1);
 }
+
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0&&tab==='entry')||(i===1&&tab==='ytd')||(i===2&&tab==='targets')));
   document.getElementById('tab-entry').style.display = tab==='entry'?'block':'none';
   document.getElementById('tab-ytd').style.display = tab==='ytd'?'block':'none';
   document.getElementById('tab-targets').style.display = tab==='targets'?'block':'none';
   if(tab==='ytd') loadYTD();
-  if(tab==='targets') buildTargetsView();
+  if(tab==='targets') buildTargetsView('targets-layout');
 }
+
 function buildEntryTable() {
   const tbody = document.getElementById('entry-tbody');
   tbody.innerHTML = '';
@@ -338,8 +364,9 @@ function buildEntryTable() {
   });
   updateSaveBar();
 }
-function buildTargetsView() {
-  const wrap = document.getElementById('targets-layout');
+
+function buildTargetsView(targetsId) {
+  const wrap = document.getElementById(targetsId);
   if(!wrap) return;
   wrap.innerHTML = '';
   let currentSection = null;
@@ -358,11 +385,14 @@ function buildTargetsView() {
     list.appendChild(div);
   });
 }
+
 function formatTargetValue(item) {
   if(item.type === 'money') return `${item.value.toLocaleString('el-GR')} €`;
   return item.value.toLocaleString('el-GR');
 }
+
 function onInputChange(el) { entryValues[el.dataset.cat] = parseFloat(el.value)||0; updateSaveBar(); }
+
 function updateSaveBar() {
   const date = document.getElementById('entry-date').value;
   const emp = document.getElementById('entry-employee').value;
@@ -370,8 +400,10 @@ function updateSaveBar() {
   document.getElementById('save-btn').disabled = !ready;
   document.getElementById('save-info').textContent = ready ? `${emp}  —  ${formatDate(date)}` : 'Επιλέξτε ημερομηνία και εργαζόμενο';
 }
+
 document.getElementById('entry-date').addEventListener('change', () => { updateSaveBar(); if(document.getElementById('entry-employee').value) loadExistingEntry(); });
 document.getElementById('entry-employee').addEventListener('change', () => { updateSaveBar(); if(document.getElementById('entry-date').value) loadExistingEntry(); });
+
 async function loadExistingEntry() {
   if(!sb) return;
   const date = document.getElementById('entry-date').value;
@@ -389,6 +421,7 @@ async function loadExistingEntry() {
     showToast('Φορτώθηκαν υπάρχοντα δεδομένα', 'success');
   }
 }
+
 async function saveEntry() {
   const date = document.getElementById('entry-date').value;
   const emp = document.getElementById('entry-employee').value;
@@ -401,6 +434,7 @@ async function saveEntry() {
   btn.disabled = false; btn.textContent = 'Αποθήκευση';
   if(error) showToast('Σφάλμα: ' + error.message, 'error'); else showToast('✓ Αποθηκεύτηκε επιτυχώς!', 'success');
 }
+
 async function loadYTD() {
   if(!sb) { renderYTD([]); return; }
   const mf = document.getElementById('ytd-month-filter').value;
@@ -413,6 +447,7 @@ async function loadYTD() {
   if(error) { showToast('Σφάλμα φόρτωσης: ' + error.message, 'error'); return; }
   renderYTD(data || []);
 }
+
 function renderYTD(data) {
   const pivot = {};
   CATEGORIES.forEach(cat => { pivot[cat.name] = {}; EMPLOYEES.forEach(emp => pivot[cat.name][emp] = 0); });
@@ -439,6 +474,7 @@ function renderYTD(data) {
   tr.innerHTML = `<td>ΣΥΝΟΛΟ ΕΝΕΡΓΕΙΩΝ</td>${grandVals.map(v=>`<td>${v||'—'}</td>`).join('')}<td>${grandTotal}</td>`;
   tbody.appendChild(tr);
 }
+
 function showEmployeeView() {
   document.getElementById('admin-view').style.display = 'none';
   document.getElementById('employee-view').style.display = 'block';
@@ -458,7 +494,9 @@ function showEmployeeView() {
     tabsEl.appendChild(btn);
   }
   loadEmployeeStats(curMonth);
+  buildTargetsView('targets-layout-employee');
 }
+
 async function loadEmployeeStats(month) {
   if(!sb) { renderEmployeeStats([]); return; }
   const range = getMonthDateRange(2026, month);
@@ -466,6 +504,7 @@ async function loadEmployeeStats(month) {
   if(error) { showToast('Σφάλμα φόρτωσης: ' + error.message, 'error'); return; }
   renderEmployeeStats(data||[]);
 }
+
 function renderEmployeeStats(data) {
   const totals = {};
   CATEGORIES.forEach(cat => totals[cat.name] = 0);
@@ -481,6 +520,7 @@ function renderEmployeeStats(data) {
     grid.appendChild(div);
   });
 }
+
 function formatDate(d) { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}/${m}/${y}`; }
 function showToast(msg, type='') { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show' + (type?' '+type:''); clearTimeout(t._timer); t._timer = setTimeout(() => t.className='toast', 3000); }
 </script>
