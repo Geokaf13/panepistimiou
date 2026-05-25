@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Παραγωγές 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1a2744;
+  --blue: #2563eb;
+  --blue-light: #3b82f6;
+  --green: #059669;
+  --green-light: #d1fae5;
+  --amber: #d97706;
+  --amber-light: #fef3c7;
+  --red: #dc2626;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-600: #475569;
+  --gray-800: #1e293b;
+  --white: #ffffff;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-800);
+  min-height: 100vh;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--navy);
+  color: white;
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.topbar-title { font-weight: 700; font-size: 16px; letter-spacing: .02em; }
+.topbar-title span { color: #60a5fa; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.user-badge {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.logout-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,.3);
+  color: rgba(255,255,255,.7);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .2s;
+}
+.logout-btn:hover { background: rgba(255,255,255,.1); color: white; }
+
+/* ── LOGIN ── */
+#login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--navy) 0%, #1e3a8a 60%, #1a2744 100%);
+}
+.login-card {
+  background: white;
+  border-radius: 20px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+.login-logo {
+  width: 64px; height: 64px;
+  background: var(--navy);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 28px;
+}
+.login-card h1 { font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.login-card p { font-size: 14px; color: var(--gray-400); margin-bottom: 32px; }
+.login-group { text-align: left; margin-bottom: 16px; }
+.login-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; }
+.login-group select,
+.login-group input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--gray-800);
+  background: var(--gray-50);
+  transition: border-color .2s;
+  appearance: none;
+}
+.login-group select:focus,
+.login-group input:focus { outline: none; border-color: var(--blue); background: white; }
+.login-btn {
+  width: 100%;
+  background: var(--navy);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background .2s, transform .1s;
+}
+.login-btn:hover { background: #253460; }
+.login-btn:active { transform: scale(.99); }
+.login-error { color: var(--red); font-size: 13px; margin-top: 8px; display: none; }
+
+/* ── MAIN LAYOUT ── */
+#app { display: none; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+
+/* ── TAB NAV ── */
+.tab-nav {
+  display: flex;
+  gap: 4px;
+  background: var(--gray-100);
+  border-radius: var(--radius);
+  padding: 4px;
+  margin-bottom: 24px;
+  width: fit-content;
+}
+.tab-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: none;
+  color: var(--gray-600);
+  transition: all .2s;
+}
+.tab-btn.active {
+  background: white;
+  color: var(--navy);
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+
+/* ── CARDS ── */
+.card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.card-header h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+.card-body { padding: 24px; }
+
+/* ── ADMIN ENTRY FORM ── */
+.entry-controls {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.field-group { display: flex; flex-direction: column; gap: 5px; }
+.field-group label { font-size: 12px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: .04em; }
+.field-group select,
+.field-group input[type=date] {
+  padding: 9px 12px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--gray-800);
+  background: white;
+  transition: border-color .2s;
+}
+.field-group select:focus,
+.field-group input[type=date]:focus { outline: none; border-color: var(--blue); }
+
+/* ── ENTRY TABLE ── */
+.entry-table-wrap { overflow-x: auto; }
+.entry-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.entry-table th {
+  background: var(--navy);
+  color: white;
+  font-weight: 600;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 12px;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+.entry-table th:first-child { border-radius: 0; }
+.entry-table td {
+  padding: 0;
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+.entry-table tr:hover td { background: var(--gray-50); }
+.cat-label {
+  padding: 10px 14px;
+  font-weight: 500;
+  color: var(--gray-800);
+  white-space: nowrap;
+}
+.cat-label.is-amount { color: var(--amber); font-weight: 600; }
+.entry-input {
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 10px 12px;
+  font-size: 13.5px;
+  font-family: 'DM Mono', monospace;
+  color: var(--navy);
+  text-align: right;
+  outline: none;
+  transition: background .15s;
+}
+.entry-input:focus { background: #eff6ff; }
+.is-amount .entry-input { color: var(--amber); }
+.row-total {
+  padding: 10px 14px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+  text-align: right;
+  color: var(--green);
+  background: var(--green-light);
+  white-space: nowrap;
+}
+
+.save-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.save-info { font-size: 13px; color: var(--gray-600); }
+.save-btn {
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.save-btn:hover { background: #047857; }
+.save-btn:active { transform: scale(.98); }
+.save-btn:disabled { background: var(--gray-300); cursor: not-allowed; }
+.save-msg { font-size: 13px; font-weight: 600; color: var(--green); display: none; }
+
+/* ── STATS / YTD ── */
+.stats-controls {
+  display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 20px;
+}
+.ytd-table-wrap { overflow-x: auto; }
+.ytd-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.ytd-table th {
+  background: var(--navy);
+  color: white;
+  font-weight: 600;
+  padding: 10px 12px;
+  text-align: center;
+  font-size: 11.5px;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+.ytd-table th:first-child { text-align: left; }
+.ytd-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--gray-100);
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+}
+.ytd-table td:first-child { text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 500; white-space: nowrap; }
+.ytd-table tr:hover td { background: var(--gray-50); }
+.ytd-table .total-row td { background: var(--navy); color: white; font-weight: 700; }
+.ytd-table .amount-row td { color: var(--amber); background: var(--amber-light); }
+.ytd-table .amount-row td:first-child { color: var(--amber); }
+.val-zero { color: var(--gray-300); }
+
+/* ── EMPLOYEE VIEW ── */
+.emp-greeting {
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, var(--navy) 0%, #1e3a8a 100%);
+  border-radius: var(--radius);
+  color: white;
+}
+.emp-greeting h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.emp-greeting p { font-size: 14px; opacity: .7; }
+
+.month-tabs {
+  display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 20px;
+}
+.month-tab {
+  padding: 6px 14px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  background: white;
+  color: var(--gray-600);
+  transition: all .2s;
+}
+.month-tab.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: white;
+}
+
+.emp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.stat-chip {
+  background: white;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  border-left: 3px solid var(--blue);
+}
+.stat-chip.is-amount { border-left-color: var(--amber); }
+.stat-chip .sc-label { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+.stat-chip .sc-val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--navy); }
+.stat-chip.is-amount .sc-val { color: var(--amber); font-size: 16px; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--navy);
+  color: white;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all .3s;
+  z-index: 999;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--green); }
+.toast.error { background: var(--red); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .container { padding: 16px 12px; }
+  .login-card { padding: 32px 24px; }
+  .entry-controls, .stats-controls { flex-direction: column; align-items: stretch; }
+}
+</style>
+</head>
+<body>
+
+<!-- CONFIG — αλλάξτε αυτές τις τιμές μετά το Supabase setup -->
+<script>
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const ADMIN_PIN = '1234'; // αλλάξτε τον κωδικό admin
+</script>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">📊</div>
+    <h1>Παραγωγές 2026</h1>
+    <p>Σύστημα καταγραφής παραγωγών</p>
+    <div class="login-group">
+      <label>Σύνδεση ως</label>
+      <select id="login-user">
+        <option value="">— Επιλέξτε —</option>
+        <option value="admin">👤 Διαχειριστής</option>
+        <optgroup label="Εργαζόμενοι">
+          <option value="ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ">ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option>
+          <option value="ΙΩΑΝΝΟΥ ΝΙΚΗ">ΙΩΑΝΝΟΥ ΝΙΚΗ</option>
+          <option value="ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ">ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
+          <option value="ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ">ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option>
+          <option value="ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ">ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option>
+          <option value="ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ">ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+          <option value="ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ">ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option>
+          <option value="ΤΖΟΓΙΑ ΝΑΝΤΙΑ">ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option>
+          <option value="ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ">ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="login-group" id="pin-group" style="display:none">
+      <label>PIN Διαχειριστή</label>
+      <input type="password" id="login-pin" placeholder="••••" maxlength="10">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Είσοδος</button>
+    <div class="login-error" id="login-error">Λάθος PIN. Προσπαθήστε ξανά.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-title">Παραγωγές <span>2026</span></div>
+    <div class="topbar-right">
+      <div class="user-badge" id="topbar-user"></div>
+      <button class="logout-btn" onclick="doLogout()">Έξοδος</button>
+    </div>
+  </div>
+
+  <!-- ADMIN VIEW -->
+  <div id="admin-view" style="display:none">
+    <div class="container">
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('entry')">✏️ Εισαγωγή</button>
+        <button class="tab-btn" onclick="switchTab('ytd')">📊 YTD Σύνοψη</button>
+      </div>
+
+      <!-- ENTRY TAB -->
+      <div id="tab-entry">
+        <div class="card">
+          <div class="card-header">
+            <h2>Εισαγωγή Ημερήσιων Παραγωγών</h2>
+          </div>
+          <div class="card-body">
+            <div class="entry-controls">
+              <div class="field-group">
+                <label>Ημερομηνία</label>
+                <input type="date" id="entry-date">
+              </div>
+              <div class="field-group">
+                <label>Εργαζόμενος</label>
+                <select id="entry-employee">
+                  <option value="">— Επιλέξτε —</option>
+                  <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option>
+                  <option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option>
+                  <option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option>
+                  <option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option>
+                  <option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option>
+                  <option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option>
+                  <option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="entry-table-wrap">
+              <table class="entry-table" id="entry-table">
+                <thead>
+                  <tr>
+                    <th>Κατηγορία</th>
+                    <th style="text-align:right;min-width:120px">Τιμή</th>
+                  </tr>
+                </thead>
+                <tbody id="entry-tbody"></tbody>
+              </table>
+            </div>
+
+            <div class="save-bar">
+              <div class="save-info" id="save-info">Επιλέξτε ημερομηνία και εργαζόμενο</div>
+              <div style="display:flex;align-items:center;gap:16px">
+                <span class="save-msg" id="save-msg">✓ Αποθηκεύτηκε!</span>
+                <button class="save-btn" id="save-btn" onclick="saveEntry()" disabled>Αποθήκευση</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- YTD TAB -->
+      <div id="tab-ytd" style="display:none">
+        <div class="card">
+          <div class="card-header">
+            <h2>Προοδευτικά Σύνολα (YTD)</h2>
+            <div class="field-group">
+              <label>Φίλτρο μήνα</label>
+              <select id="ytd-month-filter" onchange="loadYTD()">
+                <option value="all">Ολόκληρο το έτος</option>
+                <option value="1">Ιανουάριος</option><option value="2">Φεβρουάριος</option>
+                <option value="3">Μάρτιος</option><option value="4">Απρίλιος</option>
+                <option value="5">Μάιος</option><option value="6">Ιούνιος</option>
+                <option value="7">Ιούλιος</option><option value="8">Αύγουστος</option>
+                <option value="9">Σεπτέμβριος</option><option value="10">Οκτώβριος</option>
+                <option value="11">Νοέμβριος</option><option value="12">Δεκέμβριος</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="ytd-table-wrap">
+              <table class="ytd-table" id="ytd-table">
+                <thead id="ytd-thead"></thead>
+                <tbody id="ytd-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPLOYEE VIEW -->
+  <div id="employee-view" style="display:none">
+    <div class="container">
+      <div class="emp-greeting">
+        <h2 id="emp-name-display"></h2>
+        <p>Τα στοιχεία παραγωγής σας για το 2026</p>
+      </div>
+      <div class="month-tabs" id="emp-month-tabs"></div>
+      <div class="emp-stats-grid" id="emp-stats-grid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ── CONFIG ────────────────────────────────────────────────
+const EMPLOYEES = [
+  'ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ','ΙΩΑΝΝΟΥ ΝΙΚΗ','ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ',
+  'ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ','ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ','ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ',
+  'ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ','ΤΖΟΓΙΑ ΝΑΝΤΙΑ','ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ'
+];
+
+const CATEGORIES = [
+  {name:'Ραντεβού', amount:false},
+  {name:'Νέα ID', amount:false},
+  {name:'Νέα Χρεωστική', amount:false},
+  {name:'Νέο ebanking', amount:false},
+  {name:'Επικαιροποιήσεις', amount:false},
+  {name:'Αίτηση Πιστωτικής Κάρτας', amount:false},
+  {name:'Αίτηση Καταναλωτικού Δανείου', amount:false},
+  {name:'Αίτηση Στεγαστικού Δανείου', amount:false},
+  {name:'Αίτηση POS', amount:false},
+  {name:'Ασφαλιστήριο', amount:false},
+  {name:'Ποσό Ασφαλιστηρίου', amount:true},
+  {name:'Future Capital', amount:false},
+  {name:'Ποσό Future Capital', amount:true},
+  {name:'Νέα Χρήματα', amount:true},
+  {name:'Αμοιβαία', amount:true},
+  {name:'Σύμβαση Συνεργάτη', amount:false},
+  {name:'Εκταμιεύσεις SB', amount:true},
+  {name:'Εκταμιεύσεις Στεγαστικού Δανείου', amount:true},
+  {name:'Εκταμίευση Καταναλωτικού Δανείου', amount:true},
+];
+
+const MONTHS_GR = ['','Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος','Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'];
+
+// ── SUPABASE ──────────────────────────────────────────────
+let sb;
+try {
+  sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} catch(e) {}
+
+// ── STATE ─────────────────────────────────────────────────
+let currentUser = null;
+let currentRole = null;
+let entryValues = {};
+
+// ── LOGIN ─────────────────────────────────────────────────
+document.getElementById('login-user').addEventListener('change', function() {
+  document.getElementById('pin-group').style.display = this.value === 'admin' ? 'block' : 'none';
+  document.getElementById('login-error').style.display = 'none';
+});
+
+document.getElementById('login-pin').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+function doLogin() {
+  const user = document.getElementById('login-user').value;
+  if(!user) return;
+  if(user === 'admin') {
+    const pin = document.getElementById('login-pin').value;
+    if(pin !== ADMIN_PIN) {
+      document.getElementById('login-error').style.display = 'block';
+      return;
+    }
+    currentRole = 'admin';
+    currentUser = 'Διαχειριστής';
+  } else {
+    currentRole = 'employee';
+    currentUser = user;
+  }
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('topbar-user').textContent = currentUser;
+  if(currentRole === 'admin') showAdminView();
+  else showEmployeeView();
+}
+
+function doLogout() {
+  currentUser = null; currentRole = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-user').value = '';
+  document.getElementById('pin-group').style.display = 'none';
+  document.getElementById('login-pin').value = '';
+}
+
+// ── ADMIN ─────────────────────────────────────────────────
+function showAdminView() {
+  document.getElementById('admin-view').style.display = 'block';
+  document.getElementById('employee-view').style.display = 'none';
+  // Set today as default date
+  const today = new Date().toISOString().slice(0,10);
+  document.getElementById('entry-date').value = today;
+  buildEntryTable();
+  // Set current month in YTD filter
+  document.getElementById('ytd-month-filter').value = String(new Date().getMonth()+1);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0&&tab==='entry')||(i===1&&tab==='ytd')));
+  document.getElementById('tab-entry').style.display = tab==='entry'?'block':'none';
+  document.getElementById('tab-ytd').style.display = tab==='ytd'?'block':'none';
+  if(tab==='ytd') loadYTD();
+}
+
+function buildEntryTable() {
+  const tbody = document.getElementById('entry-tbody');
+  tbody.innerHTML = '';
+  entryValues = {};
+  CATEGORIES.forEach(cat => {
+    entryValues[cat.name] = 0;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="cat-label ${cat.amount?'is-amount':''}">${cat.name}${cat.amount?' (€)':''}</td>
+      <td class="${cat.amount?'is-amount':''}">
+        <input class="entry-input" type="number" min="0" step="${cat.amount?'0.01':'1'}"
+          value="0" data-cat="${cat.name}"
+          oninput="onInputChange(this)"
+          onfocus="this.select()">
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+  updateSaveBar();
+}
+
+function onInputChange(el) {
+  entryValues[el.dataset.cat] = parseFloat(el.value)||0;
+  updateSaveBar();
+}
+
+function updateSaveBar() {
+  const date = document.getElementById('entry-date').value;
+  const emp = document.getElementById('entry-employee').value;
+  const ready = date && emp;
+  document.getElementById('save-btn').disabled = !ready;
+  document.getElementById('save-info').textContent = ready
+    ? `${emp}  —  ${formatDate(date)}`
+    : 'Επιλέξτε ημερομηνία και εργαζόμενο';
+}
+
+document.getElementById('entry-date').addEventListener('change', () => {
+  updateSaveBar();
+  if(document.getElementById('entry-employee').value) loadExistingEntry();
+});
+document.getElementById('entry-employee').addEventListener('change', () => {
+  updateSaveBar();
+  if(document.getElementById('entry-date').value) loadExistingEntry();
+});
+
+async function loadExistingEntry() {
+  if(!sb || SUPABASE_URL==='YOUR_SUPABASE_URL') return;
+  const date = document.getElementById('entry-date').value;
+  const emp = document.getElementById('entry-employee').value;
+  const {data} = await sb.from('productions').select('*')
+    .eq('date', date).eq('employee', emp);
+  if(data && data.length) {
+    data.forEach(row => {
+      const input = document.querySelector(`input[data-cat="${row.category}"]`);
+      if(input) { input.value = row.value; entryValues[row.category] = row.value; }
+    });
+    showToast('Φορτώθηκαν υπάρχοντα δεδομένα', 'success');
+  } else {
+    document.querySelectorAll('.entry-input').forEach(i => { i.value=0; });
+    Object.keys(entryValues).forEach(k => entryValues[k]=0);
+  }
+}
+
+async function saveEntry() {
+  const date = document.getElementById('entry-date').value;
+  const emp = document.getElementById('entry-employee').value;
+  if(!date || !emp) return;
+
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true; btn.textContent = 'Αποθήκευση...';
+
+  if(!sb || SUPABASE_URL==='YOUR_SUPABASE_URL') {
+    // Demo mode — just show success
+    setTimeout(() => {
+      btn.disabled = false; btn.textContent = 'Αποθήκευση';
+      showToast('✓ Αποθηκεύτηκε! (demo)', 'success');
+    }, 600);
+    return;
+  }
+
+  // Upsert all categories for this date+employee
+  const rows = CATEGORIES.map(cat => ({
+    date, employee: emp, category: cat.name, value: entryValues[cat.name]||0
+  }));
+
+  const {error} = await sb.from('productions').upsert(rows, {
+    onConflict: 'date,employee,category'
+  });
+
+  btn.disabled = false; btn.textContent = 'Αποθήκευση';
+  if(error) showToast('Σφάλμα: ' + error.message, 'error');
+  else showToast('✓ Αποθηκεύτηκε επιτυχώς!', 'success');
+}
+
+async function loadYTD() {
+  if(!sb || SUPABASE_URL==='YOUR_SUPABASE_URL') { renderYTDDemo(); return; }
+  const mf = document.getElementById('ytd-month-filter').value;
+  let query = sb.from('productions').select('*').gte('date','2026-01-01').lte('date','2026-12-31');
+  if(mf !== 'all') {
+    const mm = mf.padStart(2,'0');
+    query = query.gte('date',`2026-${mm}-01`).lte('date',`2026-${mm}-31`);
+  }
+  const {data, error} = await query;
+  if(error) { showToast('Σφάλμα φόρτωσης', 'error'); return; }
+  renderYTD(data || []);
+}
+
+function renderYTD(data) {
+  // Build pivot: category -> employee -> total
+  const pivot = {};
+  CATEGORIES.forEach(cat => {
+    pivot[cat.name] = {};
+    EMPLOYEES.forEach(emp => pivot[cat.name][emp] = 0);
+  });
+  data.forEach(row => {
+    if(pivot[row.category] && pivot[row.category][row.employee] !== undefined)
+      pivot[row.category][row.employee] += row.value;
+  });
+
+  const thead = document.getElementById('ytd-thead');
+  const tbody = document.getElementById('ytd-tbody');
+
+  thead.innerHTML = `<tr>
+    <th>Κατηγορία</th>
+    ${EMPLOYEES.map(e => `<th>${e.split(' ')[0]}</th>`).join('')}
+    <th>ΣΥΝΟΛΟ</th>
+  </tr>`;
+
+  tbody.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const vals = EMPLOYEES.map(e => pivot[cat.name][e]);
+    const total = vals.reduce((a,b)=>a+b,0);
+    const isAmt = cat.amount;
+    const fmt = (v) => v===0 ? `<span class="val-zero">—</span>` : (isAmt ? `${v.toLocaleString('el-GR',{minimumFractionDigits:0})} €` : v);
+    const tr = document.createElement('tr');
+    if(isAmt) tr.className = 'amount-row';
+    tr.innerHTML = `
+      <td>${cat.name}${isAmt?' (€)':''}</td>
+      ${vals.map(v=>`<td>${fmt(v)}</td>`).join('')}
+      <td><strong>${fmt(total)}</strong></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Grand total row (count only, skip amounts)
+  const countCats = CATEGORIES.filter(c=>!c.amount);
+  const grandVals = EMPLOYEES.map(emp =>
+    countCats.reduce((s,cat)=>s+pivot[cat.name][emp],0)
+  );
+  const grandTotal = grandVals.reduce((a,b)=>a+b,0);
+  const tr = document.createElement('tr');
+  tr.className = 'total-row';
+  tr.innerHTML = `<td>ΣΥΝΟΛΟ ΕΝΕΡΓΕΙΩΝ</td>${grandVals.map(v=>`<td>${v||'—'}</td>`).join('')}<td>${grandTotal}</td>`;
+  tbody.appendChild(tr);
+}
+
+function renderYTDDemo() {
+  // Render with zeros for demo
+  renderYTD([]);
+}
+
+// ── EMPLOYEE VIEW ─────────────────────────────────────────
+function showEmployeeView() {
+  document.getElementById('admin-view').style.display = 'none';
+  document.getElementById('employee-view').style.display = 'block';
+  document.getElementById('emp-name-display').textContent = currentUser;
+
+  // Build month tabs
+  const tabsEl = document.getElementById('emp-month-tabs');
+  tabsEl.innerHTML = '';
+  const curMonth = new Date().getMonth()+1;
+  for(let m=1; m<=12; m++) {
+    const btn = document.createElement('button');
+    btn.className = 'month-tab' + (m===curMonth?' active':'');
+    btn.textContent = MONTHS_GR[m].slice(0,3);
+    btn.onclick = () => {
+      document.querySelectorAll('.month-tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      loadEmployeeStats(m);
+    };
+    tabsEl.appendChild(btn);
+  }
+  loadEmployeeStats(curMonth);
+}
+
+async function loadEmployeeStats(month) {
+  if(!sb || SUPABASE_URL==='YOUR_SUPABASE_URL') { renderEmployeeStats([]); return; }
+  const mm = String(month).padStart(2,'0');
+  const {data} = await sb.from('productions').select('*')
+    .eq('employee', currentUser)
+    .gte('date', `2026-${mm}-01`)
+    .lte('date', `2026-${mm}-31`);
+  renderEmployeeStats(data||[]);
+}
+
+function renderEmployeeStats(data) {
+  const totals = {};
+  CATEGORIES.forEach(cat => totals[cat.name] = 0);
+  data.forEach(row => { if(totals[row.category]!==undefined) totals[row.category]+=row.value; });
+
+  const grid = document.getElementById('emp-stats-grid');
+  grid.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const v = totals[cat.name];
+    const div = document.createElement('div');
+    div.className = 'stat-chip' + (cat.amount?' is-amount':'');
+    const display = cat.amount && v > 0 ? `${v.toLocaleString('el-GR')} €` : v;
+    div.innerHTML = `
+      <div class="sc-label">${cat.name}</div>
+      <div class="sc-val">${display}</div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+// ── HELPERS ──────────────────────────────────────────────
+function formatDate(d) {
+  if(!d) return '';
+  const [y,m,dd] = d.split('-');
+  return `${dd}/${m}/${y}`;
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type?' '+type:'');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.className='toast', 3000);
+}
+</script>
+</body>
+</html>
