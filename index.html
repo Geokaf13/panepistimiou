@@ -166,6 +166,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 const SUPABASE_URL = 'https://jaqlqpjbievptpiutcbj.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_6jOh1HfTk15UpEuh3za3Kw_d3t_Fnxj';
 const ADMIN_PIN = '1901';
+const REGIONAL_PIN = '2026';
 </script>
 
 <div id="login-screen">
@@ -178,6 +179,7 @@ const ADMIN_PIN = '1901';
       <select id="login-user">
         <option value="">— Επιλέξτε —</option>
         <option value="admin">👤 ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ</option>
+        <option value="regional">🏢 Περιφερειακή Διεύθυνση</option>
         <optgroup label="Εργαζόμενοι">
           <option value="ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ">ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option>
           <option value="ΙΩΑΝΝΟΥ ΝΙΚΗ">ΙΩΑΝΝΟΥ ΝΙΚΗ</option>
@@ -192,7 +194,7 @@ const ADMIN_PIN = '1901';
       </select>
     </div>
     <div class="login-group" id="pin-group" style="display:none">
-      <label>PIN Διαχειριστή</label>
+      <label id="pin-label">PIN Διαχειριστή</label>
       <input type="password" id="login-pin" placeholder="••••" maxlength="10">
     </div>
     <button class="login-btn" onclick="doLogin()">Είσοδος</button>
@@ -327,11 +329,59 @@ const ADMIN_PIN = '1901';
       <div class="emp-greeting"><h2 id="emp-name-display"></h2><p>Τα στοιχεία παραγωγής σας για το 2026</p></div>
       <div class="month-tabs" id="emp-month-tabs"></div>
       <div class="emp-stats-grid" id="emp-stats-grid"></div>
-      <div class="card">
+      <div class="card" style="margin-bottom:20px">
         <div class="card-header"><h2>Στόχοι 2026</h2></div>
         <div class="card-body">
           <div class="targets-layout" id="targets-layout-employee"></div>
           <div class="targets-note">Στατική απεικόνιση ετήσιων στόχων καταστήματος για το 2026.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>🌴 Οι Άδειές μου 2026</h2></div>
+        <div class="card-body" style="padding:0 0 4px">
+          <div style="padding:18px 24px 0"><span class="vac-badge" id="my-vac-total">0 εργάσιμες ημέρες συνολικά</span></div>
+          <table class="vac-list-table" style="margin-top:14px">
+            <thead><tr><th>#</th><th>Από</th><th>Έως</th><th>Εργάσιμες</th></tr></thead>
+            <tbody id="my-vac-tbody"></tbody>
+          </table>
+          <div class="empty-state" id="my-vac-empty" style="display:none">Δεν έχετε καταχωρημένες άδειες.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="regional-view" style="display:none">
+    <div class="container">
+      <div class="emp-greeting">
+        <h2>🏢 Περιφερειακή Διεύθυνση</h2>
+        <p>Προβολή αδειών καταστήματος -065- για το 2026 (μόνο για προβολή)</p>
+      </div>
+
+      <div class="emp-stats-grid" id="reg-stats-row"></div>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header"><h2>Ημερολόγιο Αδειών</h2></div>
+        <div class="card-body" style="padding:16px">
+          <div class="cal-wrap"><table class="cal-table" id="reg-cal-table"></table></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header"><h2>Σύνολο Εργάσιμων Ημερών ανά Εργαζόμενο</h2></div>
+        <div class="card-body"><div class="emp-totals-grid" id="reg-emp-totals"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Λίστα Καταχωρημένων Αδειών</h2>
+          <button class="export-link-btn" onclick="exportVacCSV()">⬇ Εξαγωγή CSV</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="vac-list-table">
+            <thead><tr><th>#</th><th>Εργαζόμενος</th><th>Από</th><th>Έως</th><th>Εργάσιμες</th></tr></thead>
+            <tbody id="reg-list-tbody"></tbody>
+          </table>
+          <div class="empty-state" id="reg-list-empty" style="display:none">Δεν υπάρχουν καταχωρημένες άδειες ακόμα.</div>
         </div>
       </div>
     </div>
@@ -388,7 +438,10 @@ function getMonthDateRange(year, month) {
 }
 
 document.getElementById('login-user').addEventListener('change', function() {
-  document.getElementById('pin-group').style.display = this.value === 'admin' ? 'block' : 'none';
+  const val = this.value;
+  const needsPin = val === 'admin' || val === 'regional';
+  document.getElementById('pin-group').style.display = needsPin ? 'block' : 'none';
+  document.getElementById('pin-label').textContent = val === 'regional' ? 'PIN Περιφερειακής' : 'PIN Διαχειριστή';
   document.getElementById('login-error').style.display = 'none';
 });
 document.getElementById('login-pin').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
@@ -400,11 +453,17 @@ function doLogin() {
     const pin = document.getElementById('login-pin').value;
     if(pin !== ADMIN_PIN) { document.getElementById('login-error').style.display = 'block'; return; }
     currentRole = 'admin'; currentUser = 'Διαχειριστής';
+  } else if(user === 'regional') {
+    const pin = document.getElementById('login-pin').value;
+    if(pin !== REGIONAL_PIN) { document.getElementById('login-error').style.display = 'block'; return; }
+    currentRole = 'regional'; currentUser = 'Περιφερειακή Διεύθυνση';
   } else { currentRole = 'employee'; currentUser = user; }
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('topbar-user').textContent = currentUser;
-  if(currentRole === 'admin') showAdminView(); else showEmployeeView();
+  if(currentRole === 'admin') showAdminView();
+  else if(currentRole === 'regional') showRegionalView();
+  else showEmployeeView();
 }
 
 function doLogout() {
@@ -419,6 +478,7 @@ function doLogout() {
 function showAdminView() {
   document.getElementById('admin-view').style.display = 'block';
   document.getElementById('employee-view').style.display = 'none';
+  document.getElementById('regional-view').style.display = 'none';
   document.getElementById('entry-date').value = new Date().toISOString().slice(0,10);
   buildEntryTable();
   buildTargetsView('targets-layout');
@@ -434,7 +494,7 @@ function switchTab(tab) {
   document.getElementById('tab-adeies').style.display = tab==='adeies'?'block':'none';
   if(tab==='ytd') loadYTD();
   if(tab==='targets') buildTargetsView('targets-layout');
-  if(tab==='adeies') loadVacations();
+  if(tab==='adeies') loadVacations('vac', false);
 }
 
 function buildEntryTable() {
@@ -580,12 +640,12 @@ function allDates(from, to) {
 
 function fmtVacDate(d) { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}/${m}/${y}`; }
 
-async function loadVacations() {
-  if(!sb) { vacations = []; renderVacations(); showToast('Δεν υπάρχει σύνδεση Supabase', 'error'); return; }
+async function loadVacations(prefix='vac', readonly=false) {
+  if(!sb) { vacations = []; renderVacations(prefix, readonly); showToast('Δεν υπάρχει σύνδεση Supabase', 'error'); return; }
   const {data, error} = await sb.from('vacations').select('*').order('from_date');
   if(error) { showToast('Σφάλμα φόρτωσης αδειών: ' + error.message, 'error'); return; }
   vacations = (data || []).map(r => ({ id: r.id, employee: r.employee, from: r.from_date, to: r.to_date, workdays: r.workdays }));
-  renderVacations();
+  renderVacations(prefix, readonly);
 }
 
 async function addVacation() {
@@ -625,21 +685,23 @@ function exportVacCSV() {
   a.click();
 }
 
-function renderVacations() {
-  renderVacStats();
-  renderVacCalendar();
-  renderVacEmpTotals();
-  renderVacList();
+function renderVacations(prefix='vac', readonly=false) {
+  renderVacStats(prefix);
+  renderVacCalendar(prefix);
+  renderVacEmpTotals(prefix);
+  renderVacList(prefix, readonly);
 }
 
-function renderVacStats() {
+function renderVacStats(prefix='vac') {
   const total = vacations.reduce((s,v)=>s+v.workdays,0);
   const empSet = new Set(vacations.map(v=>v.employee));
   const empDays = {};
   EMPLOYEES.forEach(e => empDays[e] = 0);
   vacations.forEach(v => empDays[v.employee] = (empDays[v.employee]||0)+v.workdays);
   const top = Object.entries(empDays).sort((a,b)=>b[1]-a[1])[0];
-  document.getElementById('vac-stats-row').innerHTML = `
+  const el = document.getElementById(`${prefix}-stats-row`);
+  if(!el) return;
+  el.innerHTML = `
     <div class="stat-chip"><div class="sc-label">Εγγραφές</div><div class="sc-val">${vacations.length}</div></div>
     <div class="stat-chip"><div class="sc-label">Εργαζόμενοι</div><div class="sc-val">${empSet.size}</div></div>
     <div class="stat-chip"><div class="sc-label">Συνολικές Εργάσιμες</div><div class="sc-val">${total}</div></div>
@@ -647,7 +709,9 @@ function renderVacStats() {
   `;
 }
 
-function renderVacCalendar() {
+function renderVacCalendar(prefix='vac') {
+  const tableEl = document.getElementById(`${prefix}-cal-table`);
+  if(!tableEl) return;
   const dates = allDates('2026-01-01','2026-12-31');
   const vacDays = {};
   EMPLOYEES.forEach(e => vacDays[e] = new Set());
@@ -699,14 +763,16 @@ function renderVacCalendar() {
     html += '</tr>';
   });
   html += '</tbody>';
-  document.getElementById('vac-cal-table').innerHTML = html;
+  tableEl.innerHTML = html;
 }
 
-function renderVacEmpTotals() {
+function renderVacEmpTotals(prefix='vac') {
+  const el = document.getElementById(`${prefix}-emp-totals`);
+  if(!el) return;
   const empDays = {};
   EMPLOYEES.forEach(e => empDays[e] = 0);
   vacations.forEach(v => empDays[v.employee] = (empDays[v.employee]||0)+v.workdays);
-  document.getElementById('vac-emp-totals').innerHTML = EMPLOYEES.map(e => `
+  el.innerHTML = EMPLOYEES.map(e => `
     <div class="emp-chip">
       <div class="ec-name">${e.split(' ')[0]}<br><span style="font-weight:400;color:var(--gray-400);font-size:11px">${e.split(' ').slice(1).join(' ')}</span></div>
       <div class="ec-days${empDays[e]===0?' zero':''}">${empDays[e]}</div>
@@ -714,9 +780,10 @@ function renderVacEmpTotals() {
   `).join('');
 }
 
-function renderVacList() {
-  const tbody = document.getElementById('vac-list-tbody');
-  const empty = document.getElementById('vac-list-empty');
+function renderVacList(prefix='vac', readonly=false) {
+  const tbody = document.getElementById(`${prefix}-list-tbody`);
+  const empty = document.getElementById(`${prefix}-list-empty`);
+  if(!tbody) return;
   if(vacations.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
   const sorted = [...vacations].sort((a,b)=>a.employee.localeCompare(b.employee)||a.from.localeCompare(b.from));
@@ -727,7 +794,7 @@ function renderVacList() {
       <td>${fmtVacDate(v.from)}</td>
       <td>${fmtVacDate(v.to)}</td>
       <td><span class="vac-badge">${v.workdays} εργάσιμες</span></td>
-      <td><button class="del-btn" onclick="deleteVacation(${v.id})">✕</button></td>
+      ${readonly ? '' : `<td><button class="del-btn" onclick="deleteVacation(${v.id})">✕</button></td>`}
     </tr>
   `).join('');
 }
@@ -736,6 +803,7 @@ function renderVacList() {
 
 function showEmployeeView() {
   document.getElementById('admin-view').style.display = 'none';
+  document.getElementById('regional-view').style.display = 'none';
   document.getElementById('employee-view').style.display = 'block';
   document.getElementById('emp-name-display').textContent = currentUser;
   const tabsEl = document.getElementById('emp-month-tabs');
@@ -754,6 +822,40 @@ function showEmployeeView() {
   }
   loadEmployeeStats(curMonth);
   buildTargetsView('targets-layout-employee');
+  loadMyVacations();
+}
+
+function showRegionalView() {
+  document.getElementById('admin-view').style.display = 'none';
+  document.getElementById('employee-view').style.display = 'none';
+  document.getElementById('regional-view').style.display = 'block';
+  loadVacations('reg', true);
+}
+
+async function loadMyVacations() {
+  if(!sb) { renderMyVacations([]); return; }
+  const {data, error} = await sb.from('vacations').select('*').eq('employee', currentUser).order('from_date');
+  if(error) { showToast('Σφάλμα φόρτωσης αδειών: ' + error.message, 'error'); return; }
+  renderMyVacations(data || []);
+}
+
+function renderMyVacations(data) {
+  const tbody = document.getElementById('my-vac-tbody');
+  const empty = document.getElementById('my-vac-empty');
+  const totalEl = document.getElementById('my-vac-total');
+  const total = data.reduce((s,r)=>s+r.workdays,0);
+  totalEl.textContent = `${total} εργάσιμες ημέρες συνολικά`;
+  if(data.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  const sorted = [...data].sort((a,b)=>a.from_date.localeCompare(b.from_date));
+  tbody.innerHTML = sorted.map((v,i) => `
+    <tr>
+      <td style="color:var(--gray-400);font-size:12px">${i+1}</td>
+      <td>${fmtVacDate(v.from_date)}</td>
+      <td>${fmtVacDate(v.to_date)}</td>
+      <td><span class="vac-badge">${v.workdays} εργάσιμες</span></td>
+    </tr>
+  `).join('');
 }
 
 async function loadEmployeeStats(month) {
