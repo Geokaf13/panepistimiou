@@ -492,7 +492,7 @@ const EMPLOYEE_PINS = {
   <div id="regional-view" style="display:none">
     <div class="container">
       <div class="emp-greeting">
-        <h2>🏢 Περιφέρεια Νοτίου Ελλάδος</h2>
+        <h2>🏢 Περιφέρεια Νοτίου Ελλάδας</h2>
         <p>Προβολή αδειών καταστήματος -065- για το 2026</p>
       </div>
       <div class="emp-stats-grid" id="reg-stats-row"></div>
@@ -620,7 +620,7 @@ function doLogin() {
     currentRole = 'admin'; currentUser = 'Διαχειριστής';
   } else if(user === 'regional') {
     if(pin !== REGIONAL_PIN) { document.getElementById('login-error').style.display = 'block'; return; }
-    currentRole = 'regional'; currentUser = 'Περιφέρεια Νοτίου Ελλάδας';
+    currentRole = 'regional'; currentUser = 'Περιφερειακή Διεύθυνση';
   } else {
     if(pin !== EMPLOYEE_PINS[user]) { document.getElementById('login-error').style.display = 'block'; return; }
     currentRole = 'employee'; currentUser = user;
@@ -1073,8 +1073,8 @@ function renderOvertimes() {
   const totalUsed = overtimes.reduce((s,o) => s + o.hours, 0);
   const remaining = OT_BUDGET - totalUsed;
   const pct = Math.min((totalUsed / OT_BUDGET) * 100, 100);
-  document.getElementById('ot-used').textContent = totalUsed % 1 === 0 ? totalUsed : totalUsed.toFixed(1);
-  document.getElementById('ot-remaining').textContent = remaining % 1 === 0 ? remaining : remaining.toFixed(1);
+  document.getElementById('ot-used').textContent = totalUsed % 1 === 0 ? totalUsed : totalUsed.toFixed(2);
+  document.getElementById('ot-remaining').textContent = remaining % 1 === 0 ? remaining : remaining.toFixed(2);
   const fill = document.getElementById('ot-progress-fill');
   fill.style.width = pct + '%';
   fill.className = 'ot-progress-fill' + (pct >= 100 ? ' over' : '');
@@ -1084,7 +1084,7 @@ function renderOvertimes() {
     const empHours = overtimes.filter(o=>o.employee===emp).reduce((s,o)=>s+o.hours, 0);
     const chip = document.createElement('div');
     chip.className = 'ot-emp-chip';
-    chip.innerHTML = `<div class="oec-name">${emp.split(' ')[0]}</div><div class="oec-val">${empHours % 1 === 0 ? empHours : empHours.toFixed(1)}</div><div class="oec-sub">${empHours === 1 ? 'ώρα' : 'ώρες'}</div>`;
+    chip.innerHTML = `<div class="oec-name">${emp.split(' ')[0]}</div><div class="oec-val">${empHours % 1 === 0 ? empHours : empHours.toFixed(2)}</div><div class="oec-sub">${empHours === 1 ? 'ώρα' : 'ώρες'}</div>`;
     empGrid.appendChild(chip);
   });
   const tbody = document.getElementById('ot-list-tbody');
@@ -1095,12 +1095,12 @@ function renderOvertimes() {
   const sorted = [...overtimes].sort((a,b) => b.date.localeCompare(a.date));
   sorted.forEach((o, i) => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${sorted.length - i}</td><td>${o.employee}</td><td>${fmtVacDate(o.date)}</td><td><span class="ot-hours-badge">${o.hours % 1 === 0 ? o.hours : o.hours.toFixed(1)}h</span></td><td><button class="del-btn" onclick="deleteOvertime('${o.id}')">Διαγραφή</button></td>`;
+    tr.innerHTML = `<td>${sorted.length - i}</td><td>${o.employee}</td><td>${fmtVacDate(o.date)}</td><td><span class="ot-hours-badge">${o.hours % 1 === 0 ? o.hours : o.hours.toFixed(2)}h</span></td><td><button class="del-btn" onclick="deleteOvertime('${o.id}')">Διαγραφή</button></td>`;
     tbody.appendChild(tr);
   });
   const trTotal = document.createElement('tr');
   trTotal.className = 'ot-total-row';
-  trTotal.innerHTML = `<td colspan="3"><strong>ΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ</strong></td><td><span class="ot-hours-badge" style="background:#ede9fe;font-size:14px">${totalUsed % 1 === 0 ? totalUsed : totalUsed.toFixed(1)}h / ${OT_BUDGET}h</span></td><td></td>`;
+  trTotal.innerHTML = `<td colspan="3"><strong>ΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ</strong></td><td><span class="ot-hours-badge" style="background:#ede9fe;font-size:14px">${totalUsed % 1 === 0 ? totalUsed : totalUsed.toFixed(2)}h / ${OT_BUDGET}h</span></td><td></td>`;
   tbody.appendChild(trTotal);
 }
 
