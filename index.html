@@ -15,6 +15,8 @@
   --amber: #d97706;
   --amber-light: #fef3c7;
   --red: #dc2626;
+  --purple: #7c3aed;
+  --purple-light: #ede9fe;
   --gray-50: #f8fafc;
   --gray-100: #f1f5f9;
   --gray-200: #e2e8f0;
@@ -144,6 +146,36 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.success { background: var(--green); }
 .toast.error { background: var(--red); }
+
+/* ===== ΥΠΕΡΩΡΙΕΣ ===== */
+.ot-budget-bar { background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px; color: white; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.ot-budget-left h3 { font-size: 14px; font-weight: 600; opacity: .8; margin-bottom: 4px; }
+.ot-budget-left .ot-numbers { font-size: 28px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.ot-budget-left .ot-numbers span { font-size: 16px; font-weight: 500; opacity: .7; }
+.ot-budget-right { text-align: right; }
+.ot-budget-right .ot-remain { font-size: 14px; font-weight: 600; opacity: .85; }
+.ot-budget-right .ot-remain strong { font-size: 22px; font-family: 'DM Mono', monospace; display: block; }
+.ot-progress-wrap { margin-top: 12px; width: 100%; }
+.ot-progress-track { background: rgba(255,255,255,.2); border-radius: 99px; height: 8px; width: 100%; overflow: hidden; }
+.ot-progress-fill { height: 100%; border-radius: 99px; background: #a78bfa; transition: width .5s ease; }
+.ot-progress-fill.over { background: #fca5a5; }
+
+.ot-emp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.ot-emp-chip { background: white; border-radius: var(--radius-sm); padding: 14px 16px; box-shadow: var(--shadow); border-left: 3px solid var(--purple); }
+.ot-emp-chip .oec-name { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+.ot-emp-chip .oec-val { font-size: 24px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--purple); }
+.ot-emp-chip .oec-sub { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+
+.ot-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.ot-table th { background: var(--navy); color: white; font-weight: 600; padding: 10px 14px; text-align: left; font-size: 12px; letter-spacing: .03em; white-space: nowrap; }
+.ot-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+.ot-table tr:hover td { background: var(--gray-50); }
+.ot-table .ot-total-row td { background: #f5f3ff; font-weight: 700; color: var(--purple); }
+.ot-hours-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 13px; font-weight: 700; font-family: 'DM Mono', monospace; background: var(--purple-light); color: var(--purple); }
+
+.ot-hours-select { padding: 9px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Mono', monospace; font-weight: 600; color: var(--purple); background: white; cursor: pointer; transition: border-color .2s; min-width: 90px; }
+.ot-hours-select:focus { outline: none; border-color: var(--purple); }
+
 @media (max-width: 900px) { .targets-layout { grid-template-columns: 1fr; } }
 @media (max-width: 640px) {
   .container { padding: 16px 12px; }
@@ -151,6 +183,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
   .entry-controls { flex-direction: column; align-items: stretch; }
   .target-item { flex-direction: column; align-items: flex-start; }
   .target-value { text-align: left; }
+  .ot-budget-bar { flex-direction: column; align-items: flex-start; }
+  .ot-budget-right { text-align: left; }
 }
 </style>
 </head>
@@ -162,7 +196,6 @@ const SUPABASE_ANON_KEY = 'sb_publishable_6jOh1HfTk15UpEuh3za3Kw_d3t_Fnxj';
 const ADMIN_PIN = '1901';
 const REGIONAL_PIN = '2026';
 
-// ====== PINS ΕΡΓΑΖΟΜΕΝΩΝ — ΑΛΛΑΞΕ ΤΑ ΠΡΙΝ ΑΝΕΒΑΣΕΙΣ ======
 const EMPLOYEE_PINS = {
   'ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ':        '1111',
   'ΙΩΑΝΝΟΥ ΝΙΚΗ':           '2222',
@@ -225,8 +258,10 @@ const EMPLOYEE_PINS = {
         <button class="tab-btn" onclick="switchTab('ytd')">📊 YTD Σύνοψη</button>
         <button class="tab-btn" onclick="switchTab('targets')">🎯 Στόχοι 2026</button>
         <button class="tab-btn" onclick="switchTab('adeies')">🌴 Άδειες</button>
+        <button class="tab-btn" onclick="switchTab('yperwries')">⏱️ Υπερωρίες</button>
       </div>
 
+      <!-- TAB: ΕΙΣΑΓΩΓΗ -->
       <div id="tab-entry">
         <div class="card">
           <div class="card-header"><h2>Εισαγωγή Ημερήσιων Παραγωγών</h2></div>
@@ -249,6 +284,7 @@ const EMPLOYEE_PINS = {
         </div>
       </div>
 
+      <!-- TAB: YTD -->
       <div id="tab-ytd" style="display:none">
         <div class="card">
           <div class="card-header">
@@ -267,6 +303,7 @@ const EMPLOYEE_PINS = {
         </div>
       </div>
 
+      <!-- TAB: ΣΤΟΧΟΙ -->
       <div id="tab-targets" style="display:none">
         <div class="card">
           <div class="card-header"><h2>Στόχοι 2026</h2></div>
@@ -277,6 +314,7 @@ const EMPLOYEE_PINS = {
         </div>
       </div>
 
+      <!-- TAB: ΑΔΕΙΕΣ -->
       <div id="tab-adeies" style="display:none">
         <div class="card" style="margin-bottom:20px">
           <div class="card-header"><h2>Καταχώρηση Νέας Άδειας</h2></div>
@@ -298,21 +336,17 @@ const EMPLOYEE_PINS = {
             <div class="targets-note">Τα Σαββατοκύριακα εξαιρούνται αυτόματα από τις εργάσιμες ημέρες.</div>
           </div>
         </div>
-
         <div class="emp-stats-grid" id="vac-stats-row"></div>
-
         <div class="card" style="margin-bottom:20px">
           <div class="card-header"><h2>Ημερολόγιο Αδειών</h2></div>
           <div class="card-body" style="padding:16px">
             <div class="cal-wrap"><table class="cal-table" id="vac-cal-table"></table></div>
           </div>
         </div>
-
         <div class="card" style="margin-bottom:20px">
           <div class="card-header"><h2>Σύνολο Εργάσιμων Ημερών ανά Εργαζόμενο</h2></div>
           <div class="card-body"><div class="emp-totals-grid" id="vac-emp-totals"></div></div>
         </div>
-
         <div class="card">
           <div class="card-header">
             <h2>Λίστα Καταχωρημένων Αδειών</h2>
@@ -328,9 +362,92 @@ const EMPLOYEE_PINS = {
         </div>
       </div>
 
+      <!-- TAB: ΥΠΕΡΩΡΙΕΣ -->
+      <div id="tab-yperwries" style="display:none">
+
+        <!-- Budget Bar -->
+        <div class="ot-budget-bar" id="ot-budget-bar">
+          <div class="ot-budget-left">
+            <h3>⏱️ Budget Υπερωριών 2026</h3>
+            <div class="ot-numbers">
+              <span id="ot-used">0</span> / <span style="opacity:.7">160</span> <span>ώρες</span>
+            </div>
+            <div class="ot-progress-wrap">
+              <div class="ot-progress-track">
+                <div class="ot-progress-fill" id="ot-progress-fill" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="ot-budget-right">
+            <div class="ot-remain">Διαθέσιμες</div>
+            <div class="ot-remain"><strong id="ot-remaining">160</strong> ώρες</div>
+          </div>
+        </div>
+
+        <!-- Καταχώρηση -->
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header"><h2>Καταχώρηση Υπερωρίας</h2></div>
+          <div class="card-body">
+            <div class="entry-controls">
+              <div class="field-group">
+                <label>Εργαζόμενος</label>
+                <select id="ot-emp">
+                  <option value="">— Επιλέξτε —</option>
+                  <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label>Ημερομηνία</label>
+                <input type="date" id="ot-date" min="2026-01-01" max="2026-12-31">
+              </div>
+              <div class="field-group">
+                <label>Ώρες</label>
+                <select id="ot-hours" class="ot-hours-select">
+                  <option value="0.5">0.5</option>
+                  <option value="1" selected>1</option>
+                  <option value="1.5">1.5</option>
+                  <option value="2">2</option>
+                </select>
+              </div>
+              <button class="save-btn" onclick="addOvertime()" style="background:#6d28d9">+ Προσθήκη</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Σύνολο ανά Εργαζόμενο -->
+        <div class="ot-emp-grid" id="ot-emp-grid"></div>
+
+        <!-- Λίστα Καταχωρήσεων -->
+        <div class="card">
+          <div class="card-header">
+            <h2>Λίστα Υπερωριών</h2>
+            <button class="export-link-btn" onclick="exportOtCSV()">⬇ Εξαγωγή CSV</button>
+          </div>
+          <div class="card-body" style="padding:0">
+            <table class="ot-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Εργαζόμενος</th>
+                  <th>Ημερομηνία</th>
+                  <th>Ώρες</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="ot-list-tbody"></tbody>
+            </table>
+            <div class="empty-state" id="ot-list-empty">Δεν υπάρχουν καταχωρημένες υπερωρίες ακόμα.</div>
+          </div>
+        </div>
+      </div>
+      <!-- /TAB ΥΠΕΡΩΡΙΕΣ -->
+
     </div>
   </div>
 
+  <!-- EMPLOYEE VIEW -->
   <div id="employee-view" style="display:none">
     <div class="container">
       <div class="emp-greeting"><h2 id="emp-name-display"></h2><p>Τα στοιχεία παραγωγής σας για το 2026</p></div>
@@ -357,27 +474,24 @@ const EMPLOYEE_PINS = {
     </div>
   </div>
 
+  <!-- REGIONAL VIEW -->
   <div id="regional-view" style="display:none">
     <div class="container">
       <div class="emp-greeting">
         <h2>🏢 Περιφερειακή Διεύθυνση</h2>
         <p>Προβολή αδειών καταστήματος -065- για το 2026 (μόνο για προβολή)</p>
       </div>
-
       <div class="emp-stats-grid" id="reg-stats-row"></div>
-
       <div class="card" style="margin-bottom:20px">
         <div class="card-header"><h2>Ημερολόγιο Αδειών</h2></div>
         <div class="card-body" style="padding:16px">
           <div class="cal-wrap"><table class="cal-table" id="reg-cal-table"></table></div>
         </div>
       </div>
-
       <div class="card" style="margin-bottom:20px">
         <div class="card-header"><h2>Σύνολο Εργάσιμων Ημερών ανά Εργαζόμενο</h2></div>
         <div class="card-body"><div class="emp-totals-grid" id="reg-emp-totals"></div></div>
       </div>
-
       <div class="card">
         <div class="card-header">
           <h2>Λίστα Καταχωρημένων Αδειών</h2>
@@ -431,12 +545,15 @@ const TARGETS = [
   {label:'Future Capital', value:66645, type:'money'}
 ];
 const MONTHS_GR = ['','Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος','Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'];
+const OT_BUDGET = 160;
+
 let sb;
 try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch(e) {}
 let currentUser = null;
 let currentRole = null;
 let entryValues = {};
 let vacations = [];
+let overtimes = [];
 
 function getMonthDateRange(year, month) {
   const mm = String(month).padStart(2,'0');
@@ -444,7 +561,7 @@ function getMonthDateRange(year, month) {
   return { start: `${year}-${mm}-01`, end: `${year}-${mm}-${String(lastDay).padStart(2,'0')}` };
 }
 
-// ====== LOGIN — ΜΕ PIN ΓΙΑ ΟΛΟΥΣ ======
+// ====== LOGIN ======
 document.getElementById('login-user').addEventListener('change', function() {
   const val = this.value;
   const needsPin = val !== '';
@@ -463,7 +580,6 @@ function doLogin() {
   if(!user) return;
   const pin = document.getElementById('login-pin').value;
   document.getElementById('login-error').style.display = 'none';
-
   if(user === 'admin') {
     if(pin !== ADMIN_PIN) { document.getElementById('login-error').style.display = 'block'; return; }
     currentRole = 'admin'; currentUser = 'Διαχειριστής';
@@ -474,7 +590,6 @@ function doLogin() {
     if(pin !== EMPLOYEE_PINS[user]) { document.getElementById('login-error').style.display = 'block'; return; }
     currentRole = 'employee'; currentUser = user;
   }
-
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('topbar-user').textContent = currentUser;
@@ -497,6 +612,7 @@ function showAdminView() {
   document.getElementById('employee-view').style.display = 'none';
   document.getElementById('regional-view').style.display = 'none';
   document.getElementById('entry-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('ot-date').value = new Date().toISOString().slice(0,10);
   buildEntryTable();
   buildTargetsView('targets-layout');
   document.getElementById('ytd-month-filter').value = String(new Date().getMonth()+1);
@@ -521,15 +637,17 @@ function showEmployeeView() {
 }
 
 function switchTab(tab) {
-  const tabs = ['entry','ytd','targets','adeies'];
+  const tabs = ['entry','ytd','targets','adeies','yperwries'];
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', tabs[i]===tab));
   document.getElementById('tab-entry').style.display = tab==='entry'?'block':'none';
   document.getElementById('tab-ytd').style.display = tab==='ytd'?'block':'none';
   document.getElementById('tab-targets').style.display = tab==='targets'?'block':'none';
   document.getElementById('tab-adeies').style.display = tab==='adeies'?'block':'none';
+  document.getElementById('tab-yperwries').style.display = tab==='yperwries'?'block':'none';
   if(tab==='ytd') loadYTD();
   if(tab==='targets') buildTargetsView('targets-layout');
   if(tab==='adeies') loadVacations('vac', false);
+  if(tab==='yperwries') loadOvertimes();
 }
 
 function buildEntryTable() {
@@ -771,7 +889,6 @@ function renderVacations(prefix, readonly) {
   EMPLOYEES.forEach(e => vacSet[e] = new Set());
   vacations.forEach(v => { allDates(v.from, v.to).forEach(d => vacSet[v.employee].add(d)); });
 
-  // Stats row
   const statsRow = document.getElementById(prefix+'-stats-row');
   if(statsRow) {
     statsRow.innerHTML = '';
@@ -784,17 +901,15 @@ function renderVacations(prefix, readonly) {
     });
   }
 
-  // Calendar
   const calTable = document.getElementById(prefix+'-cal-table');
   if(calTable) {
     calTable.innerHTML = '';
     const months = [1,2,3,4,5,6,7,8,9,10,11,12];
-    const allDays = [];
+    const allDaysArr = [];
     months.forEach(m => {
       const last = new Date(2026, m, 0).getDate();
-      for(let d=1; d<=last; d++) allDays.push({ month:m, day:d, date:`2026-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}` });
+      for(let d=1; d<=last; d++) allDaysArr.push({ month:m, day:d, date:`2026-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}` });
     });
-
     const thead = document.createElement('thead');
     const monthRow = document.createElement('tr');
     monthRow.innerHTML = '<th class="emp-th">Εργαζόμενος</th>';
@@ -807,10 +922,9 @@ function renderVacations(prefix, readonly) {
       monthRow.appendChild(th);
     });
     thead.appendChild(monthRow);
-
     const dayRow = document.createElement('tr');
     dayRow.innerHTML = '<th class="emp-th"></th>';
-    allDays.forEach(({month, day, date}) => {
+    allDaysArr.forEach(({month, day, date}) => {
       const th = document.createElement('th');
       const dow = new Date(date).getDay();
       th.textContent = day;
@@ -820,7 +934,6 @@ function renderVacations(prefix, readonly) {
     });
     thead.appendChild(dayRow);
     calTable.appendChild(thead);
-
     const tbody = document.createElement('tbody');
     EMPLOYEES.forEach(emp => {
       const tr = document.createElement('tr');
@@ -828,7 +941,7 @@ function renderVacations(prefix, readonly) {
       empTd.className = 'emp-cell';
       empTd.textContent = emp;
       tr.appendChild(empTd);
-      allDays.forEach(({date}) => {
+      allDaysArr.forEach(({date}) => {
         const td = document.createElement('td');
         const dow = new Date(date).getDay();
         if(dow===0||dow===6) td.className='we';
@@ -841,7 +954,6 @@ function renderVacations(prefix, readonly) {
     calTable.appendChild(tbody);
   }
 
-  // Emp totals
   const totalsWrap = document.getElementById(prefix+'-emp-totals');
   if(totalsWrap) {
     totalsWrap.innerHTML = '';
@@ -854,7 +966,6 @@ function renderVacations(prefix, readonly) {
     });
   }
 
-  // List
   const listTbody = document.getElementById(prefix+'-list-tbody');
   const listEmpty = document.getElementById(prefix+'-list-empty');
   if(listTbody) {
@@ -879,6 +990,150 @@ function exportVacCSV() {
   URL.revokeObjectURL(url);
 }
 
+/* ========== ΥΠΕΡΩΡΙΕΣ ========== */
+async function loadOvertimes() {
+  if(!sb) {
+    overtimes = [];
+    renderOvertimes();
+    return;
+  }
+  const {data, error} = await sb.from('overtimes').select('*').order('date');
+  if(error) {
+    // Αν δεν υπάρχει ο πίνακας, δουλεύουμε in-memory
+    if(error.code === '42P01') {
+      showToast('Ο πίνακας "overtimes" δεν υπάρχει ακόμα στο Supabase. Δείτε τις οδηγίες.', 'error');
+    } else {
+      showToast('Σφάλμα φόρτωσης υπερωριών: ' + error.message, 'error');
+    }
+    renderOvertimes();
+    return;
+  }
+  overtimes = (data || []).map(r => ({ id: r.id, employee: r.employee, date: r.date, hours: parseFloat(r.hours) }));
+  renderOvertimes();
+}
+
+async function addOvertime() {
+  const emp = document.getElementById('ot-emp').value;
+  const date = document.getElementById('ot-date').value;
+  const hours = parseFloat(document.getElementById('ot-hours').value);
+  if(!emp) { showToast('Επιλέξτε εργαζόμενο', 'error'); return; }
+  if(!date) { showToast('Επιλέξτε ημερομηνία', 'error'); return; }
+
+  const totalUsed = overtimes.reduce((s,o) => s + o.hours, 0);
+  if(totalUsed + hours > OT_BUDGET) {
+    showToast(`⚠️ Υπέρβαση budget! Διαθέσιμες: ${OT_BUDGET - totalUsed} ώρες`, 'error');
+    return;
+  }
+
+  if(!sb) {
+    // Offline / in-memory
+    overtimes.push({ id: Date.now(), employee: emp, date, hours });
+    renderOvertimes();
+    showToast(`✓ ${emp.split(' ')[0]} — ${hours}h (τοπικά, χωρίς Supabase)`, 'success');
+    return;
+  }
+
+  const {data, error} = await sb.from('overtimes').insert({ employee: emp, date, hours }).select();
+  if(error) { showToast('Σφάλμα: ' + error.message, 'error'); return; }
+  overtimes.push({ id: data[0].id, employee: emp, date, hours });
+  renderOvertimes();
+  showToast(`✓ ${emp.split(' ')[0]} — ${hours} ώρ. καταχωρήθηκαν`, 'success');
+}
+
+async function deleteOvertime(id) {
+  if(!confirm('Διαγραφή αυτής της υπερωρίας;')) return;
+  if(sb) {
+    const {error} = await sb.from('overtimes').delete().eq('id', id);
+    if(error) { showToast('Σφάλμα: ' + error.message, 'error'); return; }
+  }
+  overtimes = overtimes.filter(o => o.id !== id);
+  renderOvertimes();
+  showToast('Η υπερωρία διαγράφηκε');
+}
+
+function renderOvertimes() {
+  const totalUsed = overtimes.reduce((s,o) => s + o.hours, 0);
+  const remaining = OT_BUDGET - totalUsed;
+  const pct = Math.min((totalUsed / OT_BUDGET) * 100, 100);
+
+  // Budget bar
+  document.getElementById('ot-used').textContent = totalUsed % 1 === 0 ? totalUsed : totalUsed.toFixed(1);
+  document.getElementById('ot-remaining').textContent = remaining % 1 === 0 ? remaining : remaining.toFixed(1);
+  const fill = document.getElementById('ot-progress-fill');
+  fill.style.width = pct + '%';
+  fill.className = 'ot-progress-fill' + (pct >= 100 ? ' over' : '');
+
+  // Per-employee chips
+  const empGrid = document.getElementById('ot-emp-grid');
+  empGrid.innerHTML = '';
+  EMPLOYEES.forEach(emp => {
+    const empHours = overtimes.filter(o=>o.employee===emp).reduce((s,o)=>s+o.hours, 0);
+    const chip = document.createElement('div');
+    chip.className = 'ot-emp-chip';
+    chip.innerHTML = `
+      <div class="oec-name">${emp.split(' ')[0]}</div>
+      <div class="oec-val">${empHours % 1 === 0 ? empHours : empHours.toFixed(1)}</div>
+      <div class="oec-sub">${empHours === 1 ? 'ώρα' : 'ώρες'}</div>
+    `;
+    empGrid.appendChild(chip);
+  });
+
+  // List
+  const tbody = document.getElementById('ot-list-tbody');
+  const empty = document.getElementById('ot-list-empty');
+  tbody.innerHTML = '';
+
+  if(!overtimes.length) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  // Sort by date desc
+  const sorted = [...overtimes].sort((a,b) => b.date.localeCompare(a.date));
+
+  sorted.forEach((o, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${sorted.length - i}</td>
+      <td>${o.employee}</td>
+      <td>${fmtVacDate(o.date)}</td>
+      <td><span class="ot-hours-badge">${o.hours % 1 === 0 ? o.hours : o.hours.toFixed(1)}h</span></td>
+      <td><button class="del-btn" onclick="deleteOvertime('${o.id}')">Διαγραφή</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Total row
+  const trTotal = document.createElement('tr');
+  trTotal.className = 'ot-total-row';
+  trTotal.innerHTML = `
+    <td colspan="3"><strong>ΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ</strong></td>
+    <td><span class="ot-hours-badge" style="background:#ede9fe;font-size:14px">${totalUsed % 1 === 0 ? totalUsed : totalUsed.toFixed(1)}h / ${OT_BUDGET}h</span></td>
+    <td></td>
+  `;
+  tbody.appendChild(trTotal);
+}
+
+function exportOtCSV() {
+  let csv = 'Εργαζόμενος,Ημερομηνία,Ώρες\n';
+  const sorted = [...overtimes].sort((a,b) => a.date.localeCompare(b.date));
+  sorted.forEach(o => { csv += `${o.employee},${o.date},${o.hours}\n`; });
+  // Per-employee totals
+  csv += '\nΣύνολα ανά εργαζόμενο\nΕργαζόμενος,Σύνολο ωρών\n';
+  EMPLOYEES.forEach(emp => {
+    const h = overtimes.filter(o=>o.employee===emp).reduce((s,o)=>s+o.hours,0);
+    if(h > 0) csv += `${emp},${h}\n`;
+  });
+  const total = overtimes.reduce((s,o)=>s+o.hours,0);
+  csv += `\nΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ,${total}\nBUDGET,${OT_BUDGET}\nΔΙΑΘΕΣΙΜΕΣ,${OT_BUDGET-total}\n`;
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='yperwries_2026.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ========== UTILITIES ========== */
 function formatDate(d) {
   if(!d) return '';
   const [y,m,dd] = d.split('-');
