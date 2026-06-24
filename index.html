@@ -102,7 +102,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .stat-chip .sc-label { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
 .stat-chip .sc-val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--navy); }
 .stat-chip.is-amount .sc-val { color: var(--amber); font-size: 16px; }
-
 .targets-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .targets-section { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; }
 .targets-section-header { padding: 14px 18px; background: linear-gradient(135deg, var(--navy) 0%, #223562 100%); color: white; }
@@ -115,8 +114,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .target-value.money { color: var(--amber); }
 .target-value.big { font-size: 18px; }
 .targets-note { margin-top: 14px; font-size: 12px; color: var(--gray-400); }
-
-/* ÁDEIES TAB */
 .cal-wrap { overflow-x: auto; }
 .cal-table { border-collapse: collapse; width: 100%; min-width: 2400px; font-size: 12px; }
 .cal-table th { background: var(--navy); color: white; font-weight: 600; padding: 8px 4px; text-align: center; font-size: 10.5px; letter-spacing: .03em; white-space: nowrap; }
@@ -143,15 +140,11 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .empty-state { text-align: center; padding: 40px; color: var(--gray-400); font-size: 14px; }
 .export-link-btn { background: none; border: 1px solid var(--gray-200); border-radius: 6px; padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--navy); font-family: inherit; transition: all .2s; }
 .export-link-btn:hover { background: var(--gray-50); }
-
 .toast { position: fixed; bottom: 24px; right: 24px; background: var(--navy); color: white; padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; box-shadow: var(--shadow-lg); transform: translateY(80px); opacity: 0; transition: all .3s; z-index: 999; }
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.success { background: var(--green); }
 .toast.error { background: var(--red); }
-
-@media (max-width: 900px) {
-  .targets-layout { grid-template-columns: 1fr; }
-}
+@media (max-width: 900px) { .targets-layout { grid-template-columns: 1fr; } }
 @media (max-width: 640px) {
   .container { padding: 16px 12px; }
   .login-card { padding: 32px 24px; }
@@ -162,11 +155,25 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 </style>
 </head>
 <body>
+
 <script>
 const SUPABASE_URL = 'https://jaqlqpjbievptpiutcbj.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_6jOh1HfTk15UpEuh3za3Kw_d3t_Fnxj';
 const ADMIN_PIN = '1901';
 const REGIONAL_PIN = '2026';
+
+// ====== PINS ΕΡΓΑΖΟΜΕΝΩΝ — ΑΛΛΑΞΕ ΤΑ ΠΡΙΝ ΑΝΕΒΑΣΕΙΣ ======
+const EMPLOYEE_PINS = {
+  'ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ':        '1111',
+  'ΙΩΑΝΝΟΥ ΝΙΚΗ':           '2222',
+  'ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ':     '3333',
+  'ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ':        '4444',
+  'ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ':     '5555',
+  'ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ':      '6666',
+  'ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ':    '7777',
+  'ΤΖΟΓΙΑ ΝΑΝΤΙΑ':           '8888',
+  'ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ': '9999'
+};
 </script>
 
 <div id="login-screen">
@@ -194,7 +201,7 @@ const REGIONAL_PIN = '2026';
       </select>
     </div>
     <div class="login-group" id="pin-group" style="display:none">
-      <label id="pin-label">PIN Διαχειριστή</label>
+      <label id="pin-label">PIN</label>
       <input type="password" id="login-pin" placeholder="••••" maxlength="10">
     </div>
     <button class="login-btn" onclick="doLogin()">Είσοδος</button>
@@ -437,27 +444,37 @@ function getMonthDateRange(year, month) {
   return { start: `${year}-${mm}-01`, end: `${year}-${mm}-${String(lastDay).padStart(2,'0')}` };
 }
 
+// ====== LOGIN — ΜΕ PIN ΓΙΑ ΟΛΟΥΣ ======
 document.getElementById('login-user').addEventListener('change', function() {
   const val = this.value;
-  const needsPin = val === 'admin' || val === 'regional';
+  const needsPin = val !== '';
   document.getElementById('pin-group').style.display = needsPin ? 'block' : 'none';
-  document.getElementById('pin-label').textContent = val === 'regional' ? 'PIN Περιφερειακής' : 'PIN Διαχειριστή';
+  document.getElementById('pin-label').textContent =
+    val === 'regional' ? 'PIN Περιφερειακής' :
+    val === 'admin'    ? 'PIN Διαχειριστή'   :
+                         'PIN Εργαζομένου';
   document.getElementById('login-error').style.display = 'none';
+  document.getElementById('login-pin').value = '';
 });
 document.getElementById('login-pin').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 
 function doLogin() {
   const user = document.getElementById('login-user').value;
   if(!user) return;
+  const pin = document.getElementById('login-pin').value;
+  document.getElementById('login-error').style.display = 'none';
+
   if(user === 'admin') {
-    const pin = document.getElementById('login-pin').value;
     if(pin !== ADMIN_PIN) { document.getElementById('login-error').style.display = 'block'; return; }
     currentRole = 'admin'; currentUser = 'Διαχειριστής';
   } else if(user === 'regional') {
-    const pin = document.getElementById('login-pin').value;
     if(pin !== REGIONAL_PIN) { document.getElementById('login-error').style.display = 'block'; return; }
     currentRole = 'regional'; currentUser = 'Περιφερειακή Διεύθυνση';
-  } else { currentRole = 'employee'; currentUser = user; }
+  } else {
+    if(pin !== EMPLOYEE_PINS[user]) { document.getElementById('login-error').style.display = 'block'; return; }
+    currentRole = 'employee'; currentUser = user;
+  }
+
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('topbar-user').textContent = currentUser;
@@ -483,6 +500,24 @@ function showAdminView() {
   buildEntryTable();
   buildTargetsView('targets-layout');
   document.getElementById('ytd-month-filter').value = String(new Date().getMonth()+1);
+}
+
+function showRegionalView() {
+  document.getElementById('admin-view').style.display = 'none';
+  document.getElementById('employee-view').style.display = 'none';
+  document.getElementById('regional-view').style.display = 'block';
+  loadVacations('reg', true);
+}
+
+function showEmployeeView() {
+  document.getElementById('admin-view').style.display = 'none';
+  document.getElementById('employee-view').style.display = 'block';
+  document.getElementById('regional-view').style.display = 'none';
+  document.getElementById('emp-name-display').textContent = currentUser;
+  buildTargetsView('targets-layout-employee');
+  buildEmpMonthTabs();
+  loadEmpStats(new Date().getMonth()+1);
+  loadMyVacations();
 }
 
 function switchTab(tab) {
@@ -620,8 +655,67 @@ function renderYTD(data) {
   tbody.appendChild(tr);
 }
 
-/* ---------- ÁDEIES (VACATIONS) ---------- */
+/* ---------- EMPLOYEE VIEW ---------- */
+function buildEmpMonthTabs() {
+  const wrap = document.getElementById('emp-month-tabs');
+  wrap.innerHTML = '';
+  const cur = new Date().getMonth()+1;
+  for(let m=1; m<=12; m++) {
+    const btn = document.createElement('button');
+    btn.className = 'month-tab' + (m===cur?' active':'');
+    btn.textContent = MONTHS_GR[m].slice(0,3);
+    btn.onclick = () => {
+      document.querySelectorAll('.month-tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      loadEmpStats(m);
+    };
+    wrap.appendChild(btn);
+  }
+}
 
+async function loadEmpStats(month) {
+  const grid = document.getElementById('emp-stats-grid');
+  grid.innerHTML = '<div style="color:var(--gray-400);font-size:13px">Φόρτωση...</div>';
+  if(!sb) { grid.innerHTML = ''; return; }
+  const range = getMonthDateRange(2026, month);
+  const {data, error} = await sb.from('productions').select('*').eq('employee', currentUser).gte('date', range.start).lte('date', range.end);
+  if(error) { grid.innerHTML = ''; return; }
+  const totals = {};
+  CATEGORIES.forEach(cat => totals[cat.name] = 0);
+  (data||[]).forEach(row => { if(totals[row.category]!==undefined) totals[row.category] += row.value; });
+  grid.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    if(totals[cat.name] === 0) return;
+    const chip = document.createElement('div');
+    chip.className = 'stat-chip' + (cat.amount?' is-amount':'');
+    chip.innerHTML = `<div class="sc-label">${cat.name}</div><div class="sc-val">${cat.amount ? totals[cat.name].toLocaleString('el-GR')+'€' : totals[cat.name]}</div>`;
+    grid.appendChild(chip);
+  });
+  if(grid.children.length === 0) grid.innerHTML = '<div style="color:var(--gray-400);font-size:13px;padding:8px 0">Δεν υπάρχουν εγγραφές για αυτό τον μήνα.</div>';
+}
+
+async function loadMyVacations() {
+  const tbody = document.getElementById('my-vac-tbody');
+  const empty = document.getElementById('my-vac-empty');
+  const total = document.getElementById('my-vac-total');
+  tbody.innerHTML = '';
+  if(!sb) return;
+  const {data, error} = await sb.from('vacations').select('*').eq('employee', currentUser).order('from_date');
+  if(error) return;
+  const rows = data||[];
+  if(!rows.length) { empty.style.display='block'; total.textContent='0 εργάσιμες ημέρες συνολικά'; return; }
+  empty.style.display='none';
+  let sum=0;
+  rows.forEach((r,i) => {
+    sum += r.workdays||0;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td>${fmtVacDate(r.from_date)}</td><td>${fmtVacDate(r.to_date)}</td><td>${r.workdays}</td>`;
+    tbody.appendChild(tr);
+  });
+  total.textContent = `${sum} εργάσιμες ημέρες συνολικά`;
+}
+
+/* ---------- VACATIONS ---------- */
 function countWorkdays(from, to) {
   let count = 0;
   const cur = new Date(from);
@@ -672,218 +766,133 @@ async function deleteVacation(id) {
   loadVacations();
 }
 
-function exportVacCSV() {
-  if(vacations.length === 0) { showToast('Δεν υπάρχουν δεδομένα για εξαγωγή', 'error'); return; }
-  const rows = [['Εργαζόμενος','Από','Έως','Εργάσιμες Ημέρες']];
-  const sorted = [...vacations].sort((a,b)=>a.employee.localeCompare(b.employee)||a.from.localeCompare(b.from));
-  sorted.forEach(v => rows.push([v.employee, fmtVacDate(v.from), fmtVacDate(v.to), v.workdays]));
-  const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
-  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'adeies_2026.csv';
-  a.click();
-}
+function renderVacations(prefix, readonly) {
+  const vacSet = {};
+  EMPLOYEES.forEach(e => vacSet[e] = new Set());
+  vacations.forEach(v => { allDates(v.from, v.to).forEach(d => vacSet[v.employee].add(d)); });
 
-function renderVacations(prefix='vac', readonly=false) {
-  renderVacStats(prefix);
-  renderVacCalendar(prefix);
-  renderVacEmpTotals(prefix);
-  renderVacList(prefix, readonly);
-}
-
-function renderVacStats(prefix='vac') {
-  const total = vacations.reduce((s,v)=>s+v.workdays,0);
-  const empSet = new Set(vacations.map(v=>v.employee));
-  const empDays = {};
-  EMPLOYEES.forEach(e => empDays[e] = 0);
-  vacations.forEach(v => empDays[v.employee] = (empDays[v.employee]||0)+v.workdays);
-  const top = Object.entries(empDays).sort((a,b)=>b[1]-a[1])[0];
-  const el = document.getElementById(`${prefix}-stats-row`);
-  if(!el) return;
-  el.innerHTML = `
-    <div class="stat-chip"><div class="sc-label">Εγγραφές</div><div class="sc-val">${vacations.length}</div></div>
-    <div class="stat-chip"><div class="sc-label">Εργαζόμενοι</div><div class="sc-val">${empSet.size}</div></div>
-    <div class="stat-chip"><div class="sc-label">Συνολικές Εργάσιμες</div><div class="sc-val">${total}</div></div>
-    <div class="stat-chip"><div class="sc-label">Περισσότερες μέρες</div><div class="sc-val" style="font-size:14px">${top&&top[1]>0?top[0].split(' ')[0]+' ('+top[1]+')':'—'}</div></div>
-  `;
-}
-
-function renderVacCalendar(prefix='vac') {
-  const tableEl = document.getElementById(`${prefix}-cal-table`);
-  if(!tableEl) return;
-  const dates = allDates('2026-01-01','2026-12-31');
-  const vacDays = {};
-  EMPLOYEES.forEach(e => vacDays[e] = new Set());
-  vacations.forEach(v => allDates(v.from,v.to).forEach(d=>vacDays[v.employee].add(d)));
-
-  const months = [
-    {label:'Ιανουάριος', from:'2026-01-01', to:'2026-01-31'},
-    {label:'Φεβρουάριος', from:'2026-02-01', to:'2026-02-28'},
-    {label:'Μάρτιος', from:'2026-03-01', to:'2026-03-31'},
-    {label:'Απρίλιος', from:'2026-04-01', to:'2026-04-30'},
-    {label:'Μάιος', from:'2026-05-01', to:'2026-05-31'},
-    {label:'Ιούνιος', from:'2026-06-01', to:'2026-06-30'},
-    {label:'Ιούλιος', from:'2026-07-01', to:'2026-07-31'},
-    {label:'Αύγουστος', from:'2026-08-01', to:'2026-08-31'},
-    {label:'Σεπτέμβριος', from:'2026-09-01', to:'2026-09-30'},
-    {label:'Οκτώβριος', from:'2026-10-01', to:'2026-10-31'},
-    {label:'Νοέμβριος', from:'2026-11-01', to:'2026-11-30'},
-    {label:'Δεκέμβριος', from:'2026-12-01', to:'2026-12-31'}
-  ];
-  const monthStarts = new Set(months.slice(1).map(m=>m.from));
-
-  let html = '<thead>';
-  html += '<tr><th class="emp-th" rowspan="2">Εργαζόμενος</th>';
-  months.forEach((m,mi) => {
-    const cnt = allDates(m.from,m.to).length;
-    html += `<th colspan="${cnt}" class="month-hdr${mi>0?' month-sep':''}">${m.label}</th>`;
-  });
-  html += '</tr><tr>';
-  dates.forEach(d => {
-    const dow = new Date(d).getDay();
-    const isWE = dow===0||dow===6;
-    const isMS = monthStarts.has(d);
-    const bg = isWE ? 'background:#1e3a8a;color:#bfdbfe;' : '';
-    html += `<th style="${bg}font-size:9.5px;padding:3px 1px;${isMS?'border-left:2px solid #60a5fa':''}">${d.slice(8)}</th>`;
-  });
-  html += '</tr></thead><tbody>';
-
-  EMPLOYEES.forEach(emp => {
-    html += `<tr><td class="emp-cell">${emp}</td>`;
-    dates.forEach(d => {
-      const dow = new Date(d).getDay();
-      const isWE = dow===0||dow===6;
-      const isVac = vacDays[emp].has(d);
-      const isMS = monthStarts.has(d);
-      let cls = isWE ? 'we' : (isVac ? 'vac' : '');
-      if(isMS) cls += ' month-sep';
-      html += `<td class="${cls.trim()}" title="${isVac?emp+' · '+fmtVacDate(d):''}"></td>`;
+  // Stats row
+  const statsRow = document.getElementById(prefix+'-stats-row');
+  if(statsRow) {
+    statsRow.innerHTML = '';
+    EMPLOYEES.forEach(emp => {
+      const days = vacations.filter(v=>v.employee===emp).reduce((s,v)=>s+v.workdays,0);
+      const chip = document.createElement('div');
+      chip.className = 'stat-chip';
+      chip.innerHTML = `<div class="sc-label">${emp.split(' ')[0]}</div><div class="sc-val">${days}</div>`;
+      statsRow.appendChild(chip);
     });
-    html += '</tr>';
-  });
-  html += '</tbody>';
-  tableEl.innerHTML = html;
-}
-
-function renderVacEmpTotals(prefix='vac') {
-  const el = document.getElementById(`${prefix}-emp-totals`);
-  if(!el) return;
-  const empDays = {};
-  EMPLOYEES.forEach(e => empDays[e] = 0);
-  vacations.forEach(v => empDays[v.employee] = (empDays[v.employee]||0)+v.workdays);
-  el.innerHTML = EMPLOYEES.map(e => `
-    <div class="emp-chip">
-      <div class="ec-name">${e.split(' ')[0]}<br><span style="font-weight:400;color:var(--gray-400);font-size:11px">${e.split(' ').slice(1).join(' ')}</span></div>
-      <div class="ec-days${empDays[e]===0?' zero':''}">${empDays[e]}</div>
-    </div>
-  `).join('');
-}
-
-function renderVacList(prefix='vac', readonly=false) {
-  const tbody = document.getElementById(`${prefix}-list-tbody`);
-  const empty = document.getElementById(`${prefix}-list-empty`);
-  if(!tbody) return;
-  if(vacations.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  const sorted = [...vacations].sort((a,b)=>a.employee.localeCompare(b.employee)||a.from.localeCompare(b.from));
-  tbody.innerHTML = sorted.map((v,i) => `
-    <tr>
-      <td style="color:var(--gray-400);font-size:12px">${i+1}</td>
-      <td><strong>${v.employee}</strong></td>
-      <td>${fmtVacDate(v.from)}</td>
-      <td>${fmtVacDate(v.to)}</td>
-      <td><span class="vac-badge">${v.workdays} εργάσιμες</span></td>
-      ${readonly ? '' : `<td><button class="del-btn" onclick="deleteVacation(${v.id})">✕</button></td>`}
-    </tr>
-  `).join('');
-}
-
-/* ---------- EMPLOYEE VIEW ---------- */
-
-function showEmployeeView() {
-  document.getElementById('admin-view').style.display = 'none';
-  document.getElementById('regional-view').style.display = 'none';
-  document.getElementById('employee-view').style.display = 'block';
-  document.getElementById('emp-name-display').textContent = currentUser;
-  const tabsEl = document.getElementById('emp-month-tabs');
-  tabsEl.innerHTML = '';
-  const curMonth = new Date().getMonth()+1;
-  for(let m=1; m<=12; m++) {
-    const btn = document.createElement('button');
-    btn.className = 'month-tab' + (m===curMonth?' active':'');
-    btn.textContent = MONTHS_GR[m].slice(0,3);
-    btn.onclick = () => {
-      document.querySelectorAll('.month-tab').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      loadEmployeeStats(m);
-    };
-    tabsEl.appendChild(btn);
   }
-  loadEmployeeStats(curMonth);
-  buildTargetsView('targets-layout-employee');
-  loadMyVacations();
+
+  // Calendar
+  const calTable = document.getElementById(prefix+'-cal-table');
+  if(calTable) {
+    calTable.innerHTML = '';
+    const months = [1,2,3,4,5,6,7,8,9,10,11,12];
+    const allDays = [];
+    months.forEach(m => {
+      const last = new Date(2026, m, 0).getDate();
+      for(let d=1; d<=last; d++) allDays.push({ month:m, day:d, date:`2026-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}` });
+    });
+
+    const thead = document.createElement('thead');
+    const monthRow = document.createElement('tr');
+    monthRow.innerHTML = '<th class="emp-th">Εργαζόμενος</th>';
+    months.forEach(m => {
+      const last = new Date(2026, m, 0).getDate();
+      const th = document.createElement('th');
+      th.colSpan = last;
+      th.className = 'month-hdr month-sep';
+      th.textContent = MONTHS_GR[m];
+      monthRow.appendChild(th);
+    });
+    thead.appendChild(monthRow);
+
+    const dayRow = document.createElement('tr');
+    dayRow.innerHTML = '<th class="emp-th"></th>';
+    allDays.forEach(({month, day, date}) => {
+      const th = document.createElement('th');
+      const dow = new Date(date).getDay();
+      th.textContent = day;
+      if(day===1) th.className='month-sep';
+      if(dow===0||dow===6) th.style.background='#2d3a5a';
+      dayRow.appendChild(th);
+    });
+    thead.appendChild(dayRow);
+    calTable.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    EMPLOYEES.forEach(emp => {
+      const tr = document.createElement('tr');
+      const empTd = document.createElement('td');
+      empTd.className = 'emp-cell';
+      empTd.textContent = emp;
+      tr.appendChild(empTd);
+      allDays.forEach(({date}) => {
+        const td = document.createElement('td');
+        const dow = new Date(date).getDay();
+        if(dow===0||dow===6) td.className='we';
+        else if(vacSet[emp].has(date)) td.className='vac';
+        if(date.slice(8)==='01') td.classList.add('month-sep');
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    calTable.appendChild(tbody);
+  }
+
+  // Emp totals
+  const totalsWrap = document.getElementById(prefix+'-emp-totals');
+  if(totalsWrap) {
+    totalsWrap.innerHTML = '';
+    EMPLOYEES.forEach(emp => {
+      const days = vacations.filter(v=>v.employee===emp).reduce((s,v)=>s+v.workdays,0);
+      const chip = document.createElement('div');
+      chip.className = 'emp-chip';
+      chip.innerHTML = `<span class="ec-name">${emp}</span><span class="ec-days${days===0?' zero':''}">${days}</span>`;
+      totalsWrap.appendChild(chip);
+    });
+  }
+
+  // List
+  const listTbody = document.getElementById(prefix+'-list-tbody');
+  const listEmpty = document.getElementById(prefix+'-list-empty');
+  if(listTbody) {
+    listTbody.innerHTML = '';
+    if(!vacations.length) { if(listEmpty) listEmpty.style.display='block'; return; }
+    if(listEmpty) listEmpty.style.display='none';
+    vacations.forEach((v,i) => {
+      const tr = document.createElement('tr');
+      const delCell = readonly ? '' : `<td><button class="del-btn" onclick="deleteVacation('${v.id}')">Διαγραφή</button></td>`;
+      tr.innerHTML = `<td>${i+1}</td><td>${v.employee}</td><td>${fmtVacDate(v.from)}</td><td>${fmtVacDate(v.to)}</td><td>${v.workdays}</td>${delCell}`;
+      listTbody.appendChild(tr);
+    });
+  }
 }
 
-function showRegionalView() {
-  document.getElementById('admin-view').style.display = 'none';
-  document.getElementById('employee-view').style.display = 'none';
-  document.getElementById('regional-view').style.display = 'block';
-  loadVacations('reg', true);
+function exportVacCSV() {
+  let csv = 'Εργαζόμενος,Από,Έως,Εργάσιμες\n';
+  vacations.forEach(v => { csv += `${v.employee},${v.from},${v.to},${v.workdays}\n`; });
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='adeies_2026.csv'; a.click();
+  URL.revokeObjectURL(url);
 }
 
-async function loadMyVacations() {
-  if(!sb) { renderMyVacations([]); return; }
-  const {data, error} = await sb.from('vacations').select('*').eq('employee', currentUser).order('from_date');
-  if(error) { showToast('Σφάλμα φόρτωσης αδειών: ' + error.message, 'error'); return; }
-  renderMyVacations(data || []);
+function formatDate(d) {
+  if(!d) return '';
+  const [y,m,dd] = d.split('-');
+  return `${dd}/${m}/${y}`;
 }
 
-function renderMyVacations(data) {
-  const tbody = document.getElementById('my-vac-tbody');
-  const empty = document.getElementById('my-vac-empty');
-  const totalEl = document.getElementById('my-vac-total');
-  const total = data.reduce((s,r)=>s+r.workdays,0);
-  totalEl.textContent = `${total} εργάσιμες ημέρες συνολικά`;
-  if(data.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  const sorted = [...data].sort((a,b)=>a.from_date.localeCompare(b.from_date));
-  tbody.innerHTML = sorted.map((v,i) => `
-    <tr>
-      <td style="color:var(--gray-400);font-size:12px">${i+1}</td>
-      <td>${fmtVacDate(v.from_date)}</td>
-      <td>${fmtVacDate(v.to_date)}</td>
-      <td><span class="vac-badge">${v.workdays} εργάσιμες</span></td>
-    </tr>
-  `).join('');
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type?' '+type:'');
+  void t.offsetWidth;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
-
-async function loadEmployeeStats(month) {
-  if(!sb) { renderEmployeeStats([]); return; }
-  const range = getMonthDateRange(2026, month);
-  const {data, error} = await sb.from('productions').select('*').eq('employee', currentUser).gte('date', range.start).lte('date', range.end);
-  if(error) { showToast('Σφάλμα φόρτωσης: ' + error.message, 'error'); return; }
-  renderEmployeeStats(data||[]);
-}
-
-function renderEmployeeStats(data) {
-  const totals = {};
-  CATEGORIES.forEach(cat => totals[cat.name] = 0);
-  data.forEach(row => { if(totals[row.category]!==undefined) totals[row.category]+=row.value; });
-  const grid = document.getElementById('emp-stats-grid');
-  grid.innerHTML = '';
-  CATEGORIES.forEach(cat => {
-    const v = totals[cat.name];
-    const div = document.createElement('div');
-    div.className = 'stat-chip' + (cat.amount?' is-amount':'');
-    const display = cat.amount && v > 0 ? `${v.toLocaleString('el-GR')} €` : v;
-    div.innerHTML = `<div class="sc-label">${cat.name}</div><div class="sc-val">${display}</div>`;
-    grid.appendChild(div);
-  });
-}
-
-function formatDate(d) { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}/${m}/${y}`; }
-function showToast(msg, type='') { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show' + (type?' '+type:''); clearTimeout(t._timer); t._timer = setTimeout(() => t.className='toast', 3000); }
 </script>
 </body>
 </html>
