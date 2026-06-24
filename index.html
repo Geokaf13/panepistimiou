@@ -41,24 +41,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .logout-btn:hover { background: rgba(255,255,255,.1); color: white; }
 #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--navy) 0%, #1e3a8a 60%, #1a2744 100%); }
 .login-card { background: white; border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 420px; box-shadow: var(--shadow-lg); text-align: center; }
-.login-logo {
-  width: 128px;
-  height: 128px;
-  border-radius: 0.5vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 24px;
-  overflow: hidden;
-}
-
-.login-logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  padding: 8px;
-}.login-card h1 { font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.login-logo { width: 128px; height: 128px; border-radius: 0.5vw; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; overflow: hidden; }
+.login-logo img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 8px; }
+.login-card h1 { font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
 .login-card p { font-size: 14px; color: var(--gray-400); margin-bottom: 32px; }
 .login-group { text-align: left; margin-bottom: 16px; }
 .login-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; }
@@ -163,6 +148,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .toast.success { background: var(--green); }
 .toast.error { background: var(--red); }
 
+/* ===== ΦΙΛΤΡΑ ΑΔΕΙΩΝ ===== */
+.vac-filters { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 0; }
+.filter-results-info { font-size: 12px; color: var(--gray-400); margin-left: auto; align-self: center; }
+
 /* ===== ΥΠΕΡΩΡΙΕΣ ===== */
 .ot-budget-bar { background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px; color: white; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
 .ot-budget-left h3 { font-size: 14px; font-weight: 600; opacity: .8; margin-bottom: 4px; }
@@ -175,20 +164,17 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .ot-progress-track { background: rgba(255,255,255,.2); border-radius: 99px; height: 8px; width: 100%; overflow: hidden; }
 .ot-progress-fill { height: 100%; border-radius: 99px; background: #a78bfa; transition: width .5s ease; }
 .ot-progress-fill.over { background: #fca5a5; }
-
 .ot-emp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
 .ot-emp-chip { background: white; border-radius: var(--radius-sm); padding: 14px 16px; box-shadow: var(--shadow); border-left: 3px solid var(--purple); }
 .ot-emp-chip .oec-name { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
 .ot-emp-chip .oec-val { font-size: 24px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--purple); }
 .ot-emp-chip .oec-sub { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
-
 .ot-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 .ot-table th { background: var(--navy); color: white; font-weight: 600; padding: 10px 14px; text-align: left; font-size: 12px; letter-spacing: .03em; white-space: nowrap; }
 .ot-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
 .ot-table tr:hover td { background: var(--gray-50); }
 .ot-table .ot-total-row td { background: #f5f3ff; font-weight: 700; color: var(--purple); }
 .ot-hours-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 13px; font-weight: 700; font-family: 'DM Mono', monospace; background: var(--purple-light); color: var(--purple); }
-
 .ot-hours-select { padding: 9px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Mono', monospace; font-weight: 600; color: var(--purple); background: white; cursor: pointer; transition: border-color .2s; min-width: 90px; }
 .ot-hours-select:focus { outline: none; border-color: var(--purple); }
 
@@ -227,7 +213,7 @@ const EMPLOYEE_PINS = {
 
 <div id="login-screen">
   <div class="login-card">
-    <div class="login-logo"> <img src="https://i.ibb.co/20dZgTqw/viber-image-2026-06-24-21-43-20-809.png" alt="icon"> </div>
+    <div class="login-logo"><img src="https://i.ibb.co/20dZgTqw/viber-image-2026-06-24-21-43-20-809.png" alt="icon"></div>
     <h1>ΚΑΤΑΣΤΗΜΑ ΠΑΝΕΠΙΣΤΗΜΙΟΥ</h1>
     <div class="login-group">
       <label>Σύνδεση ως</label>
@@ -236,15 +222,15 @@ const EMPLOYEE_PINS = {
         <option value="admin">👤 ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ(ADMIN)</option>
         <option value="regional">🏢 ΠΕΡΙΦΕΡΕΙΑ ΝΟΤΙΟΥ ΕΛΛΑΔΟΣ</option>
         <optgroup label="Εργαζόμενοι">
-          <option value="👤 ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ">ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option>
-          <option value="👤 ΙΩΑΝΝΟΥ ΝΙΚΗ">ΙΩΑΝΝΟΥ ΝΙΚΗ</option>
-          <option value="👤 ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ">ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-          <option value="👤 ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ">ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option>
-          <option value="👤 ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ">ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option>
-          <option value="👤 ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ">ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
-          <option value="👤 ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ">ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option>
-          <option value="👤 ΤΖΟΓΙΑ ΝΑΝΤΙΑ">ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option>
-          <option value="👤 ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ">ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+          <option value="ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ">ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option>
+          <option value="ΙΩΑΝΝΟΥ ΝΙΚΗ">ΙΩΑΝΝΟΥ ΝΙΚΗ</option>
+          <option value="ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ">ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
+          <option value="ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ">ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option>
+          <option value="ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ">ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option>
+          <option value="ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ">ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+          <option value="ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ">ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option>
+          <option value="ΤΖΟΓΙΑ ΝΑΝΤΙΑ">ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option>
+          <option value="ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ">ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
         </optgroup>
       </select>
     </div>
@@ -351,21 +337,47 @@ const EMPLOYEE_PINS = {
             <div class="targets-note">Τα Σαββατοκύριακα εξαιρούνται αυτόματα από τις εργάσιμες ημέρες.</div>
           </div>
         </div>
+
+        <!-- Chips: σύνολο ανά εργαζόμενο (μόνο εδώ) -->
         <div class="emp-stats-grid" id="vac-stats-row"></div>
+
+        <!-- Ημερολόγιο -->
         <div class="card" style="margin-bottom:20px">
           <div class="card-header"><h2>Ημερολόγιο Αδειών 2026</h2></div>
           <div class="card-body" style="padding:16px">
             <div class="cal-wrap"><table class="cal-table" id="vac-cal-table"></table></div>
           </div>
         </div>
-        <div class="card" style="margin-bottom:20px">
-          <div class="card-header"><h2>Σύνολο Εργάσιμων Ημερών ανά Εργαζόμενο</h2></div>
-          <div class="card-body"><div class="emp-totals-grid" id="vac-emp-totals"></div></div>
-        </div>
+
+        <!-- Λίστα με φίλτρα -->
         <div class="card">
           <div class="card-header">
             <h2>Λίστα Καταχωρημένων Αδειών</h2>
             <button class="export-link-btn" onclick="exportVacCSV()">⬇ Εξαγωγή CSV</button>
+          </div>
+          <div class="card-body" style="padding:16px 24px 0">
+            <div class="vac-filters">
+              <div class="field-group">
+                <label>Εργαζόμενος</label>
+                <select id="vac-filter-emp" onchange="renderFilteredVacList('vac')">
+                  <option value="">Όλοι</option>
+                  <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label>Μήνας</label>
+                <select id="vac-filter-month" onchange="renderFilteredVacList('vac')">
+                  <option value="">Όλοι</option>
+                  <option value="01">Ιανουάριος</option><option value="02">Φεβρουάριος</option><option value="03">Μάρτιος</option>
+                  <option value="04">Απρίλιος</option><option value="05">Μάιος</option><option value="06">Ιούνιος</option>
+                  <option value="07">Ιούλιος</option><option value="08">Αύγουστος</option><option value="09">Σεπτέμβριος</option>
+                  <option value="10">Οκτώβριος</option><option value="11">Νοέμβριος</option><option value="12">Δεκέμβριος</option>
+                </select>
+              </div>
+              <div class="filter-results-info" id="vac-filter-info"></div>
+            </div>
           </div>
           <div class="card-body" style="padding:0">
             <table class="vac-list-table">
@@ -379,8 +391,6 @@ const EMPLOYEE_PINS = {
 
       <!-- TAB: ΥΠΕΡΩΡΙΕΣ -->
       <div id="tab-yperwries" style="display:none">
-
-        <!-- Budget Bar -->
         <div class="ot-budget-bar" id="ot-budget-bar">
           <div class="ot-budget-left">
             <h3>⏱️ Budget Υπερωριών 2026</h3>
@@ -398,8 +408,6 @@ const EMPLOYEE_PINS = {
             <div class="ot-remain"><strong id="ot-remaining">160</strong> ώρες</div>
           </div>
         </div>
-
-        <!-- Καταχώρηση -->
         <div class="card" style="margin-bottom:20px">
           <div class="card-header"><h2>Καταχώρηση Υπερωρίας</h2></div>
           <div class="card-body">
@@ -423,10 +431,10 @@ const EMPLOYEE_PINS = {
                   <option value="0.25">0.25</option>
                   <option value="0.5">0.5</option>
                   <option value="0.75">0.75</option>
-                  <option value="1" selected>1</option>  
-                  <option value="1.25" selected>1.25</option>
+                  <option value="1" selected>1</option>
+                  <option value="1.25">1.25</option>
                   <option value="1.5">1.5</option>
-                  <option value="1.75" selected>1.75</option>
+                  <option value="1.75">1.75</option>
                   <option value="2">2</option>
                 </select>
               </div>
@@ -434,11 +442,7 @@ const EMPLOYEE_PINS = {
             </div>
           </div>
         </div>
-
-        <!-- Σύνολο ανά Εργαζόμενο -->
         <div class="ot-emp-grid" id="ot-emp-grid"></div>
-
-        <!-- Λίστα Καταχωρήσεων -->
         <div class="card">
           <div class="card-header">
             <h2>Λίστα Υπερωριών</h2>
@@ -446,22 +450,13 @@ const EMPLOYEE_PINS = {
           </div>
           <div class="card-body" style="padding:0">
             <table class="ot-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Εργαζόμενος</th>
-                  <th>Ημερομηνία</th>
-                  <th>Ώρες</th>
-                  <th></th>
-                </tr>
-              </thead>
+              <thead><tr><th>#</th><th>Εργαζόμενος</th><th>Ημερομηνία</th><th>Ώρες</th><th></th></tr></thead>
               <tbody id="ot-list-tbody"></tbody>
             </table>
             <div class="empty-state" id="ot-list-empty">Δεν υπάρχουν καταχωρημένες υπερωρίες ακόμα.</div>
           </div>
         </div>
       </div>
-      <!-- /TAB ΥΠΕΡΩΡΙΕΣ -->
 
     </div>
   </div>
@@ -497,7 +492,7 @@ const EMPLOYEE_PINS = {
   <div id="regional-view" style="display:none">
     <div class="container">
       <div class="emp-greeting">
-        <h2>🏢 Περιφέρεια Νοτίου Ελλάδος/h2>
+        <h2>🏢 Περιφέρεια Νοτίου Ελλάδος</h2>
         <p>Προβολή αδειών καταστήματος -065- για το 2026</p>
       </div>
       <div class="emp-stats-grid" id="reg-stats-row"></div>
@@ -507,14 +502,35 @@ const EMPLOYEE_PINS = {
           <div class="cal-wrap"><table class="cal-table" id="reg-cal-table"></table></div>
         </div>
       </div>
-      <div class="card" style="margin-bottom:20px">
-        <div class="card-header"><h2>Σύνολο Εργάσιμων Ημερών ανά Εργαζόμενο</h2></div>
-        <div class="card-body"><div class="emp-totals-grid" id="reg-emp-totals"></div></div>
-      </div>
+      <!-- Χωρίς "Σύνολο Εργάσιμων ανά Εργαζόμενο" εδώ -->
       <div class="card">
         <div class="card-header">
           <h2>Λίστα Καταχωρημένων Αδειών</h2>
           <button class="export-link-btn" onclick="exportVacCSV()">⬇ Εξαγωγή CSV</button>
+        </div>
+        <div class="card-body" style="padding:16px 24px 0">
+          <div class="vac-filters">
+            <div class="field-group">
+              <label>Εργαζόμενος</label>
+              <select id="reg-filter-emp" onchange="renderFilteredVacList('reg')">
+                <option value="">Όλοι</option>
+                <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
+                <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Μήνας</label>
+              <select id="reg-filter-month" onchange="renderFilteredVacList('reg')">
+                <option value="">Όλοι</option>
+                <option value="01">Ιανουάριος</option><option value="02">Φεβρουάριος</option><option value="03">Μάρτιος</option>
+                <option value="04">Απρίλιος</option><option value="05">Μάιος</option><option value="06">Ιούνιος</option>
+                <option value="07">Ιούλιος</option><option value="08">Αύγουστος</option><option value="09">Σεπτέμβριος</option>
+                <option value="10">Οκτώβριος</option><option value="11">Νοέμβριος</option><option value="12">Δεκέμβριος</option>
+              </select>
+            </div>
+            <div class="filter-results-info" id="reg-filter-info"></div>
+          </div>
         </div>
         <div class="card-body" style="padding:0">
           <table class="vac-list-table">
@@ -580,7 +596,7 @@ function getMonthDateRange(year, month) {
   return { start: `${year}-${mm}-01`, end: `${year}-${mm}-${String(lastDay).padStart(2,'0')}` };
 }
 
-// ====== LOGIN ======
+/* ====== LOGIN ====== */
 document.getElementById('login-user').addEventListener('change', function() {
   const val = this.value;
   const needsPin = val !== '';
@@ -872,7 +888,7 @@ function allDates(from, to) {
 function fmtVacDate(d) { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}/${m}/${y}`; }
 
 async function loadVacations(prefix='vac', readonly=false) {
-  if(!sb) { vacations = []; renderVacations(prefix, readonly); showToast('Δεν υπάρχει σύνδεση Supabase', 'error'); return; }
+  if(!sb) { vacations = []; renderVacations(prefix, readonly); return; }
   const {data, error} = await sb.from('vacations').select('*').order('from_date');
   if(error) { showToast('Σφάλμα φόρτωσης αδειών: ' + error.message, 'error'); return; }
   vacations = (data || []).map(r => ({ id: r.id, employee: r.employee, from: r.from_date, to: r.to_date, workdays: r.workdays }));
@@ -896,11 +912,42 @@ async function addVacation() {
 
 async function deleteVacation(id) {
   if(!confirm('Διαγραφή αυτής της άδειας;')) return;
-  if(!sb) { showToast('Δεν υπάρχει σύνδεση Supabase', 'error'); return; }
+  if(!sb) return;
   const {error} = await sb.from('vacations').delete().eq('id', id);
   if(error) { showToast('Σφάλμα: ' + error.message, 'error'); return; }
   showToast('Η άδεια διαγράφηκε');
   loadVacations();
+}
+
+/* Φιλτράρισμα λίστας αδειών */
+function renderFilteredVacList(prefix) {
+  const empFilter  = (document.getElementById(prefix+'-filter-emp')  || {}).value || '';
+  const monthFilter = (document.getElementById(prefix+'-filter-month') || {}).value || '';
+  const readonly   = (prefix === 'reg');
+
+  let filtered = vacations;
+  if(empFilter)   filtered = filtered.filter(v => v.employee === empFilter);
+  if(monthFilter) filtered = filtered.filter(v => v.from.slice(5,7) === monthFilter || v.to.slice(5,7) === monthFilter);
+
+  const tbody  = document.getElementById(prefix+'-list-tbody');
+  const empty  = document.getElementById(prefix+'-list-empty');
+  const info   = document.getElementById(prefix+'-filter-info');
+  tbody.innerHTML = '';
+
+  const totalDays = filtered.reduce((s,v) => s + v.workdays, 0);
+  if(info) info.textContent = filtered.length ? `${filtered.length} εγγραφές — ${totalDays} εργάσιμες` : '';
+
+  if(!filtered.length) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  filtered.forEach((v, i) => {
+    const tr = document.createElement('tr');
+    const delCell = readonly ? '' : `<td><button class="del-btn" onclick="deleteVacation('${v.id}')">Διαγραφή</button></td>`;
+    tr.innerHTML = `<td>${i+1}</td><td>${v.employee}</td><td>${fmtVacDate(v.from)}</td><td>${fmtVacDate(v.to)}</td><td>${v.workdays}</td>${delCell}`;
+    tbody.appendChild(tr);
+  });
 }
 
 function renderVacations(prefix, readonly) {
@@ -908,6 +955,7 @@ function renderVacations(prefix, readonly) {
   EMPLOYEES.forEach(e => vacSet[e] = new Set());
   vacations.forEach(v => { allDates(v.from, v.to).forEach(d => vacSet[v.employee].add(d)); });
 
+  /* Stats chips (μόνο για admin prefix=vac) */
   const statsRow = document.getElementById(prefix+'-stats-row');
   if(statsRow) {
     statsRow.innerHTML = '';
@@ -920,6 +968,7 @@ function renderVacations(prefix, readonly) {
     });
   }
 
+  /* Ημερολόγιο */
   const calTable = document.getElementById(prefix+'-cal-table');
   if(calTable) {
     calTable.innerHTML = '';
@@ -935,15 +984,13 @@ function renderVacations(prefix, readonly) {
     months.forEach(m => {
       const last = new Date(2026, m, 0).getDate();
       const th = document.createElement('th');
-      th.colSpan = last;
-      th.className = 'month-hdr month-sep';
-      th.textContent = MONTHS_GR[m];
+      th.colSpan = last; th.className = 'month-hdr month-sep'; th.textContent = MONTHS_GR[m];
       monthRow.appendChild(th);
     });
     thead.appendChild(monthRow);
     const dayRow = document.createElement('tr');
     dayRow.innerHTML = '<th class="emp-th"></th>';
-    allDaysArr.forEach(({month, day, date}) => {
+    allDaysArr.forEach(({day, date}) => {
       const th = document.createElement('th');
       const dow = new Date(date).getDay();
       th.textContent = day;
@@ -957,8 +1004,7 @@ function renderVacations(prefix, readonly) {
     EMPLOYEES.forEach(emp => {
       const tr = document.createElement('tr');
       const empTd = document.createElement('td');
-      empTd.className = 'emp-cell';
-      empTd.textContent = emp;
+      empTd.className = 'emp-cell'; empTd.textContent = emp;
       tr.appendChild(empTd);
       allDaysArr.forEach(({date}) => {
         const td = document.createElement('td');
@@ -973,31 +1019,8 @@ function renderVacations(prefix, readonly) {
     calTable.appendChild(tbody);
   }
 
-  const totalsWrap = document.getElementById(prefix+'-emp-totals');
-  if(totalsWrap) {
-    totalsWrap.innerHTML = '';
-    EMPLOYEES.forEach(emp => {
-      const days = vacations.filter(v=>v.employee===emp).reduce((s,v)=>s+v.workdays,0);
-      const chip = document.createElement('div');
-      chip.className = 'emp-chip';
-      chip.innerHTML = `<span class="ec-name">${emp}</span><span class="ec-days${days===0?' zero':''}">${days}</span>`;
-      totalsWrap.appendChild(chip);
-    });
-  }
-
-  const listTbody = document.getElementById(prefix+'-list-tbody');
-  const listEmpty = document.getElementById(prefix+'-list-empty');
-  if(listTbody) {
-    listTbody.innerHTML = '';
-    if(!vacations.length) { if(listEmpty) listEmpty.style.display='block'; return; }
-    if(listEmpty) listEmpty.style.display='none';
-    vacations.forEach((v,i) => {
-      const tr = document.createElement('tr');
-      const delCell = readonly ? '' : `<td><button class="del-btn" onclick="deleteVacation('${v.id}')">Διαγραφή</button></td>`;
-      tr.innerHTML = `<td>${i+1}</td><td>${v.employee}</td><td>${fmtVacDate(v.from)}</td><td>${fmtVacDate(v.to)}</td><td>${v.workdays}</td>${delCell}`;
-      listTbody.appendChild(tr);
-    });
-  }
+  /* Λίστα — περνάμε από renderFilteredVacList για να υποστηρίζονται τα φίλτρα */
+  renderFilteredVacList(prefix);
 }
 
 function exportVacCSV() {
@@ -1011,21 +1034,12 @@ function exportVacCSV() {
 
 /* ========== ΥΠΕΡΩΡΙΕΣ ========== */
 async function loadOvertimes() {
-  if(!sb) {
-    overtimes = [];
-    renderOvertimes();
-    return;
-  }
+  if(!sb) { overtimes = []; renderOvertimes(); return; }
   const {data, error} = await sb.from('overtimes').select('*').order('date');
   if(error) {
-    // Αν δεν υπάρχει ο πίνακας, δουλεύουμε in-memory
-    if(error.code === '42P01') {
-      showToast('Ο πίνακας "overtimes" δεν υπάρχει ακόμα στο Supabase. Δείτε τις οδηγίες.', 'error');
-    } else {
-      showToast('Σφάλμα φόρτωσης υπερωριών: ' + error.message, 'error');
-    }
-    renderOvertimes();
-    return;
+    if(error.code === '42P01') showToast('Ο πίνακας "overtimes" δεν υπάρχει ακόμα στο Supabase.', 'error');
+    else showToast('Σφάλμα φόρτωσης υπερωριών: ' + error.message, 'error');
+    renderOvertimes(); return;
   }
   overtimes = (data || []).map(r => ({ id: r.id, employee: r.employee, date: r.date, hours: parseFloat(r.hours) }));
   renderOvertimes();
@@ -1037,21 +1051,9 @@ async function addOvertime() {
   const hours = parseFloat(document.getElementById('ot-hours').value);
   if(!emp) { showToast('Επιλέξτε εργαζόμενο', 'error'); return; }
   if(!date) { showToast('Επιλέξτε ημερομηνία', 'error'); return; }
-
   const totalUsed = overtimes.reduce((s,o) => s + o.hours, 0);
-  if(totalUsed + hours > OT_BUDGET) {
-    showToast(`⚠️ Υπέρβαση budget! Διαθέσιμες: ${OT_BUDGET - totalUsed} ώρες`, 'error');
-    return;
-  }
-
-  if(!sb) {
-    // Offline / in-memory
-    overtimes.push({ id: Date.now(), employee: emp, date, hours });
-    renderOvertimes();
-    showToast(`✓ ${emp.split(' ')[0]} — ${hours}h (τοπικά, χωρίς Supabase)`, 'success');
-    return;
-  }
-
+  if(totalUsed + hours > OT_BUDGET) { showToast(`⚠️ Υπέρβαση budget! Διαθέσιμες: ${OT_BUDGET - totalUsed} ώρες`, 'error'); return; }
+  if(!sb) { overtimes.push({ id: Date.now(), employee: emp, date, hours }); renderOvertimes(); showToast(`✓ ${emp.split(' ')[0]} — ${hours}h`, 'success'); return; }
   const {data, error} = await sb.from('overtimes').insert({ employee: emp, date, hours }).select();
   if(error) { showToast('Σφάλμα: ' + error.message, 'error'); return; }
   overtimes.push({ id: data[0].id, employee: emp, date, hours });
@@ -1061,10 +1063,7 @@ async function addOvertime() {
 
 async function deleteOvertime(id) {
   if(!confirm('Διαγραφή αυτής της υπερωρίας;')) return;
-  if(sb) {
-    const {error} = await sb.from('overtimes').delete().eq('id', id);
-    if(error) { showToast('Σφάλμα: ' + error.message, 'error'); return; }
-  }
+  if(sb) { const {error} = await sb.from('overtimes').delete().eq('id', id); if(error) { showToast('Σφάλμα: ' + error.message, 'error'); return; } }
   overtimes = overtimes.filter(o => o.id !== id);
   renderOvertimes();
   showToast('Η υπερωρία διαγράφηκε');
@@ -1074,76 +1073,42 @@ function renderOvertimes() {
   const totalUsed = overtimes.reduce((s,o) => s + o.hours, 0);
   const remaining = OT_BUDGET - totalUsed;
   const pct = Math.min((totalUsed / OT_BUDGET) * 100, 100);
-
-  // Budget bar
   document.getElementById('ot-used').textContent = totalUsed % 1 === 0 ? totalUsed : totalUsed.toFixed(1);
   document.getElementById('ot-remaining').textContent = remaining % 1 === 0 ? remaining : remaining.toFixed(1);
   const fill = document.getElementById('ot-progress-fill');
   fill.style.width = pct + '%';
   fill.className = 'ot-progress-fill' + (pct >= 100 ? ' over' : '');
-
-  // Per-employee chips
   const empGrid = document.getElementById('ot-emp-grid');
   empGrid.innerHTML = '';
   EMPLOYEES.forEach(emp => {
     const empHours = overtimes.filter(o=>o.employee===emp).reduce((s,o)=>s+o.hours, 0);
     const chip = document.createElement('div');
     chip.className = 'ot-emp-chip';
-    chip.innerHTML = `
-      <div class="oec-name">${emp.split(' ')[0]}</div>
-      <div class="oec-val">${empHours % 1 === 0 ? empHours : empHours.toFixed(1)}</div>
-      <div class="oec-sub">${empHours === 1 ? 'ώρα' : 'ώρες'}</div>
-    `;
+    chip.innerHTML = `<div class="oec-name">${emp.split(' ')[0]}</div><div class="oec-val">${empHours % 1 === 0 ? empHours : empHours.toFixed(1)}</div><div class="oec-sub">${empHours === 1 ? 'ώρα' : 'ώρες'}</div>`;
     empGrid.appendChild(chip);
   });
-
-  // List
   const tbody = document.getElementById('ot-list-tbody');
   const empty = document.getElementById('ot-list-empty');
   tbody.innerHTML = '';
-
-  if(!overtimes.length) {
-    empty.style.display = 'block';
-    return;
-  }
+  if(!overtimes.length) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
-
-  // Sort by date desc
   const sorted = [...overtimes].sort((a,b) => b.date.localeCompare(a.date));
-
   sorted.forEach((o, i) => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${sorted.length - i}</td>
-      <td>${o.employee}</td>
-      <td>${fmtVacDate(o.date)}</td>
-      <td><span class="ot-hours-badge">${o.hours % 1 === 0 ? o.hours : o.hours.toFixed(1)}h</span></td>
-      <td><button class="del-btn" onclick="deleteOvertime('${o.id}')">Διαγραφή</button></td>
-    `;
+    tr.innerHTML = `<td>${sorted.length - i}</td><td>${o.employee}</td><td>${fmtVacDate(o.date)}</td><td><span class="ot-hours-badge">${o.hours % 1 === 0 ? o.hours : o.hours.toFixed(1)}h</span></td><td><button class="del-btn" onclick="deleteOvertime('${o.id}')">Διαγραφή</button></td>`;
     tbody.appendChild(tr);
   });
-
-  // Total row
   const trTotal = document.createElement('tr');
   trTotal.className = 'ot-total-row';
-  trTotal.innerHTML = `
-    <td colspan="3"><strong>ΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ</strong></td>
-    <td><span class="ot-hours-badge" style="background:#ede9fe;font-size:14px">${totalUsed % 1 === 0 ? totalUsed : totalUsed.toFixed(1)}h / ${OT_BUDGET}h</span></td>
-    <td></td>
-  `;
+  trTotal.innerHTML = `<td colspan="3"><strong>ΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ</strong></td><td><span class="ot-hours-badge" style="background:#ede9fe;font-size:14px">${totalUsed % 1 === 0 ? totalUsed : totalUsed.toFixed(1)}h / ${OT_BUDGET}h</span></td><td></td>`;
   tbody.appendChild(trTotal);
 }
 
 function exportOtCSV() {
   let csv = 'Εργαζόμενος,Ημερομηνία,Ώρες\n';
-  const sorted = [...overtimes].sort((a,b) => a.date.localeCompare(b.date));
-  sorted.forEach(o => { csv += `${o.employee},${o.date},${o.hours}\n`; });
-  // Per-employee totals
+  [...overtimes].sort((a,b) => a.date.localeCompare(b.date)).forEach(o => { csv += `${o.employee},${o.date},${o.hours}\n`; });
   csv += '\nΣύνολα ανά εργαζόμενο\nΕργαζόμενος,Σύνολο ωρών\n';
-  EMPLOYEES.forEach(emp => {
-    const h = overtimes.filter(o=>o.employee===emp).reduce((s,o)=>s+o.hours,0);
-    if(h > 0) csv += `${emp},${h}\n`;
-  });
+  EMPLOYEES.forEach(emp => { const h = overtimes.filter(o=>o.employee===emp).reduce((s,o)=>s+o.hours,0); if(h > 0) csv += `${emp},${h}\n`; });
   const total = overtimes.reduce((s,o)=>s+o.hours,0);
   csv += `\nΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ,${total}\nBUDGET,${OT_BUDGET}\nΔΙΑΘΕΣΙΜΕΣ,${OT_BUDGET-total}\n`;
   const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
@@ -1153,11 +1118,7 @@ function exportOtCSV() {
 }
 
 /* ========== UTILITIES ========== */
-function formatDate(d) {
-  if(!d) return '';
-  const [y,m,dd] = d.split('-');
-  return `${dd}/${m}/${y}`;
-}
+function formatDate(d) { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}/${m}/${y}`; }
 
 function showToast(msg, type='') {
   const t = document.getElementById('toast');
