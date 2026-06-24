@@ -474,7 +474,7 @@ const EMPLOYEE_PINS = {
           <div class="targets-note">Στατική απεικόνιση ετήσιων στόχων καταστήματος για το 2026.</div>
         </div>
       </div>
-      <div class="card">
+      <div class="card" style="margin-bottom:20px">
         <div class="card-header"><h2>🌴 Οι Άδειές μου 2026</h2></div>
         <div class="card-body" style="padding:0 0 4px">
           <div style="padding:18px 24px 0"><span class="vac-badge" id="my-vac-total">0 εργάσιμες ημέρες συνολικά</span></div>
@@ -485,6 +485,17 @@ const EMPLOYEE_PINS = {
           <div class="empty-state" id="my-vac-empty" style="display:none">Δεν έχετε καταχωρημένες άδειες.</div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-header"><h2>⏱️ Οι Υπερωρίες μου 2026</h2></div>
+        <div class="card-body" style="padding:0 0 4px">
+          <div style="padding:18px 24px 0"><span class="ot-hours-badge" id="my-ot-total" style="font-size:14px">0h συνολικά</span></div>
+          <table class="ot-table" style="margin-top:14px">
+            <thead><tr><th>#</th><th>Ημερομηνία</th><th>Ώρες</th></tr></thead>
+            <tbody id="my-ot-tbody"></tbody>
+          </table>
+          <div class="empty-state" id="my-ot-empty" style="display:none">Δεν έχετε καταχωρημένες υπερωρίες.</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -492,8 +503,8 @@ const EMPLOYEE_PINS = {
   <div id="regional-view" style="display:none">
     <div class="container">
       <div class="emp-greeting">
-        <h2>🏢 Περιφέρεια Νοτίου Ελλάδας</h2>
-        <p>Προβολή αδειών καταστήματος -065- για το 2026</p>
+        <h2>🏢 Περιφέρεια Νοτίου Ελλάδος</h2>
+        <p>Προβολή αδειών & υπερωριών καταστήματος -065- για το 2026</p>
       </div>
       <div class="emp-stats-grid" id="reg-stats-row"></div>
       <div class="card" style="margin-bottom:20px">
@@ -503,7 +514,7 @@ const EMPLOYEE_PINS = {
         </div>
       </div>
       <!-- Χωρίς "Σύνολο Εργάσιμων ανά Εργαζόμενο" εδώ -->
-      <div class="card">
+      <div class="card" style="margin-bottom:20px">
         <div class="card-header">
           <h2>Λίστα Καταχωρημένων Αδειών</h2>
           <button class="export-link-btn" onclick="exportVacCSV()">⬇ Εξαγωγή CSV</button>
@@ -538,6 +549,39 @@ const EMPLOYEE_PINS = {
             <tbody id="reg-list-tbody"></tbody>
           </table>
           <div class="empty-state" id="reg-list-empty" style="display:none">Δεν υπάρχουν καταχωρημένες άδειες ακόμα.</div>
+        </div>
+      </div>
+
+      <!-- ΥΠΕΡΩΡΙΕΣ ΠΕΡΙΦΕΡΕΙΑΣ -->
+      <div class="ot-budget-bar">
+        <div class="ot-budget-left">
+          <h3>⏱️ Budget Υπερωριών 2026</h3>
+          <div class="ot-numbers">
+            <span id="reg-ot-used">0</span> / <span style="opacity:.7">160</span> <span>ώρες</span>
+          </div>
+          <div class="ot-progress-wrap">
+            <div class="ot-progress-track">
+              <div class="ot-progress-fill" id="reg-ot-progress-fill" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ot-budget-right">
+          <div class="ot-remain">Διαθέσιμες</div>
+          <div class="ot-remain"><strong id="reg-ot-remaining">160</strong> ώρες</div>
+        </div>
+      </div>
+      <div class="ot-emp-grid" id="reg-ot-emp-grid"></div>
+      <div class="card">
+        <div class="card-header">
+          <h2>Λίστα Υπερωριών</h2>
+          <button class="export-link-btn" onclick="exportOtCSV()">⬇ Εξαγωγή CSV</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="ot-table">
+            <thead><tr><th>#</th><th>Εργαζόμενος</th><th>Ημερομηνία</th><th>Ώρες</th></tr></thead>
+            <tbody id="reg-ot-tbody"></tbody>
+          </table>
+          <div class="empty-state" id="reg-ot-empty">Δεν υπάρχουν καταχωρημένες υπερωρίες ακόμα.</div>
         </div>
       </div>
     </div>
@@ -658,6 +702,7 @@ function showRegionalView() {
   document.getElementById('employee-view').style.display = 'none';
   document.getElementById('regional-view').style.display = 'block';
   loadVacations('reg', true);
+  loadRegOvertimes();
 }
 
 function showEmployeeView() {
@@ -669,6 +714,7 @@ function showEmployeeView() {
   buildEmpMonthTabs();
   loadEmpStats(new Date().getMonth()+1);
   loadMyVacations();
+  loadMyOvertimes();
 }
 
 function switchTab(tab) {
@@ -866,6 +912,78 @@ async function loadMyVacations() {
     tbody.appendChild(tr);
   });
   total.textContent = `${sum} εργάσιμες ημέρες συνολικά`;
+}
+
+async function loadMyOvertimes() {
+  const tbody = document.getElementById('my-ot-tbody');
+  const empty = document.getElementById('my-ot-empty');
+  const total = document.getElementById('my-ot-total');
+  tbody.innerHTML = '';
+  if(!sb) return;
+  const {data, error} = await sb.from('overtimes').select('*').eq('employee', currentUser).order('date');
+  if(error) return;
+  const rows = data||[];
+  if(!rows.length) { empty.style.display='block'; total.textContent='0h συνολικά'; return; }
+  empty.style.display='none';
+  let sum = 0;
+  rows.forEach((r,i) => {
+    const h = parseFloat(r.hours);
+    sum += h;
+    const tr = document.createElement('tr');
+    const hStr = h % 1 === 0 ? h : h.toFixed(2);
+    tr.innerHTML = `<td>${i+1}</td><td>${fmtVacDate(r.date)}</td><td><span class="ot-hours-badge">${hStr}h</span></td>`;
+    tbody.appendChild(tr);
+  });
+  const sumStr = sum % 1 === 0 ? sum : sum.toFixed(2);
+  total.textContent = `${sumStr}h συνολικά`;
+}
+
+async function loadRegOvertimes() {
+  if(!sb) { renderRegOvertimes([]); return; }
+  const {data, error} = await sb.from('overtimes').select('*').order('date');
+  if(error) { renderRegOvertimes([]); return; }
+  renderRegOvertimes(data||[]);
+}
+
+function renderRegOvertimes(data) {
+  const rows = data.map(r => ({ ...r, hours: parseFloat(r.hours) }));
+  const totalUsed = rows.reduce((s,o) => s + o.hours, 0);
+  const remaining = OT_BUDGET - totalUsed;
+  const pct = Math.min((totalUsed / OT_BUDGET) * 100, 100);
+
+  const fmtH = v => v % 1 === 0 ? v : v.toFixed(2);
+
+  document.getElementById('reg-ot-used').textContent = fmtH(totalUsed);
+  document.getElementById('reg-ot-remaining').textContent = fmtH(remaining);
+  const fill = document.getElementById('reg-ot-progress-fill');
+  fill.style.width = pct + '%';
+  fill.className = 'ot-progress-fill' + (pct >= 100 ? ' over' : '');
+
+  const empGrid = document.getElementById('reg-ot-emp-grid');
+  empGrid.innerHTML = '';
+  EMPLOYEES.forEach(emp => {
+    const h = rows.filter(o=>o.employee===emp).reduce((s,o)=>s+o.hours, 0);
+    const chip = document.createElement('div');
+    chip.className = 'ot-emp-chip';
+    chip.innerHTML = `<div class="oec-name">${emp.split(' ')[0]}</div><div class="oec-val">${fmtH(h)}</div><div class="oec-sub">${h === 1 ? 'ώρα' : 'ώρες'}</div>`;
+    empGrid.appendChild(chip);
+  });
+
+  const tbody = document.getElementById('reg-ot-tbody');
+  const empty = document.getElementById('reg-ot-empty');
+  tbody.innerHTML = '';
+  if(!rows.length) { empty.style.display='block'; return; }
+  empty.style.display='none';
+  const sorted = [...rows].sort((a,b) => b.date.localeCompare(a.date));
+  sorted.forEach((o,i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${sorted.length-i}</td><td>${o.employee}</td><td>${fmtVacDate(o.date)}</td><td><span class="ot-hours-badge">${fmtH(o.hours)}h</span></td>`;
+    tbody.appendChild(tr);
+  });
+  const trTotal = document.createElement('tr');
+  trTotal.className = 'ot-total-row';
+  trTotal.innerHTML = `<td colspan="3"><strong>ΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ</strong></td><td><span class="ot-hours-badge" style="background:#ede9fe;font-size:14px">${fmtH(totalUsed)}h / ${OT_BUDGET}h</span></td>`;
+  tbody.appendChild(trTotal);
 }
 
 /* ---------- VACATIONS ---------- */
