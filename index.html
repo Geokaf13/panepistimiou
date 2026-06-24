@@ -620,7 +620,7 @@ function doLogin() {
     currentRole = 'admin'; currentUser = 'Διαχειριστής';
   } else if(user === 'regional') {
     if(pin !== REGIONAL_PIN) { document.getElementById('login-error').style.display = 'block'; return; }
-    currentRole = 'regional'; currentUser = 'Περιφερειακή Διεύθυνση';
+    currentRole = 'regional'; currentUser = 'Περιφέρεια Νοτίου Ελλάδος';
   } else {
     if(pin !== EMPLOYEE_PINS[user]) { document.getElementById('login-error').style.display = 'block'; return; }
     currentRole = 'employee'; currentUser = user;
