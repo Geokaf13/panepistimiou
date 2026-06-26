@@ -328,6 +328,7 @@ const EMPLOYEE_PINS = {
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+                  <option>ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ</option>
                 </select>
               </div>
               <div class="field-group"><label>Από</label><input type="date" id="vac-from" min="2026-01-01" max="2026-12-31" value="2026-01-01"></div>
@@ -364,6 +365,7 @@ const EMPLOYEE_PINS = {
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+                  <option>ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ</option>
                 </select>
               </div>
               <div class="field-group">
@@ -535,6 +537,7 @@ const EMPLOYEE_PINS = {
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+                  <option>ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ</option>
                 </select>
               </div>
               <div class="field-group">
@@ -604,6 +607,8 @@ const EMPLOYEE_PINS = {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 const EMPLOYEES = ['ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ','ΙΩΑΝΝΟΥ ΝΙΚΗ','ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ','ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ','ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ','ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ','ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ','ΤΖΟΓΙΑ ΝΑΝΤΙΑ','ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ'];
+/* Λίστα ατόμων που μπορούν να έχουν καταχωρημένες ΑΔΕΙΕΣ — περιλαμβάνει και τον admin */
+const VACATION_PEOPLE = [...EMPLOYEES, 'ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ'];
 const CATEGORIES = [
   {name:'Ραντεβού', amount:false},{name:'Νέα ID', amount:false},{name:'Νέα Χρεωστική', amount:false},{name:'Νέο ebanking', amount:false},
   {name:'Επικαιροποιήσεις', amount:false},{name:'Αίτηση Πιστωτικής Κάρτας', amount:false},{name:'Αίτηση Καταναλωτικού Δανείου', amount:false},
@@ -1093,14 +1098,14 @@ function renderFilteredVacList(prefix) {
 
 function renderVacations(prefix, readonly) {
   const vacSet = {};
-  EMPLOYEES.forEach(e => vacSet[e] = new Set());
+  VACATION_PEOPLE.forEach(e => vacSet[e] = new Set());
   vacations.forEach(v => { allDates(v.from, v.to).forEach(d => vacSet[v.employee].add(d)); });
 
   /* Stats chips (μόνο για admin prefix=vac) */
   const statsRow = document.getElementById(prefix+'-stats-row');
   if(statsRow) {
     statsRow.innerHTML = '';
-    EMPLOYEES.forEach(emp => {
+    VACATION_PEOPLE.forEach(emp => {
       const days = vacations.filter(v=>v.employee===emp).reduce((s,v)=>s+v.workdays,0);
       const chip = document.createElement('div');
       chip.className = 'stat-chip';
@@ -1142,7 +1147,7 @@ function renderVacations(prefix, readonly) {
     thead.appendChild(dayRow);
     calTable.appendChild(thead);
     const tbody = document.createElement('tbody');
-    EMPLOYEES.forEach(emp => {
+    VACATION_PEOPLE.forEach(emp => {
       const tr = document.createElement('tr');
       const empTd = document.createElement('td');
       empTd.className = 'emp-cell'; empTd.textContent = emp;
