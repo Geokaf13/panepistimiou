@@ -1022,16 +1022,23 @@ async function saveEntry() {
 }
 
 async function loadYTD() {
-  if(!sb) { renderYTD([]); return; }
-  const mf = document.getElementById('ytd-month-filter').value;
-  let query = sb.from('productions').select('*').gte('date','2026-01-01').lte('date','2026-12-31');
-  if(mf !== 'all') {
-    const range = getMonthDateRange(2026, Number(mf));
-    query = query.gte('date', range.start).lte('date', range.end);
-  }
-  const {data, error} = await query;
-  if(error) { showToast('Σφάλμα φόρτωσης: ' + error.message, 'error'); return; }
-  renderYTD(data || []);
+    if (!sb) { renderYTD([]); return; }
+    const mf = document.getElementById('ytd-month-filter').value;
+    
+    let query = sb.from('productions').select();
+    
+    if (mf === 'all') {
+        // Ολόκληρο το έτος
+        query = query.gte('date', '2026-01-01').lte('date', '2026-12-31');
+    } else {
+        // Συγκεκριμένος μήνας
+        const range = getMonthDateRange(2026, Number(mf));
+        query = query.gte('date', range.start).lte('date', range.end);
+    }
+    
+    const { data, error } = await query;
+    if (error) { showToast(error.message, 'error'); return; }
+    renderYTD(data);
 }
 
 function renderYTD(data) {
