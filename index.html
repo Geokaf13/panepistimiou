@@ -178,6 +178,41 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .ot-hours-select { padding: 9px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Mono', monospace; font-weight: 600; color: var(--purple); background: white; cursor: pointer; transition: border-color .2s; min-width: 90px; }
 .ot-hours-select:focus { outline: none; border-color: var(--purple); }
 
+/* ===== ΡΑΛΛΥ ΠΙΣΤΩΤΙΚΩΝ ΚΑΡΤΩΝ ===== */
+.rally-hero { background: linear-gradient(135deg, #92400e 0%, #d97706 60%, #f59e0b 100%); border-radius: var(--radius); padding: 22px 26px; margin-bottom: 20px; color: white; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.rally-hero h3 { font-size: 15px; font-weight: 700; opacity: .9; letter-spacing: .02em; margin-bottom: 6px; }
+.rally-hero .rh-num { font-size: 34px; font-weight: 700; font-family: 'DM Mono', monospace; line-height: 1; }
+.rally-hero .rh-num span { font-size: 15px; font-weight: 500; opacity: .8; margin-left: 6px; }
+.rally-hero-stats { display: flex; gap: 22px; flex-wrap: wrap; }
+.rally-hero-stat { text-align: center; }
+.rally-hero-stat .rhs-val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.rally-hero-stat .rhs-lbl { font-size: 10.5px; font-weight: 600; opacity: .8; text-transform: uppercase; letter-spacing: .04em; margin-top: 2px; }
+.rally-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.rally-card { background: white; border-radius: var(--radius-sm); padding: 14px 16px; box-shadow: var(--shadow); border-left: 3px solid var(--amber); position: relative; }
+.rally-card.rank-1 { border-left-color: #d4af37; background: linear-gradient(180deg,#fffbeb 0%,#ffffff 60%); }
+.rally-card.rank-2 { border-left-color: #9ca3af; }
+.rally-card.rank-3 { border-left-color: #b45309; }
+.rally-card .rc-rank { position: absolute; top: 10px; right: 12px; font-size: 16px; }
+.rally-card .rc-name { font-size: 11.5px; font-weight: 700; color: var(--gray-800); text-transform: uppercase; letter-spacing: .03em; margin-bottom: 6px; padding-right: 18px; }
+.rally-card .rc-total { font-size: 26px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--amber); line-height: 1; }
+.rally-card .rc-total-lbl { font-size: 10.5px; color: var(--gray-400); margin-bottom: 8px; }
+.rally-card .rc-breakdown { display: flex; gap: 8px; font-size: 11px; font-weight: 600; }
+.rally-card .rc-breakdown span.ok { color: var(--green); }
+.rally-card .rc-breakdown span.no { color: var(--red); }
+.rally-card .rc-breakdown span.pend { color: var(--gray-400); }
+.rally-status-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.rally-status-badge.ok { background: var(--green-light); color: var(--green); }
+.rally-status-badge.no { background: #fee2e2; color: var(--red); }
+.rally-status-badge.pend { background: var(--gray-100); color: var(--gray-600); }
+.rally-status-select { padding: 9px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; color: var(--gray-800); background: white; cursor: pointer; }
+.rally-status-select:focus { outline: none; border-color: var(--amber); }
+.rally-my-bar { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px 18px; margin-bottom: 18px; }
+.rally-my-bar .rmb-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+.rally-my-bar .rmb-top strong { font-size: 13px; color: var(--gray-600); }
+.rally-my-bar .rmb-top span { font-size: 13px; font-weight: 700; color: var(--amber); font-family: 'DM Mono', monospace; }
+.rally-my-track { background: var(--gray-200); border-radius: 99px; height: 10px; width: 100%; overflow: hidden; }
+.rally-my-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--amber), #f59e0b); transition: width .6s ease; }
+
 @media (max-width: 900px) { .targets-layout { grid-template-columns: 1fr; } }
 @media (max-width: 640px) {
   .container { padding: 16px 12px; }
@@ -213,7 +248,7 @@ const EMPLOYEE_PINS = {
 
 <div id="login-screen">
   <div class="login-card">
-    <div class="login-logo"><img src="https://raw.githubusercontent.com/Geokaf13/panepistimiou-assets/55bd19e9d58ed253387e5763a132eb2c52f9c0a6/065.png" alt="icon"></div>
+    <div class="login-logo"><img src="https://i.ibb.co/20dZgTqw/viber-image-2026-06-24-21-43-20-809.png" alt="icon"></div>
     <h1>ΚΑΤΑΣΤΗΜΑ ΠΑΝΕΠΙΣΤΗΜΙΟΥ</h1>
     <div class="login-group">
       <label>Σύνδεση ως</label>
@@ -260,6 +295,7 @@ const EMPLOYEE_PINS = {
         <button class="tab-btn" onclick="switchTab('targets')">🎯 Στόχοι 2026</button>
         <button class="tab-btn" onclick="switchTab('adeies')">🌴 Άδειες</button>
         <button class="tab-btn" onclick="switchTab('yperwries')">⏱️ Υπερωρίες</button>
+        <button class="tab-btn" onclick="switchTab('rally')">🏆 Ράλλυ Καρτών</button>
       </div>
 
       <!-- TAB: ΗΜΕΡΗΣΙΑ -->
@@ -460,6 +496,90 @@ const EMPLOYEE_PINS = {
         </div>
       </div>
 
+      <!-- TAB: ΡΑΛΛΥ ΚΑΡΤΩΝ -->
+      <div id="tab-rally" style="display:none">
+        <div class="rally-hero">
+          <div>
+            <h3>🏆 Ράλλυ Πιστωτικών Καρτών — Σύνολο Καταστήματος</h3>
+            <div class="rh-num"><span id="rally-total">0</span><span>αιτήσεις</span></div>
+          </div>
+          <div class="rally-hero-stats">
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-ok">0</div><div class="rhs-lbl">Εγκρίσεις</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-no">0</div><div class="rhs-lbl">Απορρίψεις</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-pend">0</div><div class="rhs-lbl">Επεξεργασία</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header"><h2>Καταχώρηση Αίτησης Κάρτας</h2></div>
+          <div class="card-body">
+            <div class="entry-controls">
+              <div class="field-group"><label>GID Πελάτη</label><input type="text" id="rally-gid" placeholder="π.χ. 12993641" style="padding:9px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:inherit;min-width:140px"></div>
+              <div class="field-group"><label>Όνομα / Επωνυμία</label><input type="text" id="rally-name" placeholder="Ονοματεπώνυμο πελάτη" style="padding:9px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:inherit;min-width:200px"></div>
+              <div class="field-group">
+                <label>Εργαζόμενος</label>
+                <select id="rally-emp">
+                  <option value="">— Επιλέξτε —</option>
+                  <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label>Κατάσταση</label>
+                <select id="rally-status" class="rally-status-select">
+                  <option value="ΝΑΙ">✓ Εγκρίθηκε</option>
+                  <option value="ΕΠΕΞΕΡΓΑΣΙΑ" selected>⏳ Σε Επεξεργασία</option>
+                  <option value="ΟΧΙ">✗ Απορρίφθηκε</option>
+                </select>
+              </div>
+              <div class="field-group"><label>Ημερομηνία Αίτησης</label><input type="date" id="rally-date"></div>
+              <button class="save-btn" onclick="addRallyCard()" style="background:#d97706">+ Προσθήκη</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="rally-board" id="rally-board"></div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2>Λίστα Αιτήσεων</h2>
+            <button class="export-link-btn" onclick="exportRallyCSV()">⬇ Εξαγωγή CSV</button>
+          </div>
+          <div class="card-body" style="padding:16px 24px 0">
+            <div class="vac-filters">
+              <div class="field-group">
+                <label>Εργαζόμενος</label>
+                <select id="rally-filter-emp" onchange="renderFilteredRallyList()">
+                  <option value="">Όλοι</option>
+                  <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label>Κατάσταση</label>
+                <select id="rally-filter-status" onchange="renderFilteredRallyList()">
+                  <option value="">Όλες</option>
+                  <option value="ΝΑΙ">Εγκρίθηκε</option>
+                  <option value="ΕΠΕΞΕΡΓΑΣΙΑ">Σε Επεξεργασία</option>
+                  <option value="ΟΧΙ">Απορρίφθηκε</option>
+                </select>
+              </div>
+              <div class="filter-results-info" id="rally-filter-info"></div>
+            </div>
+          </div>
+          <div class="card-body" style="padding:0">
+            <table class="vac-list-table">
+              <thead><tr><th>#</th><th>GID</th><th>Πελάτης</th><th>Εργαζόμενος</th><th>Κατάσταση</th><th>Ημερομηνία</th><th></th></tr></thead>
+              <tbody id="rally-list-tbody"></tbody>
+            </table>
+            <div class="empty-state" id="rally-list-empty" style="display:none">Δεν υπάρχουν καταχωρημένες αιτήσεις ακόμα.</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -496,6 +616,22 @@ const EMPLOYEE_PINS = {
             <tbody id="my-ot-tbody"></tbody>
           </table>
           <div class="empty-state" id="my-ot-empty" style="display:none">Δεν έχετε καταχωρημένες υπερωρίες.</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px">
+        <div class="card-header"><h2>🏆 Το Ράλλυ Καρτών μου</h2></div>
+        <div class="card-body" style="padding:18px 24px 4px">
+          <div class="emp-stats-grid" id="my-rally-stats" style="margin-bottom:18px"></div>
+          <div class="rally-my-bar">
+            <div class="rmb-top"><strong>Συνεισφορά στο σύνολο καταστήματος</strong><span id="my-rally-pct">0%</span></div>
+            <div class="rally-my-track"><div class="rally-my-fill" id="my-rally-fill" style="width:0%"></div></div>
+            <div style="font-size:12px;color:var(--gray-400);margin-top:6px" id="my-rally-vs-total">0 από 0 συνολικές αιτήσεις καταστήματος</div>
+          </div>
+          <table class="vac-list-table">
+            <thead><tr><th>#</th><th>Πελάτης</th><th>Κατάσταση</th><th>Ημερομηνία</th></tr></thead>
+            <tbody id="my-rally-tbody"></tbody>
+          </table>
+          <div class="empty-state" id="my-rally-empty" style="display:none">Δεν έχετε καταχωρημένες αιτήσεις καρτών.</div>
         </div>
       </div>
     </div>
@@ -649,6 +785,7 @@ let currentRole = null;
 let entryValues = {};
 let vacations = [];
 let overtimes = [];
+let rallyCards = [];
 
 function getMonthDateRange(year, month) {
   const mm = String(month).padStart(2,'0');
@@ -708,6 +845,7 @@ function showAdminView() {
   document.getElementById('regional-view').style.display = 'none';
   document.getElementById('entry-date').value = new Date().toISOString().slice(0,10);
   document.getElementById('ot-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('rally-date').value = new Date().toISOString().slice(0,10);
   buildEntryTable();
   buildTargetsView('targets-layout');
   document.getElementById('ytd-month-filter').value = String(new Date().getMonth()+1);
@@ -740,20 +878,23 @@ function showEmployeeView() {
   loadEmpStats(new Date().getMonth()+1);
   loadMyVacations();
   loadMyOvertimes();
+  loadMyRally();
 }
 
 function switchTab(tab) {
-  const tabs = ['entry','ytd','targets','adeies','yperwries'];
+  const tabs = ['entry','ytd','targets','adeies','yperwries','rally'];
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', tabs[i]===tab));
   document.getElementById('tab-entry').style.display = tab==='entry'?'block':'none';
   document.getElementById('tab-ytd').style.display = tab==='ytd'?'block':'none';
   document.getElementById('tab-targets').style.display = tab==='targets'?'block':'none';
   document.getElementById('tab-adeies').style.display = tab==='adeies'?'block':'none';
   document.getElementById('tab-yperwries').style.display = tab==='yperwries'?'block':'none';
+  document.getElementById('tab-rally').style.display = tab==='rally'?'block':'none';
   if(tab==='ytd') loadYTD();
   if(tab==='targets') buildTargetsView('targets-layout');
   if(tab==='adeies') loadVacations('vac', false);
   if(tab==='yperwries') loadOvertimes();
+  if(tab==='rally') loadRallyCards();
 }
 
 function buildEntryTable() {
@@ -1266,6 +1407,165 @@ function exportOtCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href=url; a.download='yperwries_2026.csv'; a.click();
   URL.revokeObjectURL(url);
+}
+
+/* ========== ΡΑΛΛΥ ΠΙΣΤΩΤΙΚΩΝ ΚΑΡΤΩΝ ========== */
+function rallyStatusBadge(status) {
+  if(status === 'ΝΑΙ') return '<span class="rally-status-badge ok">✓ Εγκρίθηκε</span>';
+  if(status === 'ΟΧΙ') return '<span class="rally-status-badge no">✗ Απορρίφθηκε</span>';
+  return '<span class="rally-status-badge pend">⏳ Επεξεργασία</span>';
+}
+
+async function loadRallyCards() {
+  if(!sb) { rallyCards = []; renderRallyBoard(); return; }
+  const {data, error} = await sb.from('card_rally').select('*').order('application_date', {ascending:false});
+  if(error) {
+    if(error.code === '42P01') showToast('Ο πίνακας "card_rally" δεν υπάρχει ακόμα στο Supabase.', 'error');
+    else showToast('Σφάλμα φόρτωσης ράλλυ: ' + error.message, 'error');
+    rallyCards = []; renderRallyBoard(); return;
+  }
+  rallyCards = (data || []).map(r => ({ id: r.id, gid: r.gid, name: r.customer_name, employee: r.employee, status: r.status, date: r.application_date }));
+  renderRallyBoard();
+}
+
+async function addRallyCard() {
+  const gid = document.getElementById('rally-gid').value.trim();
+  const name = document.getElementById('rally-name').value.trim();
+  const emp = document.getElementById('rally-emp').value;
+  const status = document.getElementById('rally-status').value;
+  const date = document.getElementById('rally-date').value;
+  if(!emp) { showToast('Επιλέξτε εργαζόμενο', 'error'); return; }
+  if(!name) { showToast('Συμπληρώστε όνομα πελάτη', 'error'); return; }
+  if(!sb) { showToast('Δεν υπάρχει σύνδεση Supabase', 'error'); return; }
+  const {error} = await sb.from('card_rally').insert({ gid: gid || null, customer_name: name, employee: emp, status, application_date: date || null });
+  if(error) { showToast('Σφάλμα: ' + error.message, 'error'); return; }
+  showToast(`✓ ${emp.split(' ')[0]} — νέα αίτηση καταχωρήθηκε`, 'success');
+  document.getElementById('rally-gid').value = '';
+  document.getElementById('rally-name').value = '';
+  loadRallyCards();
+}
+
+async function deleteRallyCard(id) {
+  if(!confirm('Διαγραφή αυτής της αίτησης;')) return;
+  if(!sb) return;
+  const {error} = await sb.from('card_rally').delete().eq('id', id);
+  if(error) { showToast('Σφάλμα: ' + error.message, 'error'); return; }
+  showToast('Η αίτηση διαγράφηκε');
+  loadRallyCards();
+}
+
+function renderRallyBoard() {
+  const total = rallyCards.length;
+  const ok = rallyCards.filter(c=>c.status==='ΝΑΙ').length;
+  const no = rallyCards.filter(c=>c.status==='ΟΧΙ').length;
+  const pend = rallyCards.filter(c=>c.status==='ΕΠΕΞΕΡΓΑΣΙΑ').length;
+  const rate = (ok+no) > 0 ? Math.round((ok/(ok+no))*100) : 0;
+  document.getElementById('rally-total').textContent = total;
+  document.getElementById('rally-ok').textContent = ok;
+  document.getElementById('rally-no').textContent = no;
+  document.getElementById('rally-pend').textContent = pend;
+  document.getElementById('rally-rate').textContent = rate + '%';
+
+  const board = document.getElementById('rally-board');
+  board.innerHTML = '';
+  const ranking = EMPLOYEES.map(emp => {
+    const mine = rallyCards.filter(c=>c.employee===emp);
+    return {
+      emp,
+      total: mine.length,
+      ok: mine.filter(c=>c.status==='ΝΑΙ').length,
+      no: mine.filter(c=>c.status==='ΟΧΙ').length,
+      pend: mine.filter(c=>c.status==='ΕΠΕΞΕΡΓΑΣΙΑ').length
+    };
+  }).sort((a,b) => b.total - a.total);
+  const medals = ['🥇','🥈','🥉'];
+  ranking.forEach((r, i) => {
+    const card = document.createElement('div');
+    card.className = 'rally-card' + (i < 3 && r.total > 0 ? ` rank-${i+1}` : '');
+    card.innerHTML = `
+      ${i < 3 && r.total > 0 ? `<div class="rc-rank">${medals[i]}</div>` : ''}
+      <div class="rc-name">${r.emp.split(' ')[0]}</div>
+      <div class="rc-total">${r.total}</div>
+      <div class="rc-total-lbl">αιτήσεις</div>
+      <div class="rc-breakdown"><span class="ok">${r.ok}✓</span><span class="no">${r.no}✗</span><span class="pend">${r.pend}⏳</span></div>`;
+    board.appendChild(card);
+  });
+
+  renderFilteredRallyList();
+}
+
+function renderFilteredRallyList() {
+  const empFilter = (document.getElementById('rally-filter-emp')||{}).value || '';
+  const statusFilter = (document.getElementById('rally-filter-status')||{}).value || '';
+  let filtered = rallyCards;
+  if(empFilter) filtered = filtered.filter(c => c.employee === empFilter);
+  if(statusFilter) filtered = filtered.filter(c => c.status === statusFilter);
+
+  const tbody = document.getElementById('rally-list-tbody');
+  const empty = document.getElementById('rally-list-empty');
+  const info = document.getElementById('rally-filter-info');
+  tbody.innerHTML = '';
+  if(info) info.textContent = filtered.length ? `${filtered.length} εγγραφές` : '';
+  if(!filtered.length) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  filtered.forEach((c, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td>${c.gid || '—'}</td><td>${c.name}</td><td>${c.employee}</td><td>${rallyStatusBadge(c.status)}</td><td>${c.date ? fmtVacDate(c.date) : '—'}</td><td><button class="del-btn" onclick="deleteRallyCard('${c.id}')">Διαγραφή</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function exportRallyCSV() {
+  let csv = 'GID,Πελάτης,Εργαζόμενος,Κατάσταση,Ημερομηνία\n';
+  rallyCards.forEach(c => { csv += `${c.gid||''},${c.name},${c.employee},${c.status},${c.date||''}\n`; });
+  csv += '\nΣύνολα ανά εργαζόμενο\nΕργαζόμενος,Αιτήσεις,Εγκρίσεις,Απορρίψεις,Επεξεργασία\n';
+  EMPLOYEES.forEach(emp => {
+    const mine = rallyCards.filter(c=>c.employee===emp);
+    if(mine.length) csv += `${emp},${mine.length},${mine.filter(c=>c.status==='ΝΑΙ').length},${mine.filter(c=>c.status==='ΟΧΙ').length},${mine.filter(c=>c.status==='ΕΠΕΞΕΡΓΑΣΙΑ').length}\n`;
+  });
+  csv += `\nΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ,${rallyCards.length},${rallyCards.filter(c=>c.status==='ΝΑΙ').length},${rallyCards.filter(c=>c.status==='ΟΧΙ').length},${rallyCards.filter(c=>c.status==='ΕΠΕΞΕΡΓΑΣΙΑ').length}\n`;
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='rally_kartwn.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function loadMyRally() {
+  const statsGrid = document.getElementById('my-rally-stats');
+  const tbody = document.getElementById('my-rally-tbody');
+  const empty = document.getElementById('my-rally-empty');
+  statsGrid.innerHTML = ''; tbody.innerHTML = '';
+  if(!sb) return;
+  const {data: allData, error: allErr} = await sb.from('card_rally').select('*');
+  if(allErr) { if(allErr.code !== '42P01') showToast('Σφάλμα φόρτωσης: ' + allErr.message, 'error'); return; }
+  const all = allData || [];
+  const mine = all.filter(c => c.employee === currentUser);
+  const storeTotal = all.length;
+  const myTotal = mine.length;
+  const ok = mine.filter(c=>c.status==='ΝΑΙ').length;
+  const no = mine.filter(c=>c.status==='ΟΧΙ').length;
+  const pend = mine.filter(c=>c.status==='ΕΠΕΞΕΡΓΑΣΙΑ').length;
+
+  [['Αιτήσεις', myTotal, 'blue'], ['Εγκρίσεις', ok, 'green'], ['Απορρίψεις', no, 'red'], ['Επεξεργασία', pend, 'gray']].forEach(([label, val]) => {
+    const chip = document.createElement('div');
+    chip.className = 'stat-chip';
+    chip.innerHTML = `<div class="sc-label">${label}</div><div class="sc-val">${val}</div>`;
+    statsGrid.appendChild(chip);
+  });
+
+  const pct = storeTotal > 0 ? Math.round((myTotal/storeTotal)*100) : 0;
+  document.getElementById('my-rally-pct').textContent = pct + '%';
+  document.getElementById('my-rally-fill').style.width = pct + '%';
+  document.getElementById('my-rally-vs-total').textContent = `${myTotal} από ${storeTotal} συνολικές αιτήσεις καταστήματος`;
+
+  if(!mine.length) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  const sorted = [...mine].sort((a,b) => (b.application_date||'').localeCompare(a.application_date||''));
+  sorted.forEach((c, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td>${c.customer_name}</td><td>${rallyStatusBadge(c.status)}</td><td>${c.application_date ? fmtVacDate(c.application_date) : '—'}</td>`;
+    tbody.appendChild(tr);
+  });
 }
 
 /* ========== UTILITIES ========== */
