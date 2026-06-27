@@ -621,6 +621,17 @@ const EMPLOYEE_PINS = {
       <div class="card" style="margin-top:20px">
         <div class="card-header"><h2>🏆 Το Ράλλυ Καρτών μου</h2></div>
         <div class="card-body" style="padding:18px 24px 4px">
+          <div class="rally-hero" style="margin-bottom:18px">
+            <div>
+              <h3>Σύνολο Καταστήματος</h3>
+              <div class="rh-num"><span id="store-rally-total">0</span><span>αιτήσεις</span></div>
+            </div>
+            <div class="rally-hero-stats">
+              <div class="rally-hero-stat"><div class="rhs-val" id="store-rally-ok">0</div><div class="rhs-lbl">Εγκρίσεις</div></div>
+              <div class="rally-hero-stat"><div class="rhs-val" id="store-rally-no">0</div><div class="rhs-lbl">Απορρίψεις</div></div>
+              <div class="rally-hero-stat"><div class="rhs-val" id="store-rally-pend">0</div><div class="rhs-lbl">Επεξεργασία</div></div>
+            </div>
+          </div>
           <div class="emp-stats-grid" id="my-rally-stats" style="margin-bottom:18px"></div>
           <div class="rally-my-bar">
             <div class="rmb-top"><strong>Συνεισφορά στο σύνολο καταστήματος</strong><span id="my-rally-pct">0%</span></div>
@@ -648,6 +659,7 @@ const EMPLOYEE_PINS = {
       <div class="tab-nav">
         <button class="tab-btn active" id="reg-tab-btn-adeies" onclick="switchRegTab('adeies')">🌴 Άδειες</button>
         <button class="tab-btn" id="reg-tab-btn-yperwries" onclick="switchRegTab('yperwries')">⏱️ Υπερωρίες</button>
+        <button class="tab-btn" id="reg-tab-btn-rally" onclick="switchRegTab('rally')">🏆 Ράλλυ Καρτών</button>
       </div>
 
       <!-- REG TAB: ΑΔΕΙΕΣ -->
@@ -730,6 +742,32 @@ const EMPLOYEE_PINS = {
               <tbody id="reg-ot-tbody"></tbody>
             </table>
             <div class="empty-state" id="reg-ot-empty">Δεν υπάρχουν καταχωρημένες υπερωρίες ακόμα.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REG TAB: ΡΑΛΛΥ ΚΑΡΤΩΝ -->
+      <div id="reg-tab-rally" style="display:none">
+        <div class="rally-hero">
+          <div>
+            <h3>🏆 Ράλλυ Πιστωτικών Καρτών — Σύνολο Καταστήματος</h3>
+            <div class="rh-num"><span id="reg-rally-total">0</span><span>αιτήσεις</span></div>
+          </div>
+          <div class="rally-hero-stats">
+            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-ok">0</div><div class="rhs-lbl">Εγκρίσεις</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-no">0</div><div class="rhs-lbl">Απορρίψεις</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-pend">0</div><div class="rhs-lbl">Επεξεργασία</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2>Λίστα Αιτήσεων Πελατών</h2></div>
+          <div class="card-body" style="padding:0">
+            <table class="vac-list-table">
+              <thead><tr><th>#</th><th>Πελάτης</th><th>Κατάσταση</th></tr></thead>
+              <tbody id="reg-rally-tbody"></tbody>
+            </table>
+            <div class="empty-state" id="reg-rally-empty">Δεν υπάρχουν καταχωρημένες αιτήσεις ακόμα.</div>
           </div>
         </div>
       </div>
@@ -864,8 +902,11 @@ function showRegionalView() {
 function switchRegTab(tab) {
   document.getElementById('reg-tab-adeies').style.display = tab === 'adeies' ? 'block' : 'none';
   document.getElementById('reg-tab-yperwries').style.display = tab === 'yperwries' ? 'block' : 'none';
+  document.getElementById('reg-tab-rally').style.display = tab === 'rally' ? 'block' : 'none';
   document.getElementById('reg-tab-btn-adeies').classList.toggle('active', tab === 'adeies');
   document.getElementById('reg-tab-btn-yperwries').classList.toggle('active', tab === 'yperwries');
+  document.getElementById('reg-tab-btn-rally').classList.toggle('active', tab === 'rally');
+  if(tab === 'rally') loadRegRally();
 }
 
 function showEmployeeView() {
@@ -1552,6 +1593,34 @@ function exportRallyCSV() {
   URL.revokeObjectURL(url);
 }
 
+async function loadRegRally() {
+  const tbody = document.getElementById('reg-rally-tbody');
+  const empty = document.getElementById('reg-rally-empty');
+  tbody.innerHTML = '';
+  if(!sb) return;
+  const {data, error} = await sb.from('card_rally').select('customer_name, status, application_date').order('application_date', {ascending:false});
+  if(error) { if(error.code !== '42P01') showToast('Σφάλμα φόρτωσης: ' + error.message, 'error'); return; }
+  const rows = data || [];
+  const total = rows.length;
+  const ok = rows.filter(c=>c.status==='ΝΑΙ').length;
+  const no = rows.filter(c=>c.status==='ΟΧΙ').length;
+  const pend = rows.filter(c=>c.status==='ΕΠΕΞΕΡΓΑΣΙΑ').length;
+  const rate = (ok+no) > 0 ? Math.round((ok/(ok+no))*100) : 0;
+  document.getElementById('reg-rally-total').textContent = total;
+  document.getElementById('reg-rally-ok').textContent = ok;
+  document.getElementById('reg-rally-no').textContent = no;
+  document.getElementById('reg-rally-pend').textContent = pend;
+  document.getElementById('reg-rally-rate').textContent = rate + '%';
+
+  if(!rows.length) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  rows.forEach((c, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td>${c.customer_name}</td><td>${rallyStatusBadge(c.status)}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
 async function loadMyRally() {
   const statsGrid = document.getElementById('my-rally-stats');
   const tbody = document.getElementById('my-rally-tbody');
@@ -1563,6 +1632,13 @@ async function loadMyRally() {
   const all = allData || [];
   const mine = all.filter(c => c.employee === currentUser);
   const storeTotal = all.length;
+  const storeOk = all.filter(c=>c.status==='ΝΑΙ').length;
+  const storeNo = all.filter(c=>c.status==='ΟΧΙ').length;
+  const storePend = all.filter(c=>c.status==='ΕΠΕΞΕΡΓΑΣΙΑ').length;
+  document.getElementById('store-rally-total').textContent = storeTotal;
+  document.getElementById('store-rally-ok').textContent = storeOk;
+  document.getElementById('store-rally-no').textContent = storeNo;
+  document.getElementById('store-rally-pend').textContent = storePend;
   const myTotal = mine.length;
   const ok = mine.filter(c=>c.status==='ΝΑΙ').length;
   const no = mine.filter(c=>c.status==='ΟΧΙ').length;
