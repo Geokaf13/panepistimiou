@@ -886,7 +886,7 @@ function showAdminView() {
   document.getElementById('rally-date').value = new Date().toISOString().slice(0,10);
   buildEntryTable();
   buildTargetsView('targets-layout');
-  document.getElementById('ytd-month-filter').value = String(new Date().getMonth()+1);
+  document.getElementById('ytd-month-filter').value = 'all';
 }
 
 function showRegionalView() {
