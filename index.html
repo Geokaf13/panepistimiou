@@ -1416,6 +1416,28 @@ function rallyStatusBadge(status) {
   return '<span class="rally-status-badge pend">⏳ Επεξεργασία</span>';
 }
 
+function rallyStatusSelect(id, current) {
+  const opts = [
+    ['ΕΠΕΞΕΡΓΑΣΙΑ', '⏳ Σε Επεξεργασία'],
+    ['ΝΑΙ', '✓ Εγκρίθηκε'],
+    ['ΟΧΙ', '✗ Απορρίφθηκε']
+  ];
+  const optionsHtml = opts.map(([val, label]) => `<option value="${val}" ${val===current?'selected':''}>${label}</option>`).join('');
+  return `<select class="rally-status-select" style="font-size:13px;padding:6px 10px" data-prev="${current}" onchange="updateRallyStatus('${id}', this)">${optionsHtml}</select>`;
+}
+
+async function updateRallyStatus(id, selectEl) {
+  const newStatus = selectEl.value;
+  const prevStatus = selectEl.dataset.prev;
+  if(newStatus === prevStatus) return;
+  if(!sb) { showToast('Δεν υπάρχει σύνδεση Supabase', 'error'); selectEl.value = prevStatus; return; }
+  const {error} = await sb.from('card_rally').update({ status: newStatus }).eq('id', id);
+  if(error) { showToast('Σφάλμα: ' + error.message, 'error'); selectEl.value = prevStatus; return; }
+  selectEl.dataset.prev = newStatus;
+  showToast('✓ Η κατάσταση ενημερώθηκε', 'success');
+  loadRallyCards();
+}
+
 async function loadRallyCards() {
   if(!sb) { rallyCards = []; renderRallyBoard(); return; }
   const {data, error} = await sb.from('card_rally').select('*').order('application_date', {ascending:false});
@@ -1510,7 +1532,7 @@ function renderFilteredRallyList() {
   empty.style.display = 'none';
   filtered.forEach((c, i) => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${i+1}</td><td>${c.gid || '—'}</td><td>${c.name}</td><td>${c.employee}</td><td>${rallyStatusBadge(c.status)}</td><td>${c.date ? fmtVacDate(c.date) : '—'}</td><td><button class="del-btn" onclick="deleteRallyCard('${c.id}')">Διαγραφή</button></td>`;
+    tr.innerHTML = `<td>${i+1}</td><td>${c.gid || '—'}</td><td>${c.name}</td><td>${c.employee}</td><td>${rallyStatusSelect(c.id, c.status)}</td><td>${c.date ? fmtVacDate(c.date) : '—'}</td><td><button class="del-btn" onclick="deleteRallyCard('${c.id}')">Διαγραφή</button></td>`;
     tbody.appendChild(tr);
   });
 }
