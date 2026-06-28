@@ -276,6 +276,16 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
   .ot-budget-right { text-align: left; }
 }
 
+/* ── YTD Table improvements ── */
+.ytd-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.ytd-table { font-size: 12px; min-width: 900px; }
+.ytd-table th { padding: 8px 6px; font-size: 11px; white-space: nowrap; }
+.ytd-table th:first-child { text-align: left; min-width: 180px; position: sticky; left: 0; background: var(--navy); z-index: 2; }
+.ytd-table td { padding: 6px; white-space: nowrap; font-size: 12px; }
+.ytd-table td:first-child { position: sticky; left: 0; background: white; z-index: 1; font-size: 12px; box-shadow: 2px 0 4px rgba(0,0,0,.06); min-width: 180px; }
+.ytd-table .amount-row td:first-child { background: var(--amber-light); }
+.ytd-table .total-row td:first-child { background: var(--navy); }
+
 </style>
 </head>
 <body>
@@ -1411,7 +1421,7 @@ function renderYTD(data) {
     const fmt = v => v === 0
       ? `<span class="val-zero">—</span>`
       : isAmt
-        ? `${v.toLocaleString('el-GR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`
+        ? `${v.toLocaleString('el-GR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} €`
         : v;
 
     const tr = document.createElement('tr');
