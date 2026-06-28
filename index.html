@@ -1369,15 +1369,20 @@ async function loadYTD() {
 }
 
 function renderYTD(data) {
-  /* pivot */
+  /* pivot — χρησιμοποιούμε Map για να αθροίσουμε μόνο μία φορά ανά (date,employee,category) */
+  const seen  = new Set();
   const pivot = {};
   CATEGORIES.forEach(cat => {
     pivot[cat.name] = {};
     EMPLOYEES.forEach(emp => (pivot[cat.name][emp] = 0));
   });
+
   data.forEach(row => {
+    const key = `${row.date}|${row.employee}|${row.category}`;
+    if (seen.has(key)) return;   // αγνόησε διπλότυπα
+    seen.add(key);
     if (pivot[row.category] && pivot[row.category][row.employee] !== undefined)
-      pivot[row.category][row.employee] += row.value;
+      pivot[row.category][row.employee] += Number(row.value) || 0;
   });
 
   const thead = document.getElementById('ytd-thead');
@@ -1386,12 +1391,19 @@ function renderYTD(data) {
   tbody.innerHTML = '';
 
   CATEGORIES.forEach(cat => {
-    const vals  = EMPLOYEES.map(e => pivot[cat.name][e]);
-    const total = vals.reduce((a, b) => a + b, 0);
     const isAmt = cat.amount;
-    const fmt   = v => v === 0
+    /* Στρογγυλοποίηση για αποφυγή floating-point σφαλμάτων */
+    const vals  = EMPLOYEES.map(e => isAmt
+      ? Math.round(pivot[cat.name][e] * 100) / 100
+      : Math.round(pivot[cat.name][e])
+    );
+    const total = vals.reduce((a, b) => a + b, 0);
+
+    const fmt = v => v === 0
       ? `<span class="val-zero">—</span>`
-      : isAmt ? `${v.toLocaleString('el-GR', { minimumFractionDigits: 0 })} €` : v;
+      : isAmt
+        ? `${v.toLocaleString('el-GR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`
+        : v;
 
     const tr = document.createElement('tr');
     if (isAmt) tr.className = 'amount-row';
@@ -1399,13 +1411,15 @@ function renderYTD(data) {
     tbody.appendChild(tr);
   });
 
-  /* Σύνολο ενεργειών (μόνο count) */
+  /* Γραμμή ΣΥΝΟΛΟ ΕΝΕΡΓΕΙΩΝ — μόνο count κατηγορίες */
   const countCats  = CATEGORIES.filter(c => !c.amount);
-  const grandVals  = EMPLOYEES.map(emp => countCats.reduce((s, cat) => s + pivot[cat.name][emp], 0));
+  const grandVals  = EMPLOYEES.map(emp =>
+    Math.round(countCats.reduce((s, cat) => s + pivot[cat.name][emp], 0))
+  );
   const grandTotal = grandVals.reduce((a, b) => a + b, 0);
   const tr = document.createElement('tr');
-  tr.className  = 'total-row';
-  tr.innerHTML  = `<td>ΣΥΝΟΛΟ ΕΝΕΡΓΕΙΩΝ</td>${grandVals.map(v => `<td>${v || '—'}</td>`).join('')}<td>${grandTotal}</td>`;
+  tr.className = 'total-row';
+  tr.innerHTML = `<td>ΣΥΝΟΛΟ ΕΝΕΡΓΕΙΩΝ</td>${grandVals.map(v => `<td>${v || '—'}</td>`).join('')}<td>${grandTotal}</td>`;
   tbody.appendChild(tr);
 }
 
