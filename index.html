@@ -1369,8 +1369,7 @@ async function loadYTD() {
 }
 
 function renderYTD(data) {
-  /* pivot — χρησιμοποιούμε Map για να αθροίσουμε μόνο μία φορά ανά (date,employee,category) */
-  const seen  = new Set();
+  /* pivot — αθροίζουμε όλες τις ημερήσιες εγγραφές κανονικά */
   const pivot = {};
   CATEGORIES.forEach(cat => {
     pivot[cat.name] = {};
@@ -1378,9 +1377,6 @@ function renderYTD(data) {
   });
 
   data.forEach(row => {
-    const key = `${row.date}|${row.employee}|${row.category}`;
-    if (seen.has(key)) return;   // αγνόησε διπλότυπα
-    seen.add(key);
     if (pivot[row.category] && pivot[row.category][row.employee] !== undefined)
       pivot[row.category][row.employee] += Number(row.value) || 0;
   });
@@ -1392,7 +1388,6 @@ function renderYTD(data) {
 
   CATEGORIES.forEach(cat => {
     const isAmt = cat.amount;
-    /* Στρογγυλοποίηση για αποφυγή floating-point σφαλμάτων */
     const vals  = EMPLOYEES.map(e => isAmt
       ? Math.round(pivot[cat.name][e] * 100) / 100
       : Math.round(pivot[cat.name][e])
