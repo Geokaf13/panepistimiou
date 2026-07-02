@@ -286,6 +286,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .ytd-table .amount-row td:first-child { background: var(--amber-light); }
 .ytd-table .total-row td:first-child { background: var(--navy); }
 
+/* ── Rally edit inputs ── */
+.rally-edit-input { padding: 6px 10px; border: 1.5px solid var(--gray-200); border-radius: 6px; font-size: 13px; font-family: inherit; width: 100%; min-width: 90px; color: var(--gray-800); background: white; }
+.rally-edit-input:focus { outline: none; border-color: var(--amber); background: #fffbeb; }
+.rally-edit-select { padding: 6px 10px; border: 1.5px solid var(--gray-200); border-radius: 6px; font-size: 13px; font-family: inherit; color: var(--gray-800); background: white; cursor: pointer; min-width: 110px; }
+.rally-edit-select:focus { outline: none; border-color: var(--amber); }
+.island-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; background: #e0f2fe; color: #0369a1; }
+
 </style>
 </head>
 <body>
@@ -310,6 +317,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
           <option value="ΙΩΑΝΝΟΥ ΝΙΚΗ">ΙΩΑΝΝΟΥ ΝΙΚΗ</option>
           <option value="ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ">ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
           <option value="ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ">ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option>
+          <option value="ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ">ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option>
           <option value="ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ">ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
           <option value="ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ">ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option>
           <option value="ΤΖΟΓΙΑ ΝΑΝΤΙΑ">ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option>
@@ -373,6 +381,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                   <option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option>
                   <option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option>
+                  <option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option>
                   <option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option>
                   <option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option>
@@ -454,6 +463,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                   <option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option>
                   <option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option>
+                  <option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option>
                   <option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option>
                   <option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option>
@@ -496,7 +506,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                 <select id="vac-filter-emp" onchange="renderFilteredVacList('vac')">
                   <option value="">Όλοι</option>
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ</option>
                 </select>
@@ -553,7 +563,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                 <select id="ot-emp">
                   <option value="">— Επιλέξτε —</option>
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
                 </select>
               </div>
@@ -608,6 +618,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-no">0</div><div class="rhs-lbl">Απορρίψεις</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-pend">0</div><div class="rhs-lbl">Επεξεργασία</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-pct-total">0%</div><div class="rhs-lbl">% ISLAND / Σύνολο</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-pct-ok">0%</div><div class="rhs-lbl">% ISLAND / Εγκρίσεις</div></div>
           </div>
         </div>
 
@@ -628,7 +640,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                 <select id="rally-emp">
                   <option value="">— Επιλέξτε —</option>
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
                 </select>
               </div>
@@ -638,6 +650,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                   <option value="ΝΑΙ">✓ Εγκρίθηκε</option>
                   <option value="ΕΠΕΞΕΡΓΑΣΙΑ" selected>⏳ Σε Επεξεργασία</option>
                   <option value="ΟΧΙ">✗ Απορρίφθηκε</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label>ISLAND</label>
+                <select id="rally-island" class="rally-status-select">
+                  <option value="false" selected>Όχι</option>
+                  <option value="true">Ναι</option>
                 </select>
               </div>
               <div class="field-group">
@@ -663,7 +682,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                 <select id="rally-filter-emp" onchange="renderFilteredRallyList()">
                   <option value="">Όλοι</option>
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
                 </select>
               </div>
@@ -676,12 +695,20 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                   <option value="ΟΧΙ">Απορρίφθηκε</option>
                 </select>
               </div>
+              <div class="field-group">
+                <label>ISLAND</label>
+                <select id="rally-filter-island" onchange="renderFilteredRallyList()">
+                  <option value="">Όλες</option>
+                  <option value="true">Ναι</option>
+                  <option value="false">Όχι</option>
+                </select>
+              </div>
               <div class="filter-results-info" id="rally-filter-info"></div>
             </div>
           </div>
           <div class="card-body" style="padding:0">
             <table class="vac-list-table">
-              <thead><tr><th>#</th><th>GID</th><th>Πελάτης</th><th>Εργαζόμενος</th><th>Κατάσταση</th><th>Ημερομηνία</th><th></th></tr></thead>
+              <thead><tr><th>#</th><th>GID</th><th>Πελάτης</th><th>Εργαζόμενος</th><th>Κατάσταση</th><th>ISLAND</th><th>Ημερομηνία</th><th></th></tr></thead>
               <tbody id="rally-list-tbody"></tbody>
             </table>
             <div class="empty-state" id="rally-list-empty" style="display:none">Δεν υπάρχουν καταχωρημένες αιτήσεις ακόμα.</div>
@@ -813,7 +840,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                 <select id="reg-filter-emp" onchange="renderFilteredVacList('reg')">
                   <option value="">Όλοι</option>
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ</option>
                 </select>
@@ -888,13 +915,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-no">0</div><div class="rhs-lbl">Απορρίψεις</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-pend">0</div><div class="rhs-lbl">Επεξεργασία</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-island-pct-total">0%</div><div class="rhs-lbl">% ISLAND / Σύνολο</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-island-pct-ok">0%</div><div class="rhs-lbl">% ISLAND / Εγκρίσεις</div></div>
           </div>
         </div>
         <div class="card">
           <div class="card-header"><h2>Λίστα Αιτήσεων Πελατών</h2></div>
           <div class="card-body" style="padding:0">
             <table class="vac-list-table">
-              <thead><tr><th>#</th><th>Πελάτης</th><th>Κατάσταση</th></tr></thead>
+              <thead><tr><th>#</th><th>Πελάτης</th><th>Κατάσταση</th><th>ISLAND</th></tr></thead>
               <tbody id="reg-rally-tbody"></tbody>
             </table>
             <div class="empty-state" id="reg-rally-empty">Δεν υπάρχουν καταχωρημένες αιτήσεις ακόμα.</div>
@@ -929,6 +958,7 @@ const EMPLOYEE_PINS = {
   'ΙΩΑΝΝΟΥ ΝΙΚΗ':           '2222',
   'ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ':     '3333',
   'ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ':        '4444',
+  'ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ':     '5555',
   'ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ':      '6666',
   'ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ':    '7777',
   'ΤΖΟΓΙΑ ΝΑΝΤΙΑ':          '8888',
@@ -940,6 +970,7 @@ const EMPLOYEES = [
   'ΙΩΑΝΝΟΥ ΝΙΚΗ',
   'ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ',
   'ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ',
+  'ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ',
   'ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ',
   'ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ',
   'ΤΖΟΓΙΑ ΝΑΝΤΙΑ',
@@ -1077,7 +1108,7 @@ function rallyStatusBadge(status) {
   return '<span class="rally-status-badge pend">⏳ Επεξεργασία</span>';
 }
 
-/* Inline select για αλλαγή status ράλλυ */
+/* Inline select για αλλαγή status ράλλυ (editable) */
 function rallyStatusSelect(id, current) {
   const opts = [
     ['ΕΠΕΞΕΡΓΑΣΙΑ', '⏳ Σε Επεξεργασία'],
@@ -1087,9 +1118,33 @@ function rallyStatusSelect(id, current) {
   const optionsHtml = opts
     .map(([val, label]) => `<option value="${val}" ${val === current ? 'selected' : ''}>${label}</option>`)
     .join('');
-  return `<select class="rally-status-select" style="font-size:13px;padding:6px 10px"
-            data-prev="${current}"
-            onchange="updateRallyStatus('${id}', this)">${optionsHtml}</select>`;
+  return `<select class="rally-edit-select"
+            onchange="updateRallyField('${id}', 'status', this.value)">${optionsHtml}</select>`;
+}
+
+/* Inline select για αλλαγή εργαζομένου σε αίτηση ράλλυ */
+function rallyEmployeeSelect(id, current) {
+  const optionsHtml = EMPLOYEES
+    .map(e => `<option value="${e}" ${e === current ? 'selected' : ''}>${e}</option>`)
+    .join('');
+  return `<select class="rally-edit-select"
+            onchange="updateRallyField('${id}', 'employee', this.value)">${optionsHtml}</select>`;
+}
+
+/* Inline select για ISLAND flag σε αίτηση ράλλυ */
+function rallyIslandSelect(id, current) {
+  return `<select class="rally-edit-select"
+            onchange="updateRallyField('${id}', 'is_island', this.value === 'true')">
+            <option value="false" ${!current ? 'selected' : ''}>Όχι</option>
+            <option value="true" ${current ? 'selected' : ''}>Ναι</option>
+          </select>`;
+}
+
+/* Badge για ISLAND (χρήση σε read-only προβολές) */
+function islandBadge(isIsland) {
+  return isIsland
+    ? '<span class="island-badge">🏝️ ISLAND</span>'
+    : '<span style="color:var(--gray-300)">—</span>';
 }
 
 /* Δημιουργία πίνακα στόχων σε οποιοδήποτε container */
@@ -1916,6 +1971,7 @@ async function loadRallyCards() {
   rallyCards = (data || []).map(r => ({
     id: r.id, gid: r.gid, name: r.customer_name,
     employee: r.employee, status: r.status, date: r.application_date,
+    island: !!r.is_island,
   }));
   renderRallyBoard();
 }
@@ -1926,6 +1982,7 @@ async function addRallyCard() {
   const name   = document.getElementById('rally-name').value.trim();
   const emp    = document.getElementById('rally-emp').value;
   const status = document.getElementById('rally-status').value;
+  const island = document.getElementById('rally-island').value === 'true';
   const date   = document.getElementById('rally-date').value;
 
   if (!emp)  { showToast('Επιλέξτε εργαζόμενο', 'error'); return; }
@@ -1935,12 +1992,14 @@ async function addRallyCard() {
   const { error } = await sb.from('card_rally').insert({
     gid: gid || null, customer_name: name,
     employee: emp, status, application_date: date || null,
+    is_island: island,
   });
   if (error) { showToast('Σφάλμα: ' + error.message, 'error'); return; }
 
   showToast(`✓ ${emp.split(' ')[0]} — νέα αίτηση καταχωρήθηκε`, 'success');
   document.getElementById('rally-gid').value  = '';
   document.getElementById('rally-name').value = '';
+  document.getElementById('rally-island').value = 'false';
   loadRallyCards();
 }
 
@@ -1954,18 +2013,13 @@ async function deleteRallyCard(id) {
   loadRallyCards();
 }
 
-/* ── Ενημέρωση Status ── */
-async function updateRallyStatus(id, selectEl) {
-  const newStatus  = selectEl.value;
-  const prevStatus = selectEl.dataset.prev;
-  if (newStatus === prevStatus) return;
-  if (!sb) { showToast('Δεν υπάρχει σύνδεση Supabase', 'error'); selectEl.value = prevStatus; return; }
-
-  const { error } = await sb.from('card_rally').update({ status: newStatus }).eq('id', id);
-  if (error) { showToast('Σφάλμα: ' + error.message, 'error'); selectEl.value = prevStatus; return; }
-
-  selectEl.dataset.prev = newStatus;
-  showToast('✓ Η κατάσταση ενημερώθηκε', 'success');
+/* ── Γενική ενημέρωση οποιουδήποτε πεδίου (πλήρες inline edit) ── */
+async function updateRallyField(id, field, value) {
+  if (!sb) { showToast('Δεν υπάρχει σύνδεση Supabase', 'error'); return; }
+  const payload = { [field]: value };
+  const { error } = await sb.from('card_rally').update(payload).eq('id', id);
+  if (error) { showToast('Σφάλμα: ' + error.message, 'error'); loadRallyCards(); return; }
+  showToast('✓ Η αίτηση ενημερώθηκε', 'success');
   loadRallyCards();
 }
 
@@ -1977,13 +2031,20 @@ function renderRallyBoard() {
   const pend  = rallyCards.filter(c => c.status === 'ΕΠΕΞΕΡΓΑΣΙΑ').length;
   const rate  = (ok + no) > 0 ? Math.round((ok / (ok + no)) * 100) : 0;
 
+  const islandTotal = rallyCards.filter(c => c.island).length;
+  const islandOk     = rallyCards.filter(c => c.island && c.status === 'ΝΑΙ').length;
+  const islandPctTotal = total > 0 ? Math.round((islandTotal / total) * 100) : 0;
+  const islandPctOk    = ok > 0 ? Math.round((islandOk / ok) * 100) : 0;
+
   document.getElementById('rally-total').textContent = total;
   document.getElementById('rally-ok').textContent    = ok;
   document.getElementById('rally-no').textContent    = no;
   document.getElementById('rally-pend').textContent  = pend;
   document.getElementById('rally-rate').textContent  = rate + '%';
+  document.getElementById('rally-island-pct-total').textContent = islandPctTotal + '%';
+  document.getElementById('rally-island-pct-ok').textContent    = islandPctOk + '%';
 
-  /* Leaderboard cards */
+  /* Leaderboard cards — κατάταξη με βάση Εγκρίσεις, δεύτερο Σύνολο, μετά Απορρίψεις/Επεξεργασία */
   const board   = document.getElementById('rally-board');
   board.innerHTML = '';
   const ranking = EMPLOYEES.map(emp => {
@@ -1995,7 +2056,7 @@ function renderRallyBoard() {
       no:    mine.filter(c => c.status === 'ΟΧΙ').length,
       pend:  mine.filter(c => c.status === 'ΕΠΕΞΕΡΓΑΣΙΑ').length,
     };
-  }).sort((a, b) => b.total - a.total);
+  }).sort((a, b) => b.ok - a.ok || b.total - a.total || b.no - a.no || b.pend - a.pend);
 
   const medals = ['🥇', '🥈', '🥉'];
   ranking.forEach((r, i) => {
@@ -2017,13 +2078,15 @@ function renderRallyBoard() {
   renderFilteredRallyList();
 }
 
-/* ── Φιλτραρισμένη Λίστα ── */
+/* ── Φιλτραρισμένη Λίστα (πλήρως επεξεργάσιμη) ── */
 function renderFilteredRallyList() {
   const empFilter    = (document.getElementById('rally-filter-emp')    || {}).value || '';
   const statusFilter = (document.getElementById('rally-filter-status') || {}).value || '';
+  const islandFilter = (document.getElementById('rally-filter-island') || {}).value || '';
   let filtered = rallyCards;
   if (empFilter)    filtered = filtered.filter(c => c.employee === empFilter);
   if (statusFilter) filtered = filtered.filter(c => c.status === statusFilter);
+  if (islandFilter) filtered = filtered.filter(c => String(!!c.island) === islandFilter);
 
   const tbody = document.getElementById('rally-list-tbody');
   const empty = document.getElementById('rally-list-empty');
@@ -2038,11 +2101,15 @@ function renderFilteredRallyList() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${i + 1}</td>
-      <td>${c.gid || '—'}</td>
-      <td>${c.name}</td>
-      <td>${c.employee}</td>
+      <td><input class="rally-edit-input" type="text" value="${c.gid || ''}"
+            onchange="updateRallyField('${c.id}','gid', this.value.trim() || null)"></td>
+      <td><input class="rally-edit-input" type="text" value="${c.name || ''}"
+            onchange="updateRallyField('${c.id}','customer_name', this.value.trim())"></td>
+      <td>${rallyEmployeeSelect(c.id, c.employee)}</td>
       <td>${rallyStatusSelect(c.id, c.status)}</td>
-      <td>${c.date ? fmtVacDate(c.date) : '—'}</td>
+      <td>${rallyIslandSelect(c.id, c.island)}</td>
+      <td><input class="rally-edit-input" type="date" value="${c.date || ''}"
+            onchange="updateRallyField('${c.id}','application_date', this.value || null)"></td>
       <td><button class="del-btn" onclick="deleteRallyCard('${c.id}')">Διαγραφή</button></td>`;
     tbody.appendChild(tr);
   });
@@ -2050,9 +2117,9 @@ function renderFilteredRallyList() {
 
 /* ── Export CSV ── */
 function exportRallyCSV() {
-  let csv = 'GID,Πελάτης,Εργαζόμενος,Κατάσταση,Ημερομηνία\n';
+  let csv = 'GID,Πελάτης,Εργαζόμενος,Κατάσταση,ISLAND,Ημερομηνία\n';
   rallyCards.forEach(c => {
-    csv += `${c.gid || ''},${c.name},${c.employee},${c.status},${c.date || ''}\n`;
+    csv += `${c.gid || ''},${c.name},${c.employee},${c.status},${c.island ? 'ΝΑΙ' : 'ΟΧΙ'},${c.date || ''}\n`;
   });
 
   csv += '\nΣύνολα ανά εργαζόμενο\nΕργαζόμενος,Αιτήσεις,Εγκρίσεις,Απορρίψεις,Επεξεργασία\n';
@@ -2062,7 +2129,12 @@ function exportRallyCSV() {
       csv += `${emp},${mine.length},${mine.filter(c => c.status === 'ΝΑΙ').length},${mine.filter(c => c.status === 'ΟΧΙ').length},${mine.filter(c => c.status === 'ΕΠΕΞΕΡΓΑΣΙΑ').length}\n`;
   });
 
-  csv += `\nΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ,${rallyCards.length},${rallyCards.filter(c => c.status === 'ΝΑΙ').length},${rallyCards.filter(c => c.status === 'ΟΧΙ').length},${rallyCards.filter(c => c.status === 'ΕΠΕΞΕΡΓΑΣΙΑ').length}\n`;
+  const islandTotal = rallyCards.filter(c => c.island).length;
+  const islandOk     = rallyCards.filter(c => c.island && c.status === 'ΝΑΙ').length;
+  const totalOk      = rallyCards.filter(c => c.status === 'ΝΑΙ').length;
+  csv += `\nΣΥΝΟΛΟ ΚΑΤΑΣΤΗΜΑΤΟΣ,${rallyCards.length},${totalOk},${rallyCards.filter(c => c.status === 'ΟΧΙ').length},${rallyCards.filter(c => c.status === 'ΕΠΕΞΕΡΓΑΣΙΑ').length}\n`;
+  csv += `\nISLAND — Σύνολο Αιτήσεων,${islandTotal}\nISLAND — % επί Συνόλου,${rallyCards.length > 0 ? Math.round((islandTotal / rallyCards.length) * 100) : 0}%\n`;
+  csv += `ISLAND — Εγκρίσεις,${islandOk}\nISLAND — % επί Εγκρίσεων,${totalOk > 0 ? Math.round((islandOk / totalOk) * 100) : 0}%\n`;
   downloadCSV(csv, 'rally_kartwn.csv');
 }
 
@@ -2075,7 +2147,7 @@ async function loadRegRally() {
 
   const { data, error } = await sb
     .from('card_rally')
-    .select('customer_name, status, application_date')
+    .select('customer_name, status, application_date, is_island')
     .order('application_date', { ascending: false });
 
   if (error) {
@@ -2090,18 +2162,25 @@ async function loadRegRally() {
   const pend = rows.filter(c => c.status === 'ΕΠΕΞΕΡΓΑΣΙΑ').length;
   const rate = (ok + no) > 0 ? Math.round((ok / (ok + no)) * 100) : 0;
 
+  const islandTotal = rows.filter(c => c.is_island).length;
+  const islandOk     = rows.filter(c => c.is_island && c.status === 'ΝΑΙ').length;
+  const islandPctTotal = rows.length > 0 ? Math.round((islandTotal / rows.length) * 100) : 0;
+  const islandPctOk    = ok > 0 ? Math.round((islandOk / ok) * 100) : 0;
+
   document.getElementById('reg-rally-total').textContent = rows.length;
   document.getElementById('reg-rally-ok').textContent    = ok;
   document.getElementById('reg-rally-no').textContent    = no;
   document.getElementById('reg-rally-pend').textContent  = pend;
   document.getElementById('reg-rally-rate').textContent  = rate + '%';
+  document.getElementById('reg-rally-island-pct-total').textContent = islandPctTotal + '%';
+  document.getElementById('reg-rally-island-pct-ok').textContent    = islandPctOk + '%';
 
   if (!rows.length) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
 
   rows.forEach((c, i) => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${i + 1}</td><td>${c.customer_name}</td><td>${rallyStatusBadge(c.status)}</td>`;
+    tr.innerHTML = `<td>${i + 1}</td><td>${c.customer_name}</td><td>${rallyStatusBadge(c.status)}</td><td>${islandBadge(c.is_island)}</td>`;
     tbody.appendChild(tr);
   });
 }
