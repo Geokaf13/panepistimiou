@@ -287,8 +287,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .ytd-table .total-row td:first-child { background: var(--navy); }
 
 /* ── Rally edit inputs ── */
-.rally-edit-input { padding: 6px 10px; border: 1.5px solid var(--gray-200); border-radius: 6px; font-size: 13px; font-family: inherit; width: 100%; min-width: 90px; color: var(--gray-800); background: white; }
-.rally-edit-input:focus { outline: none; border-color: var(--amber); background: #fffbeb; }
+.rally-edit-input { padding: 6px 10px; border: 1.5px solid var(--gray-200); border-radius: 6px; font-size: 13px; font-family: inherit; width: 100%; min-width: 140px; color: var(--gray-800) !important; background: white !important; }
+.rally-edit-input:focus { outline: none; border-color: var(--amber); background: #fffbeb !important; }
 .rally-edit-select { padding: 6px 10px; border: 1.5px solid var(--gray-200); border-radius: 6px; font-size: 13px; font-family: inherit; color: var(--gray-800); background: white; cursor: pointer; min-width: 110px; }
 .rally-edit-select:focus { outline: none; border-color: var(--amber); }
 .island-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; background: #e0f2fe; color: #0369a1; }
@@ -620,6 +620,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-pct-total">0%</div><div class="rhs-lbl">% ISLAND / Σύνολο</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-pct-ok">0%</div><div class="rhs-lbl">% ISLAND / Εγκρίσεις</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-target-pct">0%</div><div class="rhs-lbl">% Στόχου (30)</div></div>
           </div>
         </div>
 
@@ -2040,7 +2041,7 @@ function renderRallyBoard() {
   document.getElementById('rally-ok').textContent    = ok;
   document.getElementById('rally-no').textContent    = no;
   document.getElementById('rally-pend').textContent  = pend;
-  document.getElementById('rally-rate').textContent  = rate + '%';
+  document.getElementById('rally-target-pct').textContent = Math.round((ok / 30) * 100) + '%';
   document.getElementById('rally-island-pct-total').textContent = islandPctTotal + '%';
   document.getElementById('rally-island-pct-ok').textContent    = islandPctOk + '%';
 
