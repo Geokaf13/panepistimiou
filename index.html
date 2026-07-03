@@ -391,7 +391,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                   <option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option>
                   <option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option>
-                  <option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option>
                   <option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option>
                   <option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option>
@@ -473,7 +472,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                   <option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option>
                   <option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option>
-                  <option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option>
                   <option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option>
                   <option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option>
@@ -516,7 +514,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                 <select id="vac-filter-emp" onchange="renderFilteredVacList('vac')">
                   <option value="">Όλοι</option>
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ</option>
                 </select>
@@ -573,7 +571,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                 <select id="ot-emp">
                   <option value="">— Επιλέξτε —</option>
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
                 </select>
               </div>
@@ -854,7 +852,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                 <select id="reg-filter-emp" onchange="renderFilteredVacList('reg')">
                   <option value="">Όλοι</option>
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
                   <option>ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ</option>
                 </select>
@@ -989,7 +987,6 @@ const EMPLOYEES = [
   'ΙΩΑΝΝΟΥ ΝΙΚΗ',
   'ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ',
   'ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ',
-  'ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ',
   'ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ',
   'ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ',
   'ΤΖΟΓΙΑ ΝΑΝΤΙΑ',
@@ -2066,7 +2063,7 @@ function renderRallyBoard() {
   document.getElementById('rally-no').textContent    = no;
   document.getElementById('rally-pend').textContent  = pend;
   document.getElementById('rally-rate').textContent  = rate + '%';
-  document.getElementById('rally-target-pct').textContent = `${storeTargetPct}% (${storeTarget} / ${ok})`;
+  document.getElementById('rally-target-pct').textContent = `${storeTargetPct}% (${ok} / ${storeTarget})`;
   document.getElementById('rally-island-pct-total').textContent = `${islandPctTotal}% (${islandTotal} / ${total})`;
   document.getElementById('rally-island-pct-ok').textContent    = `${islandPctOk}% (${islandOk} / ${ok})`;
   document.getElementById('rally-island-count').textContent     = `${islandTotal} / ${islandOk}`;
@@ -2102,7 +2099,7 @@ function renderRallyBoard() {
       </div>
       <div class="rc-target-wrap">
         <div class="rc-target-track"><div class="rc-target-fill${targetPct >= 100 ? ' reached' : ''}" style="width:${Math.min(targetPct, 100)}%"></div></div>
-        <div class="rc-target-lbl">επίτευξη ${targetPct}% (${RALLY_TARGET_APPROVALS} / ${r.ok})</div>
+        <div class="rc-target-lbl">επίτευξη ${targetPct}% (${r.ok} / ${RALLY_TARGET_APPROVALS})</div>
       </div>`;
     board.appendChild(card);
   });
@@ -2207,7 +2204,7 @@ async function loadRegRally() {
   document.getElementById('reg-rally-no').textContent    = no;
   document.getElementById('reg-rally-pend').textContent  = pend;
   document.getElementById('reg-rally-rate').textContent  = rate + '%';
-  document.getElementById('reg-rally-target-pct').textContent = `${storeTargetPct}% (${storeTarget} / ${ok})`;
+  document.getElementById('reg-rally-target-pct').textContent = `${storeTargetPct}% (${ok} / ${storeTarget})`;
   document.getElementById('reg-rally-island-pct-total').textContent = `${islandPctTotal}% (${islandTotal} / ${rows.length})`;
   document.getElementById('reg-rally-island-pct-ok').textContent    = `${islandPctOk}% (${islandOk} / ${ok})`;
   document.getElementById('reg-rally-island-count').textContent     = `${islandTotal} / ${islandOk}`;
