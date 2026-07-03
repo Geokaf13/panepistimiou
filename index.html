@@ -231,6 +231,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .rally-hero-stat { text-align: center; }
 .rally-hero-stat .rhs-val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; }
 .rally-hero-stat .rhs-lbl { font-size: 10.5px; font-weight: 600; opacity: .8; text-transform: uppercase; letter-spacing: .04em; margin-top: 2px; }
+.rally-hero-island-col { display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+.rally-hero-island-row { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+.rally-hero-island-row .rhi-val { font-size: 14px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.rally-hero-island-row .rhi-lbl { font-size: 10px; font-weight: 600; opacity: .8; text-transform: uppercase; letter-spacing: .03em; }
 .rally-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-bottom: 24px; }
 .rally-card { background: white; border-radius: var(--radius-sm); padding: 14px 16px; box-shadow: var(--shadow); border-left: 3px solid var(--amber); position: relative; }
 .rally-card.rank-1 { border-left-color: #d4af37; background: linear-gradient(180deg,#fffbeb 0%,#ffffff 60%); }
@@ -624,9 +628,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-no">0</div><div class="rhs-lbl">Απορρίψεις</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-pend">0</div><div class="rhs-lbl">Επεξεργασία</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
-            <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-pct-total" style="font-size:15px">0% (0 / 0)</div><div class="rhs-lbl">% ISLAND / Σύνολο</div></div>
-            <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-pct-ok" style="font-size:15px">0% (0 / 0)</div><div class="rhs-lbl">% ISLAND / Εγκρίσεις</div></div>
-            <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-count" style="font-size:18px">0 / 0</div><div class="rhs-lbl">ISLAND Αιτ. / Εγκρ.</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-target-pct" style="font-size:16px">0% (0 / 0)</div><div class="rhs-lbl">Επίτευξη Στόχου</div></div>
+            <div class="rally-hero-island-col">
+              <div class="rally-hero-island-row"><span class="rhi-val" id="rally-island-count">0 / 0</span><span class="rhi-lbl">ISLAND Αιτ. / Εγκρ.</span></div>
+              <div class="rally-hero-island-row"><span class="rhi-val" id="rally-island-pct-total">0% (0 / 0)</span><span class="rhi-lbl">% ISLAND / Σύνολο</span></div>
+              <div class="rally-hero-island-row"><span class="rhi-val" id="rally-island-pct-ok">0% (0 / 0)</span><span class="rhi-lbl">% ISLAND / Εγκρίσεις</span></div>
+            </div>
           </div>
         </div>
 
@@ -922,9 +929,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-no">0</div><div class="rhs-lbl">Απορρίψεις</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-pend">0</div><div class="rhs-lbl">Επεξεργασία</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
-            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-island-pct-total" style="font-size:15px">0% (0 / 0)</div><div class="rhs-lbl">% ISLAND / Σύνολο</div></div>
-            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-island-pct-ok" style="font-size:15px">0% (0 / 0)</div><div class="rhs-lbl">% ISLAND / Εγκρίσεις</div></div>
-            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-island-count" style="font-size:18px">0 / 0</div><div class="rhs-lbl">ISLAND Αιτ. / Εγκρ.</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-target-pct" style="font-size:16px">0% (0 / 0)</div><div class="rhs-lbl">Επίτευξη Στόχου</div></div>
+            <div class="rally-hero-island-col">
+              <div class="rally-hero-island-row"><span class="rhi-val" id="reg-rally-island-count">0 / 0</span><span class="rhi-lbl">ISLAND Αιτ. / Εγκρ.</span></div>
+              <div class="rally-hero-island-row"><span class="rhi-val" id="reg-rally-island-pct-total">0% (0 / 0)</span><span class="rhi-lbl">% ISLAND / Σύνολο</span></div>
+              <div class="rally-hero-island-row"><span class="rhi-val" id="reg-rally-island-pct-ok">0% (0 / 0)</span><span class="rhi-lbl">% ISLAND / Εγκρίσεις</span></div>
+            </div>
           </div>
         </div>
         <div class="card">
@@ -2048,11 +2058,15 @@ function renderRallyBoard() {
   const islandPctTotal = total > 0 ? Math.round((islandTotal / total) * 100) : 0;
   const islandPctOk    = ok > 0 ? Math.round((islandOk / ok) * 100) : 0;
 
+  const storeTarget    = RALLY_TARGET_APPROVALS * RALLY_EMPLOYEES.length;
+  const storeTargetPct = storeTarget > 0 ? Math.round((ok / storeTarget) * 100) : 0;
+
   document.getElementById('rally-total').textContent = total;
   document.getElementById('rally-ok').textContent    = ok;
   document.getElementById('rally-no').textContent    = no;
   document.getElementById('rally-pend').textContent  = pend;
   document.getElementById('rally-rate').textContent  = rate + '%';
+  document.getElementById('rally-target-pct').textContent = `${storeTargetPct}% (${storeTarget} / ${ok})`;
   document.getElementById('rally-island-pct-total').textContent = `${islandPctTotal}% (${islandTotal} / ${total})`;
   document.getElementById('rally-island-pct-ok').textContent    = `${islandPctOk}% (${islandOk} / ${ok})`;
   document.getElementById('rally-island-count').textContent     = `${islandTotal} / ${islandOk}`;
@@ -2185,11 +2199,15 @@ async function loadRegRally() {
   const islandPctTotal = rows.length > 0 ? Math.round((islandTotal / rows.length) * 100) : 0;
   const islandPctOk    = ok > 0 ? Math.round((islandOk / ok) * 100) : 0;
 
+  const storeTarget    = RALLY_TARGET_APPROVALS * RALLY_EMPLOYEES.length;
+  const storeTargetPct = storeTarget > 0 ? Math.round((ok / storeTarget) * 100) : 0;
+
   document.getElementById('reg-rally-total').textContent = rows.length;
   document.getElementById('reg-rally-ok').textContent    = ok;
   document.getElementById('reg-rally-no').textContent    = no;
   document.getElementById('reg-rally-pend').textContent  = pend;
   document.getElementById('reg-rally-rate').textContent  = rate + '%';
+  document.getElementById('reg-rally-target-pct').textContent = `${storeTargetPct}% (${storeTarget} / ${ok})`;
   document.getElementById('reg-rally-island-pct-total').textContent = `${islandPctTotal}% (${islandTotal} / ${rows.length})`;
   document.getElementById('reg-rally-island-pct-ok').textContent    = `${islandPctOk}% (${islandOk} / ${ok})`;
   document.getElementById('reg-rally-island-count').textContent     = `${islandTotal} / ${islandOk}`;
