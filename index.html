@@ -624,8 +624,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-no">0</div><div class="rhs-lbl">Απορρίψεις</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-pend">0</div><div class="rhs-lbl">Επεξεργασία</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
-            <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-pct-total">0%</div><div class="rhs-lbl">% ISLAND / Σύνολο</div></div>
-            <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-pct-ok">0%</div><div class="rhs-lbl">% ISLAND / Εγκρίσεις</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-pct-total" style="font-size:15px">0% (0 / 0)</div><div class="rhs-lbl">% ISLAND / Σύνολο</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-pct-ok" style="font-size:15px">0% (0 / 0)</div><div class="rhs-lbl">% ISLAND / Εγκρίσεις</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="rally-island-count" style="font-size:18px">0 / 0</div><div class="rhs-lbl">ISLAND Αιτ. / Εγκρ.</div></div>
           </div>
         </div>
 
@@ -646,7 +647,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                 <select id="rally-emp">
                   <option value="">— Επιλέξτε —</option>
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
                 </select>
               </div>
@@ -688,7 +689,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
                 <select id="rally-filter-emp" onchange="renderFilteredRallyList()">
                   <option value="">Όλοι</option>
                   <option>ΕΛΕΥΘΕΡΙΟΥ ΤΙΝΑ</option><option>ΙΩΑΝΝΟΥ ΝΙΚΗ</option><option>ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ</option>
-                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
+                  <option>ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ</option><option>ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ</option>
                   <option>ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ</option><option>ΤΖΟΓΙΑ ΝΑΝΤΙΑ</option><option>ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΧΡΙΣΤΙΝΑ</option>
                 </select>
               </div>
@@ -921,8 +922,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-no">0</div><div class="rhs-lbl">Απορρίψεις</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-pend">0</div><div class="rhs-lbl">Επεξεργασία</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
-            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-island-pct-total">0%</div><div class="rhs-lbl">% ISLAND / Σύνολο</div></div>
-            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-island-pct-ok">0%</div><div class="rhs-lbl">% ISLAND / Εγκρίσεις</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-island-pct-total" style="font-size:15px">0% (0 / 0)</div><div class="rhs-lbl">% ISLAND / Σύνολο</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-island-pct-ok" style="font-size:15px">0% (0 / 0)</div><div class="rhs-lbl">% ISLAND / Εγκρίσεις</div></div>
+            <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-island-count" style="font-size:18px">0 / 0</div><div class="rhs-lbl">ISLAND Αιτ. / Εγκρ.</div></div>
           </div>
         </div>
         <div class="card">
@@ -986,6 +988,9 @@ const EMPLOYEES = [
 
 /* Περιλαμβάνει και τον manager για τις άδειες */
 const VACATION_PEOPLE = [...EMPLOYEES, 'ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ'];
+
+/* Εργαζόμενοι που συμμετέχουν στο Ράλλυ Καρτών (εξαιρείται ο Πετράτος) */
+const RALLY_EMPLOYEES = EMPLOYEES.filter(e => e !== 'ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ');
 
 const CATEGORIES = [
   { name: 'Ραντεβού',                              amount: false },
@@ -1131,7 +1136,7 @@ function rallyStatusSelect(id, current) {
 
 /* Inline select για αλλαγή εργαζομένου σε αίτηση ράλλυ */
 function rallyEmployeeSelect(id, current) {
-  const optionsHtml = EMPLOYEES
+  const optionsHtml = RALLY_EMPLOYEES
     .map(e => `<option value="${e}" ${e === current ? 'selected' : ''}>${e}</option>`)
     .join('');
   return `<select class="rally-edit-select"
@@ -2048,13 +2053,14 @@ function renderRallyBoard() {
   document.getElementById('rally-no').textContent    = no;
   document.getElementById('rally-pend').textContent  = pend;
   document.getElementById('rally-rate').textContent  = rate + '%';
-  document.getElementById('rally-island-pct-total').textContent = islandPctTotal + '%';
-  document.getElementById('rally-island-pct-ok').textContent    = islandPctOk + '%';
+  document.getElementById('rally-island-pct-total').textContent = `${islandPctTotal}% (${islandTotal} / ${total})`;
+  document.getElementById('rally-island-pct-ok').textContent    = `${islandPctOk}% (${islandOk} / ${ok})`;
+  document.getElementById('rally-island-count').textContent     = `${islandTotal} / ${islandOk}`;
 
-  /* Leaderboard cards — κατάταξη με βάση Εγκρίσεις, δεύτερο Σύνολο, μετά Απορρίψεις/Επεξεργασία */
+  /* Leaderboard cards — κατάταξη με βάση Εγκρίσεις, δεύτερο Σύνολο, μετά Απορρίψεις/Επεξεργασία (χωρίς Πετράτο) */
   const board   = document.getElementById('rally-board');
   board.innerHTML = '';
-  const ranking = EMPLOYEES.map(emp => {
+  const ranking = RALLY_EMPLOYEES.map(emp => {
     const mine = rallyCards.filter(c => c.employee === emp);
     return {
       emp,
@@ -2082,7 +2088,7 @@ function renderRallyBoard() {
       </div>
       <div class="rc-target-wrap">
         <div class="rc-target-track"><div class="rc-target-fill${targetPct >= 100 ? ' reached' : ''}" style="width:${Math.min(targetPct, 100)}%"></div></div>
-        <div class="rc-target-lbl">${targetPct}% του στόχου (${RALLY_TARGET_APPROVALS})</div>
+        <div class="rc-target-lbl">επίτευξη ${targetPct}% (${RALLY_TARGET_APPROVALS} / ${r.ok})</div>
       </div>`;
     board.appendChild(card);
   });
@@ -2184,8 +2190,9 @@ async function loadRegRally() {
   document.getElementById('reg-rally-no').textContent    = no;
   document.getElementById('reg-rally-pend').textContent  = pend;
   document.getElementById('reg-rally-rate').textContent  = rate + '%';
-  document.getElementById('reg-rally-island-pct-total').textContent = islandPctTotal + '%';
-  document.getElementById('reg-rally-island-pct-ok').textContent    = islandPctOk + '%';
+  document.getElementById('reg-rally-island-pct-total').textContent = `${islandPctTotal}% (${islandTotal} / ${rows.length})`;
+  document.getElementById('reg-rally-island-pct-ok').textContent    = `${islandPctOk}% (${islandOk} / ${ok})`;
+  document.getElementById('reg-rally-island-count').textContent     = `${islandTotal} / ${islandOk}`;
 
   if (!rows.length) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
