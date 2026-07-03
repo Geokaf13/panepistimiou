@@ -219,7 +219,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .ot-table tr:hover td { background: var(--gray-50); }
 .ot-table .ot-total-row td { background: #f5f3ff; font-weight: 700; color: var(--purple); }
 .ot-hours-badge  { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 13px; font-weight: 700; font-family: 'DM Mono', monospace; background: var(--purple-light); color: var(--purple); }
-.ot-hours-select { padding: 9px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Mono', monospace; font-weight: 600; color: var(--purple); background: white; cursor: pointer; transition: border-color .2s; min-width: 90px; }
+.ot-hours-select { padding: 9px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Mono', monospace; font-weight: 600; color: var(--purple); background: white; cursor: pointer; min-width: 90px; }
 .ot-hours-select:focus { outline: none; border-color: var(--purple); }
 
 /* ── Rally Cards ── */
@@ -628,7 +628,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="rally-target-pct" style="font-size:16px">0% (0 / 0)</div><div class="rhs-lbl">Επίτευξη Στόχου</div></div>
             <div class="rally-hero-island-col">
-              <div class="rally-hero-island-row"><span class="rhi-val" id="rally-island-count">0 / 0</span><span class="rhi-lbl">ISLAND Αιτ. / Εγκρ.</span></div>
+              <div class="rally-hero-island-row"><span class="rhi-val" id="rally-island-count">0 / 0</span><span class="rhi-lbl">ISLAND Αιτήσεις / Εγκρίσεις</span></div>
               <div class="rally-hero-island-row"><span class="rhi-val" id="rally-island-pct-total">0% (0 / 0)</span><span class="rhi-lbl">% ISLAND / Σύνολο</span></div>
               <div class="rally-hero-island-row"><span class="rhi-val" id="rally-island-pct-ok">0% (0 / 0)</span><span class="rhi-lbl">% ISLAND / Εγκρίσεις</span></div>
             </div>
@@ -929,7 +929,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-rate">0%</div><div class="rhs-lbl">Ποσοστό Έγκρισης</div></div>
             <div class="rally-hero-stat"><div class="rhs-val" id="reg-rally-target-pct" style="font-size:16px">0% (0 / 0)</div><div class="rhs-lbl">Επίτευξη Στόχου</div></div>
             <div class="rally-hero-island-col">
-              <div class="rally-hero-island-row"><span class="rhi-val" id="reg-rally-island-count">0 / 0</span><span class="rhi-lbl">ISLAND Αιτ. / Εγκρ.</span></div>
+              <div class="rally-hero-island-row"><span class="rhi-val" id="reg-rally-island-count">0 / 0</span><span class="rhi-lbl">ISLAND Αιτήσεις / Εγκρίσεις</span></div>
               <div class="rally-hero-island-row"><span class="rhi-val" id="reg-rally-island-pct-total">0% (0 / 0)</span><span class="rhi-lbl">% ISLAND / Σύνολο</span></div>
               <div class="rally-hero-island-row"><span class="rhi-val" id="reg-rally-island-pct-ok">0% (0 / 0)</span><span class="rhi-lbl">% ISLAND / Εγκρίσεις</span></div>
             </div>
@@ -2055,7 +2055,7 @@ function renderRallyBoard() {
   const islandPctTotal = total > 0 ? Math.round((islandTotal / total) * 100) : 0;
   const islandPctOk    = ok > 0 ? Math.round((islandOk / ok) * 100) : 0;
 
-  const storeTarget    = RALLY_TARGET_APPROVALS * RALLY_EMPLOYEES.length;
+  const storeTarget    = RALLY_TARGET_APPROVALS;
   const storeTargetPct = storeTarget > 0 ? Math.round((ok / storeTarget) * 100) : 0;
 
   document.getElementById('rally-total').textContent = total;
@@ -2196,7 +2196,7 @@ async function loadRegRally() {
   const islandPctTotal = rows.length > 0 ? Math.round((islandTotal / rows.length) * 100) : 0;
   const islandPctOk    = ok > 0 ? Math.round((islandOk / ok) * 100) : 0;
 
-  const storeTarget    = RALLY_TARGET_APPROVALS * RALLY_EMPLOYEES.length;
+  const storeTarget    = RALLY_TARGET_APPROVALS;
   const storeTargetPct = storeTarget > 0 ? Math.round((ok / storeTarget) * 100) : 0;
 
   document.getElementById('reg-rally-total').textContent = rows.length;
