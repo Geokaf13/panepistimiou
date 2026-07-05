@@ -6,6 +6,16 @@ import { useToast } from '../../context/ToastContext';
 import type { RallyCard, RallyStatus } from '../../types';
 import RallyHeroStats from '../shared/RallyHeroStats';
 
+function getInitials(fullName: string): string {
+  return fullName
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase();
+}
+
 export default function RallyTab() {
   const { showToast } = useToast();
   const [cards, setCards] = useState<RallyCard[]>([]);
@@ -168,22 +178,44 @@ export default function RallyTab() {
       <div className="rally-board">
         {ranking.map((r, i) => {
           const targetPct = Math.round((r.ok / RALLY_TARGET_APPROVALS) * 100);
+          const isTop = i < 3 && r.total > 0;
           return (
-            <div className={`rally-card${i < 3 && r.total > 0 ? ` rank-${i + 1}` : ''}`} key={r.emp}>
-              {i < 3 && r.total > 0 && <div className="rc-rank">{medals[i]}</div>}
-              <div className="rc-name">{r.emp.split(' ')[0]}</div>
-              <div className="rc-total">{r.ok}</div>
-              <div className="rc-total-lbl">εγκρίσεις</div>
-              <div className="rc-breakdown">
-                <span className="total">{r.total} αιτ.</span>
-                <span className="no">{r.no}✗</span>
-                <span className="pend">{r.pend}⏳</span>
+            <div className={`rally-card${isTop ? ` rank-${i + 1}` : ''}`} key={r.emp}>
+              <div className="rc-top">
+                <div className="rc-avatar">{getInitials(r.emp)}</div>
+                {isTop && <div className="rc-rank-medal">{medals[i]}</div>}
               </div>
+
+              <div className="rc-name">{r.emp.split(' ')[0]}</div>
+
+              <div className="rc-hero-num">
+                <span className="rc-total">{r.ok}</span>
+              </div>
+              <div className="rc-total-lbl">εγκρίσεις</div>
+
+              <div className="rc-stats-grid">
+                <div className="rc-stat stat-total">
+                  <div className="rcs-val">{r.total}</div>
+                  <div className="rcs-lbl">Αιτήσεις</div>
+                </div>
+                <div className="rc-stat stat-no">
+                  <div className="rcs-val">{r.no}</div>
+                  <div className="rcs-lbl">Απορρίψεις</div>
+                </div>
+                <div className="rc-stat stat-pend">
+                  <div className="rcs-val">{r.pend}</div>
+                  <div className="rcs-lbl">Επεξεργασία</div>
+                </div>
+              </div>
+
               <div className="rc-target-wrap">
                 <div className="rc-target-track">
                   <div className={`rc-target-fill${targetPct >= 100 ? ' reached' : ''}`} style={{ width: `${Math.min(targetPct, 100)}%` }} />
                 </div>
-                <div className="rc-target-lbl">επίτευξη {targetPct}% ({r.ok} / {RALLY_TARGET_APPROVALS})</div>
+                <div className="rc-target-lbl">
+                  <span>Στόχος</span>
+                  <span>{targetPct}% ({r.ok}/{RALLY_TARGET_APPROVALS})</span>
+                </div>
               </div>
             </div>
           );
