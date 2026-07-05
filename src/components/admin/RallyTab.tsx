@@ -1,20 +1,21 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import sb from '../../lib/supabaseClient';
-import { RALLY_EMPLOYEES, RALLY_TARGET_APPROVALS } from '../../config';
+import { RALLY_EMPLOYEES } from '../../config';
 import { downloadCSV, fmtVacDate } from '../../lib/utils';
 import { useToast } from '../../context/ToastContext';
 import type { RallyCard, RallyStatus } from '../../types';
 import RallyHeroStats from '../shared/RallyHeroStats';
 
-function getInitials(fullName: string): string {
-  return fullName
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join('')
-    .toUpperCase();
-}
+const STATUS_LABEL: Record<RallyStatus, string> = {
+  ΝΑΙ: '✓ Εγκρίθηκε',
+  ΕΠΕΞΕΡΓΑΣΙΑ: '⏳ Σε Επεξεργασία',
+  ΟΧΙ: '✗ Απορρίφθηκε',
+};
+const STATUS_CLASS: Record<RallyStatus, string> = {
+  ΝΑΙ: 'ok',
+  ΕΠΕΞΕΡΓΑΣΙΑ: 'pend',
+  ΟΧΙ: 'no',
+};
 
 export default function RallyTab() {
   const { showToast } = useToast();
@@ -33,6 +34,9 @@ export default function RallyTab() {
   const [filterEmp, setFilterEmp] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterIsland, setFilterIsland] = useState('');
+
+  // inline row editing — only one row open at a time
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   useEffect(() => { loadRallyCards(); }, []);
 
@@ -73,6 +77,7 @@ export default function RallyTab() {
     const { error } = await sb.from('card_rally').delete().eq('id', id);
     if (error) { showToast('Σφάλμα: ' + error.message, 'error'); return; }
     showToast('Η αίτηση διαγράφηκε');
+    if (editingId === id) setEditingId(null);
     loadRallyCards();
   }
 
@@ -170,23 +175,20 @@ export default function RallyTab() {
               <label>Ημερομηνία Αίτησης</label>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
             </div>
-            <button className="save-btn" style={{ background: '#d97706' }} onClick={addRallyCard}>+ Προσθήκη</button>
+            <button className="save-btn rally-add-btn" onClick={addRallyCard}>+ Προσθήκη</button>
           </div>
         </div>
       </div>
 
       <div className="rally-board">
         {ranking.map((r, i) => {
-          const targetPct = Math.round((r.ok / RALLY_TARGET_APPROVALS) * 100);
           const isTop = i < 3 && r.total > 0;
           return (
             <div className={`rally-card${isTop ? ` rank-${i + 1}` : ''}`} key={r.emp}>
               <div className="rc-top">
-                <div className="rc-avatar">{getInitials(r.emp)}</div>
+                <div className="rc-name">{r.emp.split(' ')[0]}</div>
                 {isTop && <div className="rc-rank-medal">{medals[i]}</div>}
               </div>
-
-              <div className="rc-name">{r.emp.split(' ')[0]}</div>
 
               <div className="rc-hero-num">
                 <span className="rc-total">{r.ok}</span>
@@ -205,16 +207,6 @@ export default function RallyTab() {
                 <div className="rc-stat stat-pend">
                   <div className="rcs-val">{r.pend}</div>
                   <div className="rcs-lbl">Επεξεργασία</div>
-                </div>
-              </div>
-
-              <div className="rc-target-wrap">
-                <div className="rc-target-track">
-                  <div className={`rc-target-fill${targetPct >= 100 ? ' reached' : ''}`} style={{ width: `${Math.min(targetPct, 100)}%` }} />
-                </div>
-                <div className="rc-target-lbl">
-                  <span>Στόχος</span>
-                  <span>{targetPct}% ({r.ok}/{RALLY_TARGET_APPROVALS})</span>
                 </div>
               </div>
             </div>
@@ -257,47 +249,74 @@ export default function RallyTab() {
           </div>
         </div>
         <div className="card-body" style={{ padding: 0 }}>
-          <table className="vac-list-table">
+          <table className="vac-list-table rally-list-table">
             <thead>
               <tr><th>#</th><th>GID</th><th>Πελάτης</th><th>Εργαζόμενος</th><th>Κατάσταση</th><th>ISLAND</th><th>Ημερομηνία</th><th></th></tr>
             </thead>
             <tbody>
-              {filtered.map((c, i) => (
-                <tr key={c.id}>
-                  <td>{i + 1}</td>
-                  <td>
-                    <input className="rally-edit-input" type="text" defaultValue={c.gid || ''}
-                      onBlur={(e) => updateRallyField(c.id, 'gid', e.target.value.trim() || null)} />
-                  </td>
-                  <td>
-                    <input className="rally-edit-input" type="text" defaultValue={c.name || ''}
-                      onBlur={(e) => updateRallyField(c.id, 'customer_name', e.target.value.trim())} />
-                  </td>
-                  <td>
-                    <select className="rally-edit-select" defaultValue={c.employee} onChange={(e) => updateRallyField(c.id, 'employee', e.target.value)}>
-                      {RALLY_EMPLOYEES.map((e) => (<option key={e} value={e}>{e}</option>))}
-                    </select>
-                  </td>
-                  <td>
-                    <select className="rally-edit-select" defaultValue={c.status} onChange={(e) => updateRallyField(c.id, 'status', e.target.value)}>
-                      <option value="ΕΠΕΞΕΡΓΑΣΙΑ">⏳ Σε Επεξεργασία</option>
-                      <option value="ΝΑΙ">✓ Εγκρίθηκε</option>
-                      <option value="ΟΧΙ">✗ Απορρίφθηκε</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select className="rally-edit-select" defaultValue={String(c.island)} onChange={(e) => updateRallyField(c.id, 'is_island', e.target.value === 'true')}>
-                      <option value="false">Όχι</option>
-                      <option value="true">Ναι</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input className="rally-edit-input" type="date" defaultValue={c.date || ''}
-                      onChange={(e) => updateRallyField(c.id, 'application_date', e.target.value || null)} />
-                  </td>
-                  <td><button className="del-btn" onClick={() => deleteRallyCard(c.id)}>Διαγραφή</button></td>
-                </tr>
-              ))}
+              {filtered.map((c, i) => {
+                const isEditing = editingId === c.id;
+                return (
+                  <tr key={c.id} className={isEditing ? 'row-editing' : ''}>
+                    <td>{i + 1}</td>
+
+                    <td>
+                      {isEditing
+                        ? <input className="rally-edit-input" type="text" defaultValue={c.gid || ''}
+                            onBlur={(e) => updateRallyField(c.id, 'gid', e.target.value.trim() || null)} />
+                        : <span className="rally-view-text">{c.gid || '—'}</span>}
+                    </td>
+
+                    <td>
+                      {isEditing
+                        ? <input className="rally-edit-input" type="text" defaultValue={c.name || ''}
+                            onBlur={(e) => updateRallyField(c.id, 'customer_name', e.target.value.trim())} />
+                        : <span className="rally-view-text">{c.name}</span>}
+                    </td>
+
+                    <td>
+                      {isEditing
+                        ? <select className="rally-edit-select" defaultValue={c.employee} onChange={(e) => updateRallyField(c.id, 'employee', e.target.value)}>
+                            {RALLY_EMPLOYEES.map((e) => (<option key={e} value={e}>{e}</option>))}
+                          </select>
+                        : <span className="rally-view-text">{c.employee.split(' ')[0]}</span>}
+                    </td>
+
+                    <td>
+                      {isEditing
+                        ? <select className="rally-edit-select" defaultValue={c.status} onChange={(e) => updateRallyField(c.id, 'status', e.target.value)}>
+                            <option value="ΕΠΕΞΕΡΓΑΣΙΑ">⏳ Σε Επεξεργασία</option>
+                            <option value="ΝΑΙ">✓ Εγκρίθηκε</option>
+                            <option value="ΟΧΙ">✗ Απορρίφθηκε</option>
+                          </select>
+                        : <span className={`rally-status-badge ${STATUS_CLASS[c.status]}`}>{STATUS_LABEL[c.status]}</span>}
+                    </td>
+
+                    <td>
+                      {isEditing
+                        ? <select className="rally-edit-select" defaultValue={String(c.island)} onChange={(e) => updateRallyField(c.id, 'is_island', e.target.value === 'true')}>
+                            <option value="false">Όχι</option>
+                            <option value="true">Ναι</option>
+                          </select>
+                        : (c.island ? <span className="island-badge">Ναι</span> : <span className="rally-view-text">—</span>)}
+                    </td>
+
+                    <td>
+                      {isEditing
+                        ? <input className="rally-edit-input" type="date" defaultValue={c.date || ''}
+                            onChange={(e) => updateRallyField(c.id, 'application_date', e.target.value || null)} />
+                        : <span className="rally-view-text">{c.date ? fmtVacDate(c.date) : '—'}</span>}
+                    </td>
+
+                    <td className="rally-actions-cell">
+                      {isEditing
+                        ? <button className="rally-icon-btn rally-icon-done" title="Ολοκλήρωση" onClick={() => setEditingId(null)}>✓</button>
+                        : <button className="rally-icon-btn rally-icon-edit" title="Επεξεργασία" onClick={() => setEditingId(c.id)}>✏️</button>}
+                      <button className="del-btn" onClick={() => deleteRallyCard(c.id)}>Διαγραφή</button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           {!filtered.length && <div className="empty-state">Δεν υπάρχουν καταχωρημένες αιτήσεις ακόμα.</div>}
