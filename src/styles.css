@@ -227,25 +227,129 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .rally-hero-island-row { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
 .rally-hero-island-row .rhi-val { font-size: 14px; font-weight: 700; font-family: 'DM Mono', monospace; }
 .rally-hero-island-row .rhi-lbl { font-size: 10px; font-weight: 600; opacity: .8; text-transform: uppercase; letter-spacing: .03em; }
-.rally-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-bottom: 24px; }
-.rally-card { background: white; border-radius: var(--radius-sm); padding: 14px 16px; box-shadow: var(--shadow); border-left: 3px solid var(--amber); position: relative; }
-.rally-card.rank-1 { border-left-color: #d4af37; background: linear-gradient(180deg,#fffbeb 0%,#ffffff 60%); }
-.rally-card.rank-2 { border-left-color: #9ca3af; }
-.rally-card.rank-3 { border-left-color: #b45309; }
-.rally-card .rc-rank       { position: absolute; top: 10px; right: 12px; font-size: 16px; }
-.rally-card .rc-name       { font-size: 11.5px; font-weight: 700; color: var(--gray-800); text-transform: uppercase; letter-spacing: .03em; margin-bottom: 6px; padding-right: 18px; }
-.rally-card .rc-total      { font-size: 26px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--amber); line-height: 1; }
-.rally-card .rc-total-lbl  { font-size: 10.5px; color: var(--gray-400); margin-bottom: 8px; }
-.rally-card .rc-breakdown  { display: flex; gap: 8px; font-size: 11px; font-weight: 600; margin-bottom: 10px; }
-.rally-card .rc-breakdown span.ok    { color: var(--green); }
-.rally-card .rc-breakdown span.total { color: var(--gray-600); }
-.rally-card .rc-breakdown span.no    { color: var(--red); }
-.rally-card .rc-breakdown span.pend  { color: var(--gray-400); }
-.rally-card .rc-target-wrap  { margin-top: 2px; }
-.rally-card .rc-target-track { background: var(--gray-100); border-radius: 99px; height: 6px; width: 100%; overflow: hidden; }
-.rally-card .rc-target-fill  { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--amber), #f59e0b); transition: width .5s ease; }
-.rally-card .rc-target-fill.reached { background: linear-gradient(90deg, var(--green), #10b981); }
-.rally-card .rc-target-lbl   { font-size: 10px; color: var(--gray-400); margin-top: 4px; font-weight: 600; }
+
+.rally-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.rally-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 20px 18px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-100);
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.rally-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--amber), #f59e0b);
+}
+.rally-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.rally-card.rank-1 {
+  background: linear-gradient(180deg, #fffdf5 0%, #ffffff 55%);
+  border-color: #f5e1a4;
+}
+.rally-card.rank-1::before { background: linear-gradient(90deg, #d4af37, #f5d76e); }
+.rally-card.rank-2::before { background: linear-gradient(90deg, #9ca3af, #d1d5db); }
+.rally-card.rank-3::before { background: linear-gradient(90deg, #b45309, #d97706); }
+
+.rc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.rc-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy), #2c3e63);
+  color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; letter-spacing: .02em;
+  flex-shrink: 0;
+}
+.rally-card.rank-1 .rc-avatar { background: linear-gradient(135deg, #d4af37, #f5d76e); color: #5b4400; }
+.rally-card.rank-2 .rc-avatar { background: linear-gradient(135deg, #9ca3af, #d1d5db); color: #374151; }
+.rally-card.rank-3 .rc-avatar { background: linear-gradient(135deg, #b45309, #d97706); color: #fff8ec; }
+
+.rc-rank-medal { font-size: 20px; line-height: 1; }
+
+.rc-name {
+  font-size: 13px; font-weight: 700; color: var(--gray-800);
+  text-transform: uppercase; letter-spacing: .03em;
+  margin-bottom: 10px;
+}
+
+.rc-hero-num { display: flex; align-items: baseline; gap: 8px; }
+.rc-total {
+  font-size: 32px; font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--amber);
+  line-height: 1;
+}
+.rc-total-lbl {
+  font-size: 11px; font-weight: 600; color: var(--gray-400);
+  text-transform: uppercase; letter-spacing: .05em;
+  margin-bottom: 14px;
+}
+
+.rc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.rc-stat {
+  background: var(--gray-50);
+  border-radius: 8px;
+  padding: 8px 6px;
+  text-align: center;
+}
+.rc-stat .rcs-val {
+  font-family: 'DM Mono', monospace;
+  font-weight: 700; font-size: 15px;
+  color: var(--gray-800);
+}
+.rc-stat.stat-total .rcs-val { color: var(--blue); }
+.rc-stat.stat-no .rcs-val    { color: var(--red); }
+.rc-stat.stat-pend .rcs-val  { color: var(--gray-400); }
+.rc-stat .rcs-lbl {
+  font-size: 9.5px; font-weight: 600; color: var(--gray-400);
+  text-transform: uppercase; letter-spacing: .03em;
+  margin-top: 2px;
+}
+
+.rc-target-wrap { margin-top: 2px; }
+.rc-target-track {
+  background: var(--gray-100);
+  border-radius: 99px;
+  height: 7px; width: 100%;
+  overflow: hidden;
+}
+.rc-target-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--amber), #f59e0b);
+  transition: width .5s ease;
+}
+.rc-target-fill.reached { background: linear-gradient(90deg, var(--green), #10b981); }
+.rc-target-lbl {
+  font-size: 10.5px; color: var(--gray-600);
+  margin-top: 6px; font-weight: 600;
+  display: flex; justify-content: space-between;
+}
+
 .rally-status-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
 .rally-status-badge.ok   { background: var(--green-light); color: var(--green); }
 .rally-status-badge.no   { background: #fee2e2; color: var(--red); }
