@@ -253,11 +253,11 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 }
 
 .rally-card {
-  background: white;
+  background: linear-gradient(165deg, #ffffff 0%, #f4f6fb 100%);
   border-radius: 16px;
   padding: 18px 18px 16px;
   box-shadow: var(--shadow);
-  border: 1px solid var(--gray-100);
+  border: 1px solid var(--gray-200);
   position: relative;
   overflow: hidden;
   transition: transform .2s ease, box-shadow .2s ease;
@@ -266,7 +266,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 4px;
+  height: 5px;
   background: linear-gradient(90deg, var(--rally-1), var(--rally-2));
 }
 .rally-card:hover {
@@ -275,8 +275,16 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 }
 
 .rally-card.rank-1 {
-  background: linear-gradient(180deg, #fffdf5 0%, #ffffff 55%);
-  border-color: #f5e1a4;
+  background: linear-gradient(165deg, #fffdf2 0%, #fdf6e0 100%);
+  border-color: #ecd28a;
+}
+.rally-card.rank-2 {
+  background: linear-gradient(165deg, #fbfbfc 0%, #eef0f3 100%);
+  border-color: #cbd0d8;
+}
+.rally-card.rank-3 {
+  background: linear-gradient(165deg, #fdf6ee 0%, #fae7d3 100%);
+  border-color: #e3ba8b;
 }
 .rally-card.rank-1::before { background: linear-gradient(90deg, #d4af37, #f5d76e); }
 .rally-card.rank-2::before { background: linear-gradient(90deg, #9ca3af, #d1d5db); }
@@ -289,7 +297,16 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
   margin-bottom: 12px;
 }
 
-.rc-rank-medal { font-size: 20px; line-height: 1; }
+.rc-rank-badge {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,.18), inset 0 1px 1px rgba(255,255,255,.5);
+  flex-shrink: 0;
+}
+.rank-badge-1 { background: radial-gradient(circle at 32% 28%, #fff3c4, #d4af37 55%, #9c7a1e); color: #4a3a0a; }
+.rank-badge-2 { background: radial-gradient(circle at 32% 28%, #f3f4f6, #9ca3af 55%, #6b7280); color: #2f3542; }
+.rank-badge-3 { background: radial-gradient(circle at 32% 28%, #fcd9a8, #b45309 55%, #7c3a08); color: #fff3e6; }
 
 .rc-name {
   font-size: 13px; font-weight: 700; color: var(--gray-800);
@@ -315,24 +332,29 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
   gap: 6px;
 }
 .rc-stat {
-  background: var(--gray-50);
   border-radius: 8px;
   padding: 8px 6px;
   text-align: center;
 }
+.rc-stat.stat-total { background: #e0f2fe; }
+.rc-stat.stat-no    { background: #fee2e2; }
+.rc-stat.stat-pend  { background: #ede9fe; }
 .rc-stat .rcs-val {
   font-variant-numeric: tabular-nums;
   font-weight: 700; font-size: 15px;
   color: var(--gray-800);
 }
-.rc-stat.stat-total .rcs-val { color: var(--rally-2); }
+.rc-stat.stat-total .rcs-val { color: #0369a1; }
 .rc-stat.stat-no .rcs-val    { color: var(--red); }
-.rc-stat.stat-pend .rcs-val  { color: var(--gray-400); }
+.rc-stat.stat-pend .rcs-val  { color: #6d28d9; }
 .rc-stat .rcs-lbl {
-  font-size: 9.5px; font-weight: 600; color: var(--gray-400);
+  font-size: 9.5px; font-weight: 700; color: var(--gray-600);
   text-transform: uppercase; letter-spacing: .03em;
   margin-top: 2px;
 }
+.rc-stat.stat-total .rcs-lbl { color: #0369a1; opacity: .75; }
+.rc-stat.stat-no .rcs-lbl    { color: var(--red); opacity: .75; }
+.rc-stat.stat-pend .rcs-lbl  { color: #6d28d9; opacity: .75; }
 
 .rally-status-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: var(--rally-font); }
 .rally-status-badge.ok   { background: var(--green-light); color: var(--green); }
