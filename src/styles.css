@@ -333,7 +333,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 }
 .rc-stat {
   border-radius: 8px;
-  padding: 8px 6px;
+  padding: 8px 3px;
   text-align: center;
 }
 .rc-stat.stat-total { background: #e0f2fe; }
@@ -348,9 +348,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .rc-stat.stat-no .rcs-val    { color: var(--red); }
 .rc-stat.stat-pend .rcs-val  { color: #6d28d9; }
 .rc-stat .rcs-lbl {
-  font-size: 9.5px; font-weight: 700; color: var(--gray-600);
-  text-transform: uppercase; letter-spacing: .03em;
+  font-size: 8.8px; font-weight: 700; color: var(--gray-600);
+  text-transform: uppercase; letter-spacing: .01em;
   margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .rc-stat.stat-total .rcs-lbl { color: #0369a1; opacity: .75; }
 .rc-stat.stat-no .rcs-lbl    { color: var(--red); opacity: .75; }
