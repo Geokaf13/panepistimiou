@@ -17,6 +17,34 @@ const STATUS_CLASS: Record<RallyStatus, string> = {
   ΟΧΙ: 'no',
 };
 
+function RankBadge({ rank }: { rank: 1 | 2 | 3 }) {
+  if (rank === 1) {
+    return (
+      <div className="rc-rank-badge rank-badge-1" title="1η θέση">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M3 8l4 3 5-6 5 6 4-3-2 10H5L3 8zm2.5 12h13v2h-13v-2z" />
+        </svg>
+      </div>
+    );
+  }
+  if (rank === 2) {
+    return (
+      <div className="rc-rank-badge rank-badge-2" title="2η θέση">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+          <path d="M12 2l2.9 6 6.6.6-5 4.4 1.5 6.5L12 16l-5.9 3.5L7.6 13l-5-4.4 6.6-.6L12 2z" />
+        </svg>
+      </div>
+    );
+  }
+  return (
+    <div className="rc-rank-badge rank-badge-3" title="3η θέση">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+        <path d="M12 2l2.9 6 6.6.6-5 4.4 1.5 6.5L12 16l-5.9 3.5L7.6 13l-5-4.4 6.6-.6L12 2z" />
+      </svg>
+    </div>
+  );
+}
+
 export default function RallyTab() {
   const { showToast } = useToast();
   const [cards, setCards] = useState<RallyCard[]>([]);
@@ -129,8 +157,6 @@ export default function RallyTab() {
     downloadCSV(csv, 'rally_kartwn.csv');
   }
 
-  const medals = ['🥇', '🥈', '🥉'];
-
   return (
     <>
       <RallyHeroStats cards={cards} title="🏆 Sales Rally Πιστωτικών Καρτών Q2 — Σύνολο Καταστήματος" />
@@ -187,7 +213,7 @@ export default function RallyTab() {
             <div className={`rally-card${isTop ? ` rank-${i + 1}` : ''}`} key={r.emp}>
               <div className="rc-top">
                 <div className="rc-name">{r.emp.split(' ')[0]}</div>
-                {isTop && <div className="rc-rank-medal">{medals[i]}</div>}
+                {isTop && <RankBadge rank={(i + 1) as 1 | 2 | 3} />}
               </div>
 
               <div className="rc-hero-num">
