@@ -214,31 +214,48 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
 .ot-hours-select { padding: 9px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Mono', monospace; font-weight: 600; color: var(--purple); background: white; cursor: pointer; min-width: 90px; }
 .ot-hours-select:focus { outline: none; border-color: var(--purple); }
 
-/* ── Rally Cards ── */
-.rally-hero { background: linear-gradient(135deg, #92400e 0%, #d97706 60%, #f59e0b 100%); border-radius: var(--radius); padding: 22px 26px; margin-bottom: 20px; color: white; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+/* ── Rally Cards (σύγχρονη παλέτα indigo/cyan) ── */
+:root {
+  --rally-1: #4338ca;
+  --rally-2: #0891b2;
+  --rally-light: #eef2ff;
+  --rally-font: 'Plus Jakarta Sans', 'DM Sans', 'Inter', sans-serif;
+}
+
+.rally-hero {
+  background: linear-gradient(135deg, #312e81 0%, #4338ca 55%, #0891b2 100%);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  margin-bottom: 20px;
+  color: white;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+  font-family: var(--rally-font);
+}
 .rally-hero h3 { font-size: 15px; font-weight: 700; opacity: .9; letter-spacing: .02em; margin-bottom: 6px; }
-.rally-hero .rh-num { font-size: 34px; font-weight: 700; font-family: 'DM Mono', monospace; line-height: 1; }
+.rally-hero .rh-num { font-size: 34px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
 .rally-hero .rh-num span { font-size: 15px; font-weight: 500; opacity: .8; margin-left: 6px; }
 .rally-hero-stats { display: flex; gap: 22px; flex-wrap: wrap; }
 .rally-hero-stat { text-align: center; }
-.rally-hero-stat .rhs-val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.rally-hero-stat .rhs-val { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .rally-hero-stat .rhs-lbl { font-size: 10.5px; font-weight: 600; opacity: .8; text-transform: uppercase; letter-spacing: .04em; margin-top: 2px; }
 .rally-hero-island-col { display: flex; flex-direction: column; gap: 6px; justify-content: center; }
 .rally-hero-island-row { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
-.rally-hero-island-row .rhi-val { font-size: 14px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.rally-hero-island-row .rhi-val { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .rally-hero-island-row .rhi-lbl { font-size: 10px; font-weight: 600; opacity: .8; text-transform: uppercase; letter-spacing: .03em; }
 
 .rally-board {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 14px;
   margin-bottom: 28px;
+  font-family: var(--rally-font);
 }
 
 .rally-card {
   background: white;
   border-radius: 16px;
-  padding: 20px 20px 18px;
+  padding: 18px 18px 16px;
   box-shadow: var(--shadow);
   border: 1px solid var(--gray-100);
   position: relative;
@@ -250,7 +267,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--amber), #f59e0b);
+  background: linear-gradient(90deg, var(--rally-1), var(--rally-2));
 }
 .rally-card:hover {
   transform: translateY(-3px);
@@ -269,34 +286,21 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
-.rc-avatar {
-  width: 38px; height: 38px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--navy), #2c3e63);
-  color: white;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px; letter-spacing: .02em;
-  flex-shrink: 0;
-}
-.rally-card.rank-1 .rc-avatar { background: linear-gradient(135deg, #d4af37, #f5d76e); color: #5b4400; }
-.rally-card.rank-2 .rc-avatar { background: linear-gradient(135deg, #9ca3af, #d1d5db); color: #374151; }
-.rally-card.rank-3 .rc-avatar { background: linear-gradient(135deg, #b45309, #d97706); color: #fff8ec; }
 
 .rc-rank-medal { font-size: 20px; line-height: 1; }
 
 .rc-name {
   font-size: 13px; font-weight: 700; color: var(--gray-800);
   text-transform: uppercase; letter-spacing: .03em;
-  margin-bottom: 10px;
 }
 
 .rc-hero-num { display: flex; align-items: baseline; gap: 8px; }
 .rc-total {
-  font-size: 32px; font-weight: 800;
-  font-family: 'DM Mono', monospace;
-  color: var(--amber);
+  font-size: 34px; font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--rally-1);
   line-height: 1;
 }
 .rc-total-lbl {
@@ -309,7 +313,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 6px;
-  margin-bottom: 14px;
 }
 .rc-stat {
   background: var(--gray-50);
@@ -318,11 +321,11 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
   text-align: center;
 }
 .rc-stat .rcs-val {
-  font-family: 'DM Mono', monospace;
+  font-variant-numeric: tabular-nums;
   font-weight: 700; font-size: 15px;
   color: var(--gray-800);
 }
-.rc-stat.stat-total .rcs-val { color: var(--blue); }
+.rc-stat.stat-total .rcs-val { color: var(--rally-2); }
 .rc-stat.stat-no .rcs-val    { color: var(--red); }
 .rc-stat.stat-pend .rcs-val  { color: var(--gray-400); }
 .rc-stat .rcs-lbl {
@@ -331,37 +334,40 @@ body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: va
   margin-top: 2px;
 }
 
-.rc-target-wrap { margin-top: 2px; }
-.rc-target-track {
-  background: var(--gray-100);
-  border-radius: 99px;
-  height: 7px; width: 100%;
-  overflow: hidden;
-}
-.rc-target-fill {
-  height: 100%; border-radius: 99px;
-  background: linear-gradient(90deg, var(--amber), #f59e0b);
-  transition: width .5s ease;
-}
-.rc-target-fill.reached { background: linear-gradient(90deg, var(--green), #10b981); }
-.rc-target-lbl {
-  font-size: 10.5px; color: var(--gray-600);
-  margin-top: 6px; font-weight: 600;
-  display: flex; justify-content: space-between;
-}
-
-.rally-status-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.rally-status-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: var(--rally-font); }
 .rally-status-badge.ok   { background: var(--green-light); color: var(--green); }
 .rally-status-badge.no   { background: #fee2e2; color: var(--red); }
 .rally-status-badge.pend { background: var(--gray-100); color: var(--gray-600); }
 .rally-status-select { padding: 9px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; color: var(--gray-800); background: white; cursor: pointer; }
-.rally-status-select:focus { outline: none; border-color: var(--amber); }
+.rally-status-select:focus { outline: none; border-color: var(--rally-1); }
 .rally-my-bar { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px 18px; margin-bottom: 18px; }
 .rally-my-bar .rmb-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
 .rally-my-bar .rmb-top strong { font-size: 13px; color: var(--gray-600); }
-.rally-my-bar .rmb-top span   { font-size: 13px; font-weight: 700; color: var(--amber); font-family: 'DM Mono', monospace; }
+.rally-my-bar .rmb-top span   { font-size: 13px; font-weight: 700; color: var(--rally-1); font-variant-numeric: tabular-nums; }
 .rally-my-track { background: var(--gray-200); border-radius: 99px; height: 10px; width: 100%; overflow: hidden; }
-.rally-my-fill  { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--amber), #f59e0b); transition: width .6s ease; }
+.rally-my-fill  { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--rally-1), var(--rally-2)); transition: width .6s ease; }
+
+.rally-add-btn { background: linear-gradient(90deg, var(--rally-1), var(--rally-2)) !important; }
+.rally-add-btn:hover { filter: brightness(1.07); }
+
+/* ── Λίστα Αιτήσεων: read-only view + pencil edit ── */
+.rally-list-table td { vertical-align: middle; }
+.rally-view-text { font-size: 13.5px; color: var(--gray-800); }
+.rally-actions-cell { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
+.rally-icon-btn {
+  background: var(--rally-light);
+  border: 1px solid #e0e7ff;
+  border-radius: 6px;
+  width: 30px; height: 30px;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.rally-icon-btn:hover { background: #e0e7ff; }
+.rally-icon-done { background: var(--green-light); border-color: #a7f3d0; color: var(--green); font-weight: 700; }
+.rally-icon-done:hover { background: #bbf7d0; }
+tr.row-editing td { background: #fafbff; }
 
 /* ── Emp totals grid (vacations) ── */
 .emp-totals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
