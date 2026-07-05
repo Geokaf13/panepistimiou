@@ -16,7 +16,6 @@ export const EMPLOYEE_PINS: Record<string, string> = {
   'ΙΩΑΝΝΟΥ ΝΙΚΗ': '2222',
   'ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ': '3333',
   'ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ': '4444',
-  'ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ': '5555',
   'ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ': '6666',
   'ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ': '7777',
   'ΤΖΟΓΙΑ ΝΑΝΤΙΑ': '8888',
@@ -28,7 +27,6 @@ export const EMPLOYEES: string[] = [
   'ΙΩΑΝΝΟΥ ΝΙΚΗ',
   'ΚΑΡΑΚΩΣΤΑ ΧΡΙΣΤΙΝΑ',
   'ΛΟΥΠΑΣ ΧΑΡΙΛΑΟΣ',
-  'ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ',
   'ΣΥΚΙΩΤΗ ΑΛΕΞΑΝΔΡΑ',
   'ΤΖΑΓΚΑΡΑΚΗ ΔΕΣΠΟΙΝΑ',
   'ΤΖΟΓΙΑ ΝΑΝΤΙΑ',
@@ -38,8 +36,8 @@ export const EMPLOYEES: string[] = [
 /** Περιλαμβάνει και τον manager για τις άδειες */
 export const VACATION_PEOPLE: string[] = [...EMPLOYEES, 'ΚΑΦΕΤΖΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ'];
 
-/** Εργαζόμενοι που συμμετέχουν στο Ράλλυ Καρτών (εξαιρείται ο Πετράτος) */
-export const RALLY_EMPLOYEES: string[] = EMPLOYEES.filter((e) => e !== 'ΠΕΤΡΑΤΟΣ ΒΑΣΙΛΕΙΟΣ');
+/** Εργαζόμενοι που συμμετέχουν στο Ράλλυ Καρτών */
+export const RALLY_EMPLOYEES: string[] = EMPLOYEES;
 
 export interface Category {
   name: string;
